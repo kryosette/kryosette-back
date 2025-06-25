@@ -1,0 +1,121 @@
+logging:
+  level:
+    org.springframework.web: DEBUG
+spring:
+  config:
+    import: optional:configserver:http://localhost:8888
+  application:
+    name:
+      auth
+  security:
+    token:
+      expiration: 8640000
+      issuer: "your-bank-auth-service"
+    jwt:
+      secret-key: 404E635266556A586E327357538782F413F4428472B4B6250645367566B5970
+      expiration: 8640000
+  mailing:
+    frontend:
+        activation-url: http://localhost:3000/activate-account
+  file:
+    uploads:
+      photos-output-path: ./uploads
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: all
+    consumer:
+      group-id: inventory-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      enable-auto-commit: false
+      max-poll-records: 10
+    listener:
+      ack-mode: manual
+  datasource:
+    url: jdbc:mysql://localhost:3306/book_social_network
+    username: root
+    password: HoslDiBm5:DodLoPost
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
+  resilience4j:
+    ratelimiter:
+      instances:
+        loginRateLimiter:
+          limitForPeriod: 5
+          limitRefreshPeriod: 10s
+          timeoutDuration: 0s
+  jackson:
+    default-property-inclusion: non_null
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: UTC
+
+    serialization:
+      fail-on-empty-beans: false
+      write-dates-as-timestamps: false
+      indent-output: true  # Для красивого форматирования JSON (в разработке)
+
+    deserialization:
+      fail-on-unknown-properties: false
+
+    parser:
+      allow-unquoted-field-names: true
+      allow-single-quotes: true
+  redis:
+    host: localhost
+    port: 6379
+    password: "1234"
+#    username: user
+    ssl: false
+    cache:
+      type: redis
+      redis:
+        time-to-live: 60000
+        cache-null-values: false
+  session:
+    store-type: redis
+  mail:
+    host: localhost
+    port: 1025
+    username: dima
+    password: dima
+    properties:
+      mail:
+        smtp:
+          trust: "*"
+        auth: true
+        starttls:
+          enabled: true
+        connectiontimeout: 5000
+        timeout: 3000
+        writetimeout: 5000
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: user
+    password: 123456
+
+rabbitmq:
+  queue: notification.queue
+  exchange: notification.exchange
+  routing_key: notification.routing.key
+
+server:
+  port: 8088
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/

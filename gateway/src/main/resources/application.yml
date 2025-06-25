@@ -1,0 +1,19 @@
+eureka:
+  client:
+    register-with-eurika: false
+server:
+  port: 8222
+
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enadled: true
+      routes:
+        - id: students
+          uti: http://localhost:8090
+          predicates:
+            - Path=/api/v1/students/**
+  config:
+    import: optional:configserver:http://localhost:8888

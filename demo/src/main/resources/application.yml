@@ -1,0 +1,18 @@
+spring:
+#  config:
+#    import: optional:configserver:http://localhost:8888
+#  name:
+#    posts-service
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      max-file-size: 50MB
+springdoc:
+  default-produces-media-type: application/json
+server:
+  servlet:
+    context-path: /api/v1/
+    cookie:
+      same-site: none  # Разрешает кросс-сайтовые cookies
+      secure: true
