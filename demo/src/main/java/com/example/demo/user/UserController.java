@@ -2,6 +2,8 @@ package com.example.demo.user;
 
 import com.example.demo.security.opaque_tokens.TokenData;
 import com.example.demo.security.opaque_tokens.TokenService;
+import com.example.demo.user.subscritpion.Subscription;
+import com.example.demo.user.subscritpion.SubscriptionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -29,6 +31,7 @@ public class UserController {
 
     private final UserRepository userRepository;
     private final TokenService tokenService;
+    private final SubscriptionRepository subscriptionRepository;
 
 //    @GetMapping("/me")
 //    public ResponseEntity<?> getCurrentUser(
@@ -164,4 +167,80 @@ public class UserController {
 //        return userDto;
 //    }
 
+
+    @PostMapping("/subscribe/email/{targetEmail}")
+    public ResponseEntity<?> subscribeToUser(
+            @PathVariable String targetEmail,
+            @RequestHeader("Authorization") String authHeader) {
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid authorization header");
+        }
+
+        String token = authHeader.substring(7);
+        String currentUserEmail = String.valueOf(tokenService.getTokenJsonData(token));
+
+        if (currentUserEmail.equals(targetEmail)) {
+            return ResponseEntity.badRequest().body("Cannot subscribe to yourself");
+        }
+
+        if (subscriptionRepository.existsSubscription(currentUserEmail, targetEmail)) {
+            return ResponseEntity.badRequest().body("Already subscribed");
+        }
+
+        Subscription subscription = new Subscription();
+        subscription.setFollowerEmail(currentUserEmail);
+        subscription.setFollowingEmail(targetEmail);
+
+        subscriptionRepository.save(subscription);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/unsubscribe/email/{targetEmail}")
+    public ResponseEntity<?> unsubscribeFromUser(
+            @PathVariable String targetEmail,
+            @RequestHeader("Authorization") String authHeader) {
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid authorization header");
+        }
+
+        String token = authHeader.substring(7);
+        String currentUserEmail = String.valueOf(tokenService.getTokenJsonData(token));
+
+        Optional<Subscription> subscription = subscriptionRepository
+                .findSubscription(currentUserEmail, targetEmail);
+
+        if (subscription.isEmpty()) {
+            return ResponseEntity.badRequest().body("Not subscribed");
+        }
+
+        subscriptionRepository.delete(subscription.get());
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/is-subscribed/email/{targetEmail}")
+    public ResponseEntity<Boolean> isSubscribedToUser(
+            @PathVariable String targetEmail,
+            @RequestHeader("Authorization") String authHeader) {
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid authorization header");
+        }
+
+        String token = authHeader.substring(7);
+        String currentUserEmail = String.valueOf(tokenService.getTokenJsonData(token));
+
+        boolean isSubscribed = subscriptionRepository
+                .existsSubscription(currentUserEmail, targetEmail);
+
+        return ResponseEntity.ok(isSubscribed);
+    }
+
+    @GetMapping("/followers-count/email/{email}")
+    public ResponseEntity<Integer> getFollowersCount(@PathVariable String email) {
+        long count = subscriptionRepository.countFollowers(email);
+        return ResponseEntity.ok((int) count);
+    }
 }

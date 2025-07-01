@@ -55,6 +55,12 @@ public class  User extends BaseEntity implements UserDetails, Principal {
     @JsonIgnore
     private boolean enabled;
 
+    @Column(name = "followers_count")
+    private Integer followersCount = 0;
+
+    @Column(name = "is_subscribed")
+    private Boolean isSubscribed;
+
     @Getter
     @Setter
     @Column(name = "secret_key")
