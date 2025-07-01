@@ -232,10 +232,11 @@ public class UserController {
         String token = authHeader.substring(7);
         String currentUserEmail = String.valueOf(tokenService.getTokenJsonData(token));
 
-        boolean isSubscribed = subscriptionRepository
-                .existsSubscription(currentUserEmail, targetEmail);
+        if (subscriptionRepository.existsSubscription(currentUserEmail, targetEmail)) {
+            return ResponseEntity.ok(true);
+        }
 
-        return ResponseEntity.ok(isSubscribed);
+        return ResponseEntity.ok(false);
     }
 
     @GetMapping("/followers-count/email/{email}")

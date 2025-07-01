@@ -18,6 +18,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -60,6 +61,19 @@ public class  User extends BaseEntity implements UserDetails, Principal {
 
     @Column(name = "is_subscribed")
     private Boolean isSubscribed;
+
+    @Column(name = "last_seen_at")
+    private LocalDateTime lastSeenAt;
+
+    @Column(name = "is_online")
+    private Boolean isOnline;
+
+    @Transient
+    public Boolean isOnline() {
+        return isOnline ||
+                (lastSeenAt != null &&
+                        lastSeenAt.isAfter(LocalDateTime.now().minusMinutes(5)));
+    }
 
     @Getter
     @Setter
@@ -152,4 +166,7 @@ public class  User extends BaseEntity implements UserDetails, Principal {
             inverseJoinColumns = @JoinColumn(name = "friend_id")
     )
     private Set<User> friends = new HashSet<>();
+
+    public void setOnline(boolean online) {
+    }
 }

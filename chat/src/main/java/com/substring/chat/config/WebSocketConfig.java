@@ -15,12 +15,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void configureMessageBroker(MessageBrokerRegistry config) {
 
         config.enableSimpleBroker("/topic");
-        // /topic/messages
-
         config.setApplicationDestinationPrefixes("/app");
-        // /app/chat
-        // server-side: @MessagingMapping("/chat)
-
 
     }
 
@@ -30,5 +25,4 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .setAllowedOrigins("http://localhost:3000")
                 .withSockJS();
     }
-    // /chat endpoint par connection apka establish hoga
 }

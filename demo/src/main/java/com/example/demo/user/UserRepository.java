@@ -14,5 +14,7 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     Optional<User> findByEmail(String email);
 
+    List<User> findByIsOnlineTrue();
+
 //    User updateUser(String userId, String newName) throws NotFoundException;
 }
