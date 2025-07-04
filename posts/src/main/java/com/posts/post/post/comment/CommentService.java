@@ -2,12 +2,15 @@ package com.posts.post.post.comment;
 
 import com.posts.post.post.Post;
 import com.posts.post.post.PostRepository;
+import com.posts.post.post.reply.ReplyCommentDto;
 import lombok.RequiredArgsConstructor;
+import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -16,6 +19,8 @@ import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,6 +29,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
     private final RestTemplate restTemplate;
+    private final ExecutorService asyncExecutor = Executors.newCachedThreadPool();
 
     @Value("${auth.service.url}")
     private String authServiceUrl;
@@ -89,5 +95,22 @@ public class CommentService {
         );
     }
 
+    private Map<String, String> verifyToken(String token) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + token.trim());
+
+        ResponseEntity<Map> response = restTemplate.exchange(
+                authServiceUrl + "/api/v1/auth/verify",
+                HttpMethod.POST,
+                new HttpEntity<>(headers),
+                Map.class
+        );
+
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            throw new SecurityException("Ошибка авторизации");
+        }
+
+        return (Map<String, String>) response.getBody();
+    }
 
 }

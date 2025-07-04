@@ -50,6 +50,7 @@ public class SecurityConfig {
                                         "/chat/**"
                                      )
                                 .permitAll()
+                                .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/api/v1/bank_account/user/**").authenticated()
                                 .anyRequest()
                                 .authenticated()

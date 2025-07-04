@@ -10,6 +10,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -17,6 +18,10 @@ import org.springframework.web.client.RestTemplate;
 import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +31,7 @@ public class PostService {
     private final AuthServiceClient authServiceClient;
     private final RestTemplate restTemplate;
     private final LikeRepository likeRepository;
+    private final ExecutorService executorService = Executors.newFixedThreadPool(10);
 
     @Value("${auth.service.url}")
     private String authServiceUrl;
@@ -35,36 +41,42 @@ public class PostService {
     }
 
     @Transactional
-    public Post createPost(
-            PostCreateRequest request,
-            String token
-    ) throws UserPrincipalNotFoundException {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + token.trim());
-        ResponseEntity<Map> response = restTemplate.exchange(
-                authServiceUrl + "/api/v1/auth/verify",
-                HttpMethod.POST,
-                new HttpEntity<>(headers),
-                Map.class
-        );
+    public CompletableFuture<Post> createPost(PostCreateRequest request, String token) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                Map<String, String> authData = verifyTokenAsync(token).get();
 
-        if (!response.getStatusCode().is2xxSuccessful()) {
-            throw new SecurityException("Ошибка авторизации: " + response.getBody());
-        }
+                Post post = new Post();
+                post.setTitle(request.getTitle());
+                post.setContent(request.getContent());
+                post.setAuthorId(authData.get("userId"));
+                post.setAuthor(authData.get("username"));
 
-        String userId = (String) Objects.requireNonNull(response.getBody()).get("userId");
-        String username = (String) Objects.requireNonNull(response.getBody().get("username"));
-        if (userId == null) {
-            throw new UserPrincipalNotFoundException("User ID не найден в токене");
-        }
+                return postRepository.save(post);
+            } catch (Exception e) {
+                throw new CompletionException(e);
+            }
+        }, executorService);
+    }
 
-        Post post = new Post();
-        post.setTitle(request.getTitle());
-        post.setContent(request.getContent());
-        post.setAuthorId(userId);
-        post.setAuthor(username);
+    private CompletableFuture<Map<String, String>> verifyTokenAsync(String token) {
+        return CompletableFuture.supplyAsync(() -> {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "Bearer " + token.trim());
 
-        return postRepository.save(post);
+            ResponseEntity<Map> response = restTemplate.exchange(
+                    "http://auth-service/api/v1/auth/verify",
+                    HttpMethod.POST,
+                    new HttpEntity<>(headers),
+                    Map.class
+            );
+
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                throw new SecurityException("Ошибка авторизации");
+            }
+
+            return (Map<String, String>) response.getBody();
+        }, executorService);
     }
 
     @Transactional

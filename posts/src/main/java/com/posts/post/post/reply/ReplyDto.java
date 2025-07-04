@@ -1,18 +1,15 @@
 package com.posts.post.post.reply;
 
-import lombok.*;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 public class ReplyDto {
     private Long id;
     private String content;
-    private Long authorId;
-    private String authorName;
+    private String username;
     private LocalDateTime createdAt;
     private Long commentId;
 }
-

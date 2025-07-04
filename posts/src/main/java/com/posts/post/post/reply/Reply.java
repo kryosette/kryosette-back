@@ -1,39 +1,37 @@
-//package com.transactions.transactions.post.reply;
-//
-//
-//import com.transactions.transactions.post.comment.Comment;
-//import com.example.demo.user.User;
-//import jakarta.persistence.*;
-//
-//import lombok.Getter;
-//import lombok.Setter;
-//import org.hibernate.annotations.CreationTimestamp;
-//import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-//
-//import java.time.LocalDateTime;
-//
-//@Getter
-//@Setter
-//@Entity
-//@Table(name = "replies")
-//@EntityListeners(AuditingEntityListener.class)
-//public class Reply {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
-//
-//    @Column(columnDefinition = "TEXT")
-//    private String content;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "comment_id", nullable = false)
-//    private Comment parentComment;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "user_id", nullable = false)
-//    private User author;
-//
-//    @Column(name = "created_at", nullable = false)
-//    @CreationTimestamp
-//    private LocalDateTime createdAt;
-//}
+package com.posts.post.post.reply;
+
+import com.posts.post.post.comment.Comment;
+import jakarta.persistence.*;
+
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "replies")
+@Getter
+@Setter
+public class Reply {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(columnDefinition = "TEXT")
+    private String content;
+
+    @ManyToOne
+    @JoinColumn(name = "comment_id", nullable = false)
+    private Comment comment;
+
+    @Column(name = "user_id", nullable = false)
+    private String userId;
+
+    @Column(name = "username", nullable = false)
+    private String username;
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+}

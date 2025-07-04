@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -37,6 +38,9 @@ public class Post {
     @Column(name = "created_at", nullable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
+
+    @ElementCollection
+    private List<String> fileUrls;
 
     public Post(String title, String content, Long id) {
         this.title = title;

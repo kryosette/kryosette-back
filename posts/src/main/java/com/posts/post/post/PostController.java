@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.nio.file.attribute.UserPrincipalNotFoundException;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("posts")
@@ -32,17 +33,17 @@ public class PostController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Post createPost(
+    public CompletableFuture<Post> createPost(
             @RequestBody @Valid PostCreateRequest request,
             @RequestHeader("Authorization") String authHeader
-    ) throws UserPrincipalNotFoundException {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid authorization header: Authorization header must start with 'Bearer '");
-        }
-
-        String token = authHeader.replace("Bearer ", "");
-        Post post = postService.createPost(request, token);
-        return ResponseEntity.ok(post).getBody();
+    ) {
+        return postService.createPost(request, authHeader)
+                .exceptionally(ex -> {
+                    if (ex.getCause() instanceof UserPrincipalNotFoundException) {
+                        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, ex.getCause().getMessage());
+                    }
+                    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Ошибка при создании поста");
+                });
     }
 
     @GetMapping
