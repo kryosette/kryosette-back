@@ -1,5 +1,7 @@
 package com.posts.post.post;
 
+import com.posts.post.post.comment.Comment;
+import com.posts.post.post.like.Like;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -41,6 +43,12 @@ public class Post {
 
     @ElementCollection
     private List<String> fileUrls;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Like> likes = new ArrayList<>();
 
     public Post(String title, String content, Long id) {
         this.title = title;

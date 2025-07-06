@@ -1,8 +1,12 @@
 package com.posts.post.post;
 
+import com.posts.post.post.comment.CommentRepository;
 import com.posts.post.post.like.Like;
 import com.posts.post.post.like.LikeRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.kafka.common.errors.ResourceNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,23 +19,23 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.nio.file.AccessDeniedException;
 import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 @Service
 @RequiredArgsConstructor
 public class PostService {
 
+    Logger log = LoggerFactory.getLogger(PostService.class);
     private final PostRepository postRepository;
     private final AuthServiceClient authServiceClient;
     private final RestTemplate restTemplate;
     private final LikeRepository likeRepository;
     private final ExecutorService executorService = Executors.newFixedThreadPool(10);
+    private final CommentRepository commentRepository;
 
     @Value("${auth.service.url}")
     private String authServiceUrl;
@@ -77,6 +81,41 @@ public class PostService {
 
             return (Map<String, String>) response.getBody();
         }, executorService);
+    }
+
+    @Transactional
+    public void deletePost(String token, Integer postId)
+            throws AccessDeniedException, UserPrincipalNotFoundException {
+        // Verify token and get user ID
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + token.trim());
+
+        ResponseEntity<Map> response = restTemplate.exchange(
+                authServiceUrl + "/api/v1/auth/verify",
+                HttpMethod.POST,
+                new HttpEntity<>(headers),
+                Map.class
+        );
+
+        String userId = (String) Objects.requireNonNull(response.getBody()).get("userId");
+        if (userId == null) {
+            throw new UserPrincipalNotFoundException("User ID not found in token");
+        }
+
+        Post post = postRepository.findById(Long.valueOf(postId))
+                .orElseThrow(() -> new ResourceNotFoundException("Post not found with id: " + postId));
+
+//        if (!post.getAuthorId().equals(userId)) {
+//            throw new AccessDeniedException("You don't have permission to delete this post");
+//        }
+
+        log.info("Attempting to delete post {} by user {}", postId, userId);
+
+        likeRepository.deleteByPostId(post.getId());
+
+        commentRepository.deleteByPostId(post.getId());
+
+        postRepository.delete(post);
     }
 
     @Transactional

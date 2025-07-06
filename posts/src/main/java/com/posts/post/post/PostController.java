@@ -4,6 +4,9 @@ import com.posts.post.post.like.LikeRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.kafka.common.errors.ResourceNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.nio.file.AccessDeniedException;
 import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.concurrent.CompletableFuture;
 
@@ -24,6 +28,7 @@ import java.util.concurrent.CompletableFuture;
 @Tag(name = "Posts")
 public class PostController {
 
+    Logger log = LoggerFactory.getLogger(PostController.class);
     private final PostService postService;
     private final PostRepository postRepository;
 //    private final UserRepository userRepository;
@@ -58,6 +63,31 @@ public class PostController {
                 .map(this::mapPostToDto);
 
         return ResponseEntity.ok(postPage);
+    }
+
+    @DeleteMapping("/{postId}/delete")
+    public ResponseEntity<?> deletePost(
+            @RequestHeader("Authorization") String authHeader,
+            @PathVariable Integer postId) {
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid authorization header: Authorization header must start with 'Bearer '");
+        }
+        String token = authHeader.replace("Bearer ", "");
+
+        try {
+            postService.deletePost(token, postId);
+            return ResponseEntity.noContent().build();
+        } catch (ResourceNotFoundException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found");
+        } catch (AccessDeniedException ex) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You don't have permission to delete this post");
+        } catch (Exception ex) {
+            log.error("Error deleting post", ex);
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "An error occurred while deleting the post");
+        }
     }
 
     @Transactional

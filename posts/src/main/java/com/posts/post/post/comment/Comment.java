@@ -28,7 +28,6 @@ public class Comment {
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
-
     @JoinColumn(name = "user_id", nullable = false)
     private String userId;
 
