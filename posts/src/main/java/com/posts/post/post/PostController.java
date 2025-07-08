@@ -21,6 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 
 @RestController
 @RequestMapping("posts")
@@ -40,14 +41,20 @@ public class PostController {
     @ResponseStatus(HttpStatus.CREATED)
     public CompletableFuture<Post> createPost(
             @RequestBody @Valid PostCreateRequest request,
-            @RequestHeader("Authorization") String authHeader
-    ) {
+            @RequestHeader("Authorization") String authHeader) {
         return postService.createPost(request, authHeader)
                 .exceptionally(ex -> {
-                    if (ex.getCause() instanceof UserPrincipalNotFoundException) {
-                        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, ex.getCause().getMessage());
+                    Throwable cause = ex instanceof CompletionException ? ex.getCause() : ex;
+                    if (cause instanceof UserPrincipalNotFoundException) {
+                        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, cause.getMessage());
+                    } else if (cause instanceof SecurityException) {
+                        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token");
+                    } else {
+                        throw new ResponseStatusException(
+                                HttpStatus.INTERNAL_SERVER_ERROR,
+                                "Ошибка при создании поста: " + (cause.getMessage() != null ? cause.getMessage() : "Unknown error")
+                        );
                     }
-                    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Ошибка при создании поста");
                 });
     }
 

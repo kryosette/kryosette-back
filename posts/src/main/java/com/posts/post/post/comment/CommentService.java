@@ -2,15 +2,13 @@ package com.posts.post.post.comment;
 
 import com.posts.post.post.Post;
 import com.posts.post.post.PostRepository;
-import com.posts.post.post.reply.ReplyCommentDto;
 import lombok.RequiredArgsConstructor;
-import org.apache.kafka.common.errors.ResourceNotFoundException;
+import org.apache.kafka.common.protocol.types.Field;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -19,6 +17,7 @@ import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
@@ -29,7 +28,6 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
     private final RestTemplate restTemplate;
-    private final ExecutorService asyncExecutor = Executors.newCachedThreadPool();
 
     @Value("${auth.service.url}")
     private String authServiceUrl;
@@ -66,6 +64,7 @@ public class CommentService {
         comment.setPost(post);
         comment.setUserId(userId);
         comment.setUsername(username);
+        comment.setIsPinned(false);
 
         Comment savedComment = commentRepository.save(comment);
         return convertToDto(savedComment);
@@ -91,7 +90,8 @@ public class CommentService {
                 comment.getPost().getId(),
                 comment.getUserId(),
                 comment.getUsername(),
-                comment.getCreatedAt()
+                comment.getCreatedAt(),
+                comment.getIsPinned()
         );
     }
 
@@ -113,4 +113,32 @@ public class CommentService {
         return (Map<String, String>) response.getBody();
     }
 
+    public Comment findById(Long commentId) {
+        Optional<Comment> commentOptional = commentRepository.findById(commentId);
+        return commentOptional.orElseThrow(() ->
+                new RuntimeException("Comment not found with id: " + commentId));
+    }
+
+    @Transactional
+    public CommentDto pinComment(Long postId, Long commentId, String currentUserId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new RuntimeException("Comment not found"));
+
+        if (!comment.getPost().getId().equals(postId)) {
+            throw new RuntimeException("Comment does not belong to this post");
+        }
+
+        if (Boolean.TRUE.equals(comment.getIsPinned())) {
+            comment.setIsPinned(false);
+        } else {
+            commentRepository.unpinAllCommentsInPost(postId);
+            comment.setIsPinned(true);
+        }
+
+        Comment savedComment = commentRepository.save(comment);
+        return convertToDto(savedComment);
+    }
 }

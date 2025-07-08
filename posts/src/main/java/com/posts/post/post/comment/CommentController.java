@@ -1,6 +1,5 @@
 package com.posts.post.post.comment;
 
-import com.posts.post.post.reply.ReplyCommentDto;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,7 +9,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/posts/{postId}/comments")
@@ -54,6 +52,21 @@ public class CommentController {
     @GetMapping("/count")
     public ResponseEntity<Long> getCommentsCountByPostId(@PathVariable Long postId) {
         return ResponseEntity.ok(commentService.getCommentsCountByPostId(postId));
+    }
+
+    @PatchMapping("/{commentId}/pin")
+    public ResponseEntity<CommentDto> togglePinComment(
+            @PathVariable Long postId,
+            @PathVariable Long commentId,
+            @RequestHeader("Authorization") String authHeader
+            ) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid authorization header: Authorization header must start with 'Bearer '");
+        }
+
+        String token = authHeader.replace("Bearer ", "");
+        CommentDto updatedComment = commentService.pinComment(postId, commentId, token);
+        return ResponseEntity.ok(updatedComment);
     }
 
 }

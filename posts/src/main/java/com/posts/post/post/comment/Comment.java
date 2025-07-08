@@ -42,6 +42,10 @@ public class Comment {
     @JoinColumn(name = "parent_id")
     private Comment parent;
 
+    @Column(name = "is_pinned")
+    private Boolean isPinned = false;
+
     @Column(name = "depth", nullable = false)
     private Integer depth = 0;
+
 }

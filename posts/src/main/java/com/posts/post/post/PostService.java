@@ -46,40 +46,51 @@ public class PostService {
 
     @Transactional
     public CompletableFuture<Post> createPost(PostCreateRequest request, String token) {
-        return CompletableFuture.supplyAsync(() -> {
-            try {
-                Map<String, String> authData = verifyTokenAsync(token).get();
+        return verifyTokenAsync(token)
+                .thenApply(authData -> {
+                    if (authData.get("userId") == null || authData.get("username") == null) {
+                        throw new CompletionException(new UserPrincipalNotFoundException("User credentials not found in token"));
+                    }
 
-                Post post = new Post();
-                post.setTitle(request.getTitle());
-                post.setContent(request.getContent());
-                post.setAuthorId(authData.get("userId"));
-                post.setAuthor(authData.get("username"));
+                    Post post = new Post();
+                    post.setTitle(request.getTitle());
+                    post.setContent(request.getContent());
+                    post.setAuthorId(authData.get("userId"));
+                    post.setAuthor(authData.get("username"));
 
-                return postRepository.save(post);
-            } catch (Exception e) {
-                throw new CompletionException(e);
-            }
-        }, executorService);
+                    return postRepository.save(post);
+                })
+                .exceptionally(ex -> {
+                    throw new CompletionException(ex instanceof CompletionException ? ex.getCause() : ex);
+                });
     }
 
     private CompletableFuture<Map<String, String>> verifyTokenAsync(String token) {
         return CompletableFuture.supplyAsync(() -> {
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Authorization", "Bearer " + token.trim());
+            try {
+                HttpHeaders headers = new HttpHeaders();
+                headers.set("Authorization", "Bearer " + token.trim());
 
-            ResponseEntity<Map> response = restTemplate.exchange(
-                    "http://auth-service/api/v1/auth/verify",
-                    HttpMethod.POST,
-                    new HttpEntity<>(headers),
-                    Map.class
-            );
+                ResponseEntity<Map> response = restTemplate.exchange(
+                        "http://auth-service/api/v1/auth/verify",
+                        HttpMethod.POST,
+                        new HttpEntity<>(headers),
+                        Map.class
+                );
 
-            if (!response.getStatusCode().is2xxSuccessful()) {
-                throw new SecurityException("Ошибка авторизации");
+                if (!response.getStatusCode().is2xxSuccessful()) {
+                    throw new SecurityException("Ошибка авторизации: " + response.getStatusCode());
+                }
+
+                Map<String, String> body = response.getBody();
+                if (body == null) {
+                    throw new SecurityException("Empty response from auth service");
+                }
+
+                return body;
+            } catch (Exception e) {
+                throw new CompletionException(e);
             }
-
-            return (Map<String, String>) response.getBody();
         }, executorService);
     }
 
