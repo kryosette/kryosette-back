@@ -1,6 +1,5 @@
 package com.example.demo.user.subscritpion;
 
-import com.example.demo.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

@@ -3,7 +3,6 @@ package com.posts.post.post.comment;
 import com.posts.post.post.Post;
 import com.posts.post.post.PostRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.kafka.common.protocol.types.Field;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -18,8 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,6 +29,18 @@ public class CommentService {
     @Value("${auth.service.url}")
     private String authServiceUrl;
 
+    /**
+     * Creates a new comment for a specific post.
+     * This method verifies the user's token, retrieves user information,
+     * finds the associated post, and saves the comment to the database.
+     *
+     * @param commentDto The data transfer object containing the comment information.
+     * @param token      The user's authorization token.
+     * @return CommentDto The created comment data transfer object.
+     * @throws UserPrincipalNotFoundException if the user information cannot be retrieved from the token.
+     * @throws SecurityException if there is an authorization error.
+     * @throws RuntimeException if the post is not found.
+     */
     @Transactional
     public CommentDto createComment(
             CreateCommentDto commentDto,
@@ -70,6 +79,12 @@ public class CommentService {
         return convertToDto(savedComment);
     }
 
+    /**
+     * Retrieves all comments associated with a specific post, ordered by creation date descending.
+     *
+     * @param postId The ID of the post.
+     * @return List<CommentDto> A list of comment data transfer objects for the specified post.
+     */
     public List<CommentDto> getCommentsByPostId(Long postId) {
         return commentRepository.findByPostIdOrderByCreatedAtDesc(postId)
                 .stream()
@@ -77,12 +92,25 @@ public class CommentService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Retrieves the total number of comments for a given post.
+     *
+     * @param postId The ID of the post.
+     * @return long The number of comments for the post.
+     * @throws RuntimeException if the post is not found.
+     */
     public long getCommentsCountByPostId(Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
         return commentRepository.countByPost(post);
     }
 
+    /**
+     * Converts a Comment object to a CommentDto object.
+     *
+     * @param comment The Comment object to convert.
+     * @return CommentDto The converted comment data transfer object.
+     */
     private CommentDto convertToDto(Comment comment) {
         return new CommentDto(
                 comment.getId(),
@@ -95,6 +123,13 @@ public class CommentService {
         );
     }
 
+    /**
+     * Verifies the user's token by sending a request to the authentication service.
+     *
+     * @param token The user's authorization token.
+     * @return Map<String, String> A map containing the user's information (userId, username).
+     * @throws SecurityException if there is an authorization error.
+     */
     private Map<String, String> verifyToken(String token) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + token.trim());
@@ -113,12 +148,28 @@ public class CommentService {
         return (Map<String, String>) response.getBody();
     }
 
+    /**
+     * Finds a comment by its ID.
+     *
+     * @param commentId The ID of the comment to find.
+     * @return Comment The Comment object.
+     * @throws RuntimeException if the comment is not found.
+     */
     public Comment findById(Long commentId) {
         Optional<Comment> commentOptional = commentRepository.findById(commentId);
         return commentOptional.orElseThrow(() ->
                 new RuntimeException("Comment not found with id: " + commentId));
     }
 
+    /**
+     * Toggles the pinned status of a comment.
+     *
+     * @param postId        The ID of the post the comment belongs to.
+     * @param commentId     The ID of the comment to pin/unpin.
+     * @param currentUserId The ID of the user performing the action.
+     * @return CommentDto The updated comment data transfer object.
+     * @throws RuntimeException if the post or comment is not found, or if the comment does not belong to the post.
+     */
     @Transactional
     public CommentDto pinComment(Long postId, Long commentId, String currentUserId) {
         Post post = postRepository.findById(postId)

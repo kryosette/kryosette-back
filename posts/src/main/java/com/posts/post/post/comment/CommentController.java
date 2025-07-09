@@ -17,6 +17,16 @@ import java.util.List;
 public class CommentController {
     private final CommentService commentService;
 
+    /**
+     * Creates a new comment for a specific post.
+     *
+     * @param postId      The ID of the post to which the comment belongs.
+     * @param commentDto  The data transfer object containing the comment information.
+     * @param authHeader  The authorization header containing the user's token.
+     * @return ResponseEntity containing the created CommentDto with HTTP status CREATED.
+     * @throws UserPrincipalNotFoundException if the user principal cannot be found based on the token.
+     * @throws ResponseStatusException if the authorization header is invalid.
+     */
     @PostMapping
     public ResponseEntity<CommentDto> createComment(
             @PathVariable Long postId,
@@ -34,7 +44,12 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdComment);
     }
 
-
+    /**
+     * Maps a Comment object to a CommentDto object.
+     *
+     * @param comment The Comment object to map.
+     * @return A CommentDto object representing the Comment.
+     */
     private CommentDto mapCommentToDto(Comment comment) {
         CommentDto dto = new CommentDto();
         dto.setId(comment.getId());
@@ -44,22 +59,43 @@ public class CommentController {
         return dto;
     }
 
+    /**
+     * Retrieves all comments for a given post ID.
+     *
+     * @param postId The ID of the post.
+     * @return ResponseEntity containing a list of CommentDto objects with HTTP status OK.
+     */
     @GetMapping
     public ResponseEntity<List<CommentDto>> getCommentsByPostId(@PathVariable Long postId) {
         return ResponseEntity.ok(commentService.getCommentsByPostId(postId));
     }
 
+    /**
+     * Retrieves the total number of comments for a specific post.
+     *
+     * @param postId The ID of the post.
+     * @return ResponseEntity containing the number of comments with HTTP status OK.
+     */
     @GetMapping("/count")
     public ResponseEntity<Long> getCommentsCountByPostId(@PathVariable Long postId) {
         return ResponseEntity.ok(commentService.getCommentsCountByPostId(postId));
     }
 
+    /**
+     * Toggles the pinned status of a comment.
+     *
+     * @param postId    The ID of the post the comment belongs to.
+     * @param commentId The ID of the comment to pin/unpin.
+     * @param authHeader The authorization header containing the user's token.
+     * @return ResponseEntity containing the updated CommentDto with HTTP status OK.
+     * @throws ResponseStatusException if the authorization header is invalid.
+     */
     @PatchMapping("/{commentId}/pin")
     public ResponseEntity<CommentDto> togglePinComment(
             @PathVariable Long postId,
             @PathVariable Long commentId,
             @RequestHeader("Authorization") String authHeader
-            ) {
+    ) {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid authorization header: Authorization header must start with 'Bearer '");
         }

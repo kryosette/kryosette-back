@@ -2,12 +2,17 @@ package com.example.demo.user;
 
 import com.example.demo.security.opaque_tokens.TokenData;
 import com.example.demo.security.opaque_tokens.TokenService;
+import com.example.demo.user.notifications.Notification;
+import com.example.demo.user.notifications.NotificationDto;
+import com.example.demo.user.notifications.NotificationRepository;
+import com.example.demo.user.notifications.NotificationType;
 import com.example.demo.user.subscritpion.Subscription;
 import com.example.demo.user.subscritpion.SubscriptionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +37,8 @@ public class UserController {
     private final UserRepository userRepository;
     private final TokenService tokenService;
     private final SubscriptionRepository subscriptionRepository;
-
+    private final NotificationRepository notificationRepository;
+    private final SimpMessagingTemplate messagingTemplate;
 //    @GetMapping("/me")
 //    public ResponseEntity<?> getCurrentUser(
 //            Authentication authentication
@@ -115,7 +121,6 @@ public class UserController {
 
 
         UserDto userProfile = new UserDto(
-                user.getId(),
                 user.getFirstname() + " " + user.getLastname(),
                 user.getEmail()
         );
@@ -141,9 +146,7 @@ public class UserController {
 
         User user = userOptional.get();
 
-
         UserDto userProfile = new UserDto(
-                user.getId(),
                 user.getFirstname() + " " + user.getLastname(),
                 user.getEmail()
         );
@@ -191,10 +194,37 @@ public class UserController {
         Subscription subscription = new Subscription();
         subscription.setFollowerEmail(currentUserEmail);
         subscription.setFollowingEmail(targetEmail);
-
         subscriptionRepository.save(subscription);
 
+        Notification notification = new Notification();
+        notification.setRecipientEmail(targetEmail);
+        notification.setSenderEmail(currentUserEmail);
+        notification.setType(NotificationType.SUBSCRIPTION);
+        notification.setMessage(String.format("%s подписался(ась) на вас", currentUserEmail));
+
+        notificationRepository.save(notification);
+
+        messagingTemplate.convertAndSendToUser(
+                targetEmail,
+                "/queue/notifications",
+                convertToDto(notification)
+        );
+
         return ResponseEntity.ok().build();
+    }
+
+    private NotificationDto convertToDto(Notification notification) {
+        return NotificationDto.builder()
+                .id(String.valueOf(notification.getId()))
+                .sender(new UserDto(
+                        notification.getSenderEmail(),
+                        notification.getRecipientEmail()
+                ))
+                .type(notification.getType())
+                .message(notification.getMessage())
+                .isRead(notification.isRead())
+                .createdAt(notification.getCreatedAt())
+                .build();
     }
 
     @DeleteMapping("/unsubscribe/email/{targetEmail}")

@@ -30,6 +30,20 @@ public class ReplyService {
     @Value("${auth.service.url}")
     private String authServiceUrl;
 
+    /**
+     * Creates a new reply to a specific comment.  This method verifies the user's
+     * token, retrieves user information, finds the associated comment, and saves
+     * the reply to the database.
+     *
+     * @param commentId The ID of the comment being replied to.
+     * @param dto       The data transfer object containing the reply information.
+     * @param token     The user's authorization token.
+     * @return ReplyDto The created reply data transfer object.
+     * @throws UserPrincipalNotFoundException if the user information cannot be
+     *                                        retrieved from the token.
+     * @throws SecurityException              if there is an authorization error.
+     * @throws ResourceNotFoundException      if the comment is not found.
+     */
     @Transactional
     public ReplyDto createReply(Long commentId, CreateReplyDto dto, String token) throws UserPrincipalNotFoundException {
         HttpHeaders headers = new HttpHeaders();
@@ -64,6 +78,14 @@ public class ReplyService {
         return convertToDto(savedReply);
     }
 
+    /**
+     * Retrieves all replies to a specific comment, ordered by creation date
+     * ascending.
+     *
+     * @param commentId The ID of the comment.
+     * @return List<ReplyDto> A list of reply data transfer objects for the specified
+     * comment.
+     */
     public List<ReplyDto> getReplies(Long commentId) {
         return replyRepository.findByCommentIdOrderByCreatedAtAsc(commentId)
                 .stream()
@@ -71,6 +93,12 @@ public class ReplyService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Converts a Reply object to a ReplyDto object.
+     *
+     * @param reply The Reply object to convert.
+     * @return ReplyDto The converted reply data transfer object.
+     */
     private ReplyDto convertToDto(Reply reply) {
         ReplyDto dto = new ReplyDto();
         dto.setId(reply.getId());
@@ -81,6 +109,14 @@ public class ReplyService {
         return dto;
     }
 
+    /**
+     * Verifies the user's token by sending a request to the authentication service.
+     *
+     * @param token The user's authorization token.
+     * @return Map<String, String> A map containing the user's information (userId,
+     * username).
+     * @throws SecurityException if there is an authorization error.
+     */
     private Map<String, String> verifyToken(String token) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + token.trim());

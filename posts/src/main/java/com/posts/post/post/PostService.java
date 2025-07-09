@@ -3,6 +3,7 @@ package com.posts.post.post;
 import com.posts.post.post.comment.CommentRepository;
 import com.posts.post.post.like.Like;
 import com.posts.post.post.like.LikeRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.slf4j.Logger;
@@ -21,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.nio.file.AccessDeniedException;
 import java.nio.file.attribute.UserPrincipalNotFoundException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.*;
@@ -36,14 +38,30 @@ public class PostService {
     private final LikeRepository likeRepository;
     private final ExecutorService executorService = Executors.newFixedThreadPool(10);
     private final CommentRepository commentRepository;
+    private final PostViewRepository postViewRepository;
 
     @Value("${auth.service.url}")
     private String authServiceUrl;
 
+    /**
+     * Retrieves all posts in descending order of creation time
+     *
+     * @param pageable pagination information (page number, size, etc.)
+     * @return Page object containing posts and pagination details
+     */
     public Page<Post> getAllPosts(Pageable pageable) {
         return postRepository.findAllByOrderByCreatedAtDesc(pageable);
     }
 
+    /**
+     * Creates a new post after verifying the user's authentication token
+     * Uses asynchronous token verification with opaque tokens (JWT or similar)
+     *
+     * @param request post creation DTO containing title and content
+     * @param token opaque authentication token (Bearer token)
+     * @return CompletableFuture containing the created post
+     * @throws CompletionException if token verification fails or user credentials are invalid
+     */
     @Transactional
     public CompletableFuture<Post> createPost(PostCreateRequest request, String token) {
         return verifyTokenAsync(token)
@@ -65,6 +83,13 @@ public class PostService {
                 });
     }
 
+    /**
+     * Asynchronously verifies an opaque authentication token with the auth service
+     *
+     * @param token opaque authentication token to verify
+     * @return CompletableFuture containing user claims if verification succeeds
+     * @throws CompletionException if token verification fails
+     */
     private CompletableFuture<Map<String, String>> verifyTokenAsync(String token) {
         return CompletableFuture.supplyAsync(() -> {
             try {
@@ -94,6 +119,16 @@ public class PostService {
         }, executorService);
     }
 
+    /**
+     * Deletes a post after verifying the user's authentication token
+     * Also deletes all associated likes and comments
+     *
+     * @param token opaque authentication token for authorization
+     * @param postId ID of the post to delete
+     * @throws AccessDeniedException if user is not authorized to delete the post
+     * @throws UserPrincipalNotFoundException if user ID cannot be extracted from token
+     * @throws ResourceNotFoundException if post with given ID doesn't exist
+     */
     @Transactional
     public void deletePost(String token, Integer postId)
             throws AccessDeniedException, UserPrincipalNotFoundException {
@@ -116,10 +151,6 @@ public class PostService {
         Post post = postRepository.findById(Long.valueOf(postId))
                 .orElseThrow(() -> new ResourceNotFoundException("Post not found with id: " + postId));
 
-//        if (!post.getAuthorId().equals(userId)) {
-//            throw new AccessDeniedException("You don't have permission to delete this post");
-//        }
-
         log.info("Attempting to delete post {} by user {}", postId, userId);
 
         likeRepository.deleteByPostId(post.getId());
@@ -129,6 +160,15 @@ public class PostService {
         postRepository.delete(post);
     }
 
+    /**
+     * Toggles a like on a post after verifying the user's authentication token
+     *
+     * @param token opaque authentication token for authorization
+     * @param postId ID of the post to like/unlike
+     * @return ResponseEntity with liked status (true if like was added, false if removed)
+     * @throws UserPrincipalNotFoundException if user ID cannot be extracted from token
+     * @throws SecurityException if token verification fails
+     */
     @Transactional
     public ResponseEntity<?> createLike(
             String token,
@@ -169,6 +209,15 @@ public class PostService {
         }
     }
 
+    /**
+     * Checks if the authenticated user has liked a specific post
+     *
+     * @param token opaque authentication token for authorization
+     * @param postId ID of the post to check
+     * @return ResponseEntity with boolean indicating like status
+     * @throws UserPrincipalNotFoundException if user ID cannot be extracted from token
+     * @throws SecurityException if token verification fails
+     */
     @Transactional
     public ResponseEntity<?> checkIfLike(
             String token,
@@ -199,5 +248,39 @@ public class PostService {
 
         return ResponseEntity.ok(likeRepository.existsByPostAndUserId(post, userId));
     }
-}
 
+    @Transactional
+    public void recordPostView(String token, Long postId, HttpServletRequest request) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + token.trim());
+
+        ResponseEntity<Map> response = restTemplate.exchange(
+                authServiceUrl + "/api/v1/auth/verify",
+                HttpMethod.POST,
+                new HttpEntity<>(headers),
+                Map.class
+        );
+
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            throw new SecurityException("Ошибка авторизации: " + response.getBody());
+        }
+
+        String userId = (String) Objects.requireNonNull(response.getBody()).get("userId");
+
+        // Record view only if user hasn't viewed this post before
+        if (!postViewRepository.existsByPostIdAndUserId(postId, userId)) {
+            PostView view = new PostView(postId, userId);
+            postViewRepository.save(view);
+        }
+    }
+
+    /**
+     * Gets view statistics for a post
+     */
+    public Map<String, Long> getPostViewStats(Long postId) {
+        Map<String, Long> stats = new HashMap<>();
+        stats.put("totalViews", postViewRepository.countByPostId(postId));
+        stats.put("uniqueUserViews", postViewRepository.countUniqueUserViewsByPostId(postId));
+        return stats;
+    }
+}

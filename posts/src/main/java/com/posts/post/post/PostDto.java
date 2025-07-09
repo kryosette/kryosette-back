@@ -22,5 +22,6 @@ public class PostDto {
     private LocalDateTime createdAt;
     private Long likesCount;
     private Boolean isLiked;
+    private Long viewsCount;
     private List<CommentDto> comments;
 }
