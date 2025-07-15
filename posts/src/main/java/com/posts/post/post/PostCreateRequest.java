@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -16,6 +17,7 @@ public class PostCreateRequest {
     private List<String> imagePaths;
     private List<String> videoPaths;
     private List<String> audioPaths;
+    private Set<String> hashtags;
 
     @Override
     public String toString() {

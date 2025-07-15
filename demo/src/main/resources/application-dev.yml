@@ -41,6 +41,9 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
+      cache:
+        use_second_level_cache: true
+        region.factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
       ddl-auto: update
     show-sql: false
     properties:

@@ -21,6 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.nio.file.AccessDeniedException;
 import java.nio.file.attribute.UserPrincipalNotFoundException;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
@@ -52,23 +53,24 @@ public class PostController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CompletableFuture<Post> createPost(
+    public Post createPost(
             @RequestBody @Valid PostCreateRequest request,
             @RequestHeader("Authorization") String authHeader) {
-        return postService.createPost(request, authHeader)
-                .exceptionally(ex -> {
-                    Throwable cause = ex instanceof CompletionException ? ex.getCause() : ex;
-                    if (cause instanceof UserPrincipalNotFoundException) {
-                        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, cause.getMessage());
-                    } else if (cause instanceof SecurityException) {
-                        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token");
-                    } else {
-                        throw new ResponseStatusException(
-                                HttpStatus.INTERNAL_SERVER_ERROR,
-                                "Ошибка при создании поста: " + (cause.getMessage() != null ? cause.getMessage() : "Unknown error")
-                        );
-                    }
-                });
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid authorization header: Authorization header must start with 'Bearer '");
+        }
+        String token = authHeader.replace("Bearer ", "");
+
+        try {
+            return postService.createPost(request, token);
+        } catch (UserPrincipalNotFoundException | SecurityException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (Exception e) {
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Ошибка при создании поста: " + e.getMessage()
+            );
+        }
     }
 
     /**
@@ -221,6 +223,7 @@ public class PostController {
         dto.setContent(post.getContent());
         dto.setCreatedAt(post.getCreatedAt());
         dto.setAuthorName(post.getAuthor());
+        dto.setHashtags(post.getHashtags());
 
         Map<String, Long> viewStats = postService.getPostViewStats(post.getId());
         dto.setViewsCount(viewStats.get("totalViews"));
@@ -256,6 +259,26 @@ public class PostController {
     @GetMapping("/{postId}/views/stats")
     public ResponseEntity<Map<String, Long>> getPostViewStats(@PathVariable Long postId) {
         return ResponseEntity.ok(postService.getPostViewStats(postId));
+    }
+
+    @GetMapping("/hashtags/popular")
+    public ResponseEntity<List<String>> getPopularHashtags(
+            @RequestParam(defaultValue = "10") int count) {
+        List<String> popularHashtags = postService.getPopularHashtags(count);
+        return ResponseEntity.ok(popularHashtags);
+    }
+
+    @GetMapping("/hashtags/{hashtag}")
+    public ResponseEntity<Page<PostDto>> getPostsByHashtag(
+            @PathVariable String hashtag,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        Page<PostDto> posts = postService.getPostsByHashtag(hashtag, pageable)
+                .map(this::mapPostToDto);
+
+        return ResponseEntity.ok(posts);
     }
 
 }

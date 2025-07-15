@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -17,11 +18,11 @@ public class PostDto {
     private Long id;
     private String title;
     private String content;
-    private String userId;
     private String authorName;
     private LocalDateTime createdAt;
     private Long likesCount;
     private Boolean isLiked;
     private Long viewsCount;
     private List<CommentDto> comments;
+    private Set<String> hashtags;
 }

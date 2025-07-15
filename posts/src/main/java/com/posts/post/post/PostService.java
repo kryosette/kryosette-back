@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -22,10 +23,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.nio.file.AccessDeniedException;
 import java.nio.file.attribute.UserPrincipalNotFoundException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -63,24 +63,27 @@ public class PostService {
      * @throws CompletionException if token verification fails or user credentials are invalid
      */
     @Transactional
-    public CompletableFuture<Post> createPost(PostCreateRequest request, String token) {
-        return verifyTokenAsync(token)
-                .thenApply(authData -> {
-                    if (authData.get("userId") == null || authData.get("username") == null) {
-                        throw new CompletionException(new UserPrincipalNotFoundException("User credentials not found in token"));
-                    }
+    public Post createPost(PostCreateRequest request, String token) throws UserPrincipalNotFoundException {
+        Map<String, String> authData = verifyToken(token);
 
-                    Post post = new Post();
-                    post.setTitle(request.getTitle());
-                    post.setContent(request.getContent());
-                    post.setAuthorId(authData.get("userId"));
-                    post.setAuthor(authData.get("username"));
+        if (authData.get("userId") == null || authData.get("username") == null) {
+            throw new UserPrincipalNotFoundException("User credentials not found in token");
+        }
 
-                    return postRepository.save(post);
-                })
-                .exceptionally(ex -> {
-                    throw new CompletionException(ex instanceof CompletionException ? ex.getCause() : ex);
-                });
+        Post post = new Post();
+        post.setTitle(request.getTitle());
+        post.setContent(request.getContent());
+        post.setAuthorId(authData.get("userId"));
+        post.setAuthor(authData.get("username"));
+
+        if (request.getHashtags() != null) {
+            Set<String> normalizedHashtags = request.getHashtags().stream()
+                    .map(tag -> tag.startsWith("#") ? tag : "#" + tag)
+                    .collect(Collectors.toSet());
+            post.setHashtags(normalizedHashtags);
+        }
+
+        return postRepository.save(post);
     }
 
     /**
@@ -90,33 +93,27 @@ public class PostService {
      * @return CompletableFuture containing user claims if verification succeeds
      * @throws CompletionException if token verification fails
      */
-    private CompletableFuture<Map<String, String>> verifyTokenAsync(String token) {
-        return CompletableFuture.supplyAsync(() -> {
-            try {
-                HttpHeaders headers = new HttpHeaders();
-                headers.set("Authorization", "Bearer " + token.trim());
+    private Map<String, String> verifyToken(String token) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + token.trim());
 
-                ResponseEntity<Map> response = restTemplate.exchange(
-                        "http://auth-service/api/v1/auth/verify",
-                        HttpMethod.POST,
-                        new HttpEntity<>(headers),
-                        Map.class
-                );
+        ResponseEntity<Map> response = restTemplate.exchange(
+                authServiceUrl + "/api/v1/auth/verify",
+                HttpMethod.POST,
+                new HttpEntity<>(headers),
+                Map.class
+        );
 
-                if (!response.getStatusCode().is2xxSuccessful()) {
-                    throw new SecurityException("Ошибка авторизации: " + response.getStatusCode());
-                }
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            throw new SecurityException("Authentication failed: " + response.getStatusCode());
+        }
 
-                Map<String, String> body = response.getBody();
-                if (body == null) {
-                    throw new SecurityException("Empty response from auth service");
-                }
+        Map<String, String> body = response.getBody();
+        if (body == null) {
+            throw new SecurityException("Empty response from auth service");
+        }
 
-                return body;
-            } catch (Exception e) {
-                throw new CompletionException(e);
-            }
-        }, executorService);
+        return body;
     }
 
     /**
@@ -282,5 +279,14 @@ public class PostService {
         stats.put("totalViews", postViewRepository.countByPostId(postId));
         stats.put("uniqueUserViews", postViewRepository.countUniqueUserViewsByPostId(postId));
         return stats;
+    }
+
+    public Page<Post> getPostsByHashtag(String hashtag, Pageable pageable) {
+        String normalizedHashtag = hashtag.startsWith("#") ? hashtag : "#" + hashtag;
+        return postRepository.findByHashtagsContaining(normalizedHashtag, pageable);
+    }
+
+    public List<String> getPopularHashtags(int count) {
+        return postRepository.findPopularHashtags(PageRequest.of(0, count));
     }
 }
