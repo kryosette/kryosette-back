@@ -21,7 +21,11 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "posts")
+@Table(name = "posts", indexes = {
+        @Index(name = "idx_posts_author", columnList = "author"),
+        @Index(name = "idx_posts_created_at", columnList = "created_at"),
+        @Index(name = "idx_posts_hashtags", columnList = "hashtag") // для таблицы post_hashtags
+})
 @EntityListeners(AuditingEntityListener.class)
 public class Post {
     @Id
@@ -53,7 +57,8 @@ public class Post {
     private List<Like> likes = new ArrayList<>();
 
     @ElementCollection
-    @CollectionTable(name = "post_hashtags", joinColumns = @JoinColumn(name = "post_id"))
+    @CollectionTable(name = "post_hashtags", joinColumns = @JoinColumn(name = "post_id"),
+            indexes = @Index(name = "idx_post_hashtags_hashtag", columnList = "hashtag"))
     @Column(name = "hashtag")
     private Set<String> hashtags = new HashSet<>();
 

@@ -4,17 +4,34 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
-    @Query("SELECT p FROM Post p ORDER BY p.createdAt DESC")
+    @Query(value = "SELECT p FROM Post p ORDER BY p.createdAt DESC")
     Page<Post> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
-    Page<Post> findByHashtagsContaining(String hashtag, Pageable pageable);
+    @Query(nativeQuery = true, value = """
+    SELECT p.* FROM posts p
+    WHERE p.id IN (
+        SELECT h.post_id FROM post_hashtags h 
+        WHERE h.hashtag = :hashtag
+    )
+    ORDER BY p.created_at DESC
+    """)
+    Page<Post> findByHashtagsContaining(@Param("hashtag") String hashtag, Pageable pageable);
 
-    @Query(value = "SELECT h FROM Post p JOIN p.hashtags h GROUP BY h ORDER BY COUNT(h) DESC")
-    List<String> findPopularHashtags(Pageable pageable);
-//    @Query("SELECT p FROM Post p ORDER BY p.likes DESC, p.createdAt DESC")
-//    List<Post> findAllByOrderByLikesDescAndCreatedAtDesc();
+    @Query(nativeQuery = true, value = """
+        SELECT hashtag FROM (
+            SELECT hashtag, COUNT(*) as cnt 
+            FROM post_hashtags
+            WHERE created_at >= :dateFrom
+            GROUP BY hashtag
+            ORDER BY cnt DESC
+            LIMIT :limit
+        ) t
+        """)
+    List<String> findPopularHashtags(
+            Pageable pageable);
 }
