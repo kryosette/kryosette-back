@@ -1,0 +1,45 @@
+auth:
+  service:
+    url: http://localhost:8088
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+spring:
+  cloud:
+    compatibility-verifier:
+      enabled: false
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+  datasource:
+    url: jdbc:mysql://localhost:3306/book_social_network
+    username: root
+    password: HoslDiBm5:DodLoPost
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
+  config:
+    import: optional:configserver:http://localhost:8888
+  application:
+    name: chat
+server:
+  port: 8092
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka

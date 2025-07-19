@@ -1,89 +1,98 @@
 package com.substring.chat.controllers;
 
-import com.substring.chat.entities.Message;
 import com.substring.chat.entities.Room;
 import com.substring.chat.repositories.RoomRepository;
-import lombok.Getter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
+import jakarta.validation.Valid;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/rooms")
-@CrossOrigin("http://localhost:3000")
+@RequestMapping("/api/rooms")
+@RequiredArgsConstructor
 public class RoomController {
+    private final RoomRepository roomRepository;
+    private final RestTemplate restTemplate;
 
-    private RoomRepository roomRepository;
+    @Value("${auth.service.url}")
+    private String authServiceUrl;
 
-
-    public RoomController(RoomRepository roomRepository) {
-        this.roomRepository = roomRepository;
-    }
-
-    //create room
     @PostMapping
-    public ResponseEntity<?> createRoom(@RequestBody String roomId) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public Room createRoom(
+            @Valid @RequestBody Room room,
+            @RequestHeader("Authorization") String authHeader) {
 
-        if (roomRepository.findByRoomId(roomId) != null) {
-            //room is already there
-            return ResponseEntity.badRequest().body("Room already exists!");
-
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
+                    "Invalid authorization header: Authorization header must start with 'Bearer '");
         }
 
+        String token = authHeader.replace("Bearer ", "");
 
-        //create new room
-        Room room = new Room();
-        room.setRoomId(roomId);
-        Room savedRoom = roomRepository.save(room);
-        return ResponseEntity.status(HttpStatus.CREATED).body(room);
+        try {
+            Map<String, String> authData = verifyToken(token);
 
+            if (authData.get("userId") == null) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
+                        "User credentials not found in token");
+            }
 
-    }
+            room.setCreatedAt(Instant.now());
+            room.setUserId(authData.get("userId"));
+            return roomRepository.save(room);
 
-
-    //get room: join
-    @GetMapping("/{roomId}")
-    public ResponseEntity<?> joinRoom(
-            @PathVariable String roomId
-    ) {
-
-        Room room = roomRepository.findByRoomId(roomId);
-        if (room == null) {
-            return ResponseEntity.badRequest()
-                    .body("Room not found!!");
+        } catch (SecurityException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (Exception e) {
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Ошибка при создании комнаты: " + e.getMessage()
+            );
         }
-        return ResponseEntity.ok(room);
     }
 
+    @GetMapping
+    public List<Room> getAllRooms() {
+        return roomRepository.findAll();
+    }
 
-    //get messages of room
+    private Map<String, String> verifyToken(String token) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + token.trim());
 
-    @GetMapping("/{roomId}/messages")
-    public ResponseEntity<List<Message>> getMessages(
-            @PathVariable String roomId,
-            @RequestParam(value = "page", defaultValue = "0", required = false) int page,
-            @RequestParam(value = "size", defaultValue = "20", required = false) int size
-    ) {
-        Room room = roomRepository.findByRoomId(roomId);
-        if (room == null) {
-            return ResponseEntity.badRequest().build()
-                    ;
+        ResponseEntity<Map> response = restTemplate.exchange(
+                authServiceUrl + "/api/v1/auth/verify",
+                HttpMethod.POST,
+                new HttpEntity<>(headers),
+                Map.class
+        );
+
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            throw new SecurityException("Authentication failed: " + response.getStatusCode());
         }
-        //get messages :
-        //pagination
-        List<Message> messages = room.getMessages();
-        int start = Math.max(0, messages.size() - (page + 1) * size);
-        int end = Math.min(messages.size(), start + size);
-        List<Message> paginatedMessages = messages.subList(start, end);
-        return ResponseEntity.ok(paginatedMessages);
 
+        Map<String, String> body = response.getBody();
+        if (body == null) {
+            throw new SecurityException("Empty response from auth service");
+        }
+
+        return body;
     }
 
-
+    @GetMapping("/{id}")
+    public ResponseEntity<Room> getRoomById(@PathVariable Long id) {
+        return roomRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 }

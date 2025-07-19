@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.security.core.Authentication;
@@ -171,6 +172,7 @@ public class UserController {
 //    }
 
 
+    @Transactional
     @PostMapping("/subscribe/email/{targetEmail}")
     public ResponseEntity<?> subscribeToUser(
             @PathVariable String targetEmail,
@@ -227,6 +229,7 @@ public class UserController {
                 .build();
     }
 
+    @Transactional
     @DeleteMapping("/unsubscribe/email/{targetEmail}")
     public ResponseEntity<?> unsubscribeFromUser(
             @PathVariable String targetEmail,

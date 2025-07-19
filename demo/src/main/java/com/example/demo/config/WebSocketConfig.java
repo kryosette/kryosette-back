@@ -15,19 +15,20 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void configureMessageBroker(MessageBrokerRegistry config) {
 
         config.enableSimpleBroker("/topic");
-
         config.setApplicationDestinationPrefixes("/app");
 
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/ws")
+                .setAllowedOrigins("http://localhost:3000")
+                .withSockJS();
         registry.addEndpoint("/chat/chats")
                 .setAllowedOrigins("http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:3001")
                 .withSockJS();
         registry.addEndpoint("/ws-status")
-                .setAllowedOriginPatterns("*")
-                .setAllowedOrigins("http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:3001")
+                .setAllowedOrigins("*")
                 .withSockJS();
     }
 }

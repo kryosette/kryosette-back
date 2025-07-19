@@ -2,58 +2,30 @@ package com.substring.chat.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
-
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
 @Table(name = "messages")
+@Data
 public class Message {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne // Добавляем отношение ManyToOne к Room
-    @JoinColumn(name = "room_id") // Указываем столбец для связи
-    private Room room;
-
-    @Column(nullable = false)
-    private String sender;
-
-    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    private LocalDateTime timeStamp;
+    private String sender;
 
-    // Конструктор без room (может потребоваться)
-    public Message(String sender, String content) {
-        this.sender = sender;
-        this.content = content;
-        this.timeStamp = LocalDateTime.now();
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id")
+    private Room room;
 
-    //Конструктор с room
-    public Message(Room room, String sender, String content) {
-        this.room = room;
-        this.sender = sender;
-        this.content = content;
-        this.timeStamp = LocalDateTime.now();
-    }
+    private String userId;
+
+    private Instant timestamp = Instant.now();
 }
