@@ -59,6 +59,7 @@ public class AuthenticationService {
                 .accountLocked(false)
                 .enabled(false)
                 .roles(List.of(userRole))
+                .enabled2Fa(false)
                 .build();
         userRepository.save(user);
         sendValidationEmail(user);
@@ -109,7 +110,7 @@ public class AuthenticationService {
                 username,
                 String.valueOf(System.currentTimeMillis() / (1000 * 60 * 60 * 24))
         );
-        return DigestUtils.sha256Hex(deviceFingerprint);
+        return deviceFingerprint;
     }
 
 

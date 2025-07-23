@@ -12,13 +12,13 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query(value = "SELECT p FROM Post p ORDER BY p.createdAt DESC")
     Page<Post> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
-    @Query(nativeQuery = true, value = """
-    SELECT p.* FROM posts p
-    WHERE p.id IN (
-        SELECT h.post_id FROM post_hashtags h 
-        WHERE h.hashtag = :hashtag
+    @Query("""
+    SELECT p FROM Post p 
+    WHERE EXISTS (
+        SELECT h FROM p.hashtags h 
+        WHERE h = :hashtag
     )
-    ORDER BY p.created_at DESC
+    ORDER BY p.createdAt DESC
     """)
     Page<Post> findByHashtagsContaining(@Param("hashtag") String hashtag, Pageable pageable);
 

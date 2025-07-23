@@ -117,7 +117,8 @@ public class TokenService {
                         Map.of(
                                 "username", tokenData.getUsername(),
                                 "userId", tokenData.getUserId(),
-                                "roles", tokenData.getAuthorities()
+                                "roles", tokenData.getAuthorities(),
+                                "device", tokenData.getDeviceHash()
                         )
                 );
             } catch (JsonProcessingException e) {

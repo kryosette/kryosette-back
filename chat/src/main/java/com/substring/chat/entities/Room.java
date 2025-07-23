@@ -1,9 +1,7 @@
 package com.substring.chat.entities;
 
 import java.time.Instant;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.UUID;
+import java.util.*;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -21,10 +19,12 @@ public class Room {
     @Column(columnDefinition = "BIGINT")
     private Long id;
 
-    @Column(nullable = false)
+    @Column
     private String name;
 
     private String description;
+
+    private String createdBy;
 
     @Column(name = "created_at")
     private Instant createdAt = Instant.now();

@@ -8,6 +8,8 @@ spring:
     name:
       auth
   security:
+    encryption:
+      key: mySuperSecretKeyWithAtLeast32Characters123
     token:
       expiration: 8640000
       issuer: "your-bank-auth-service"

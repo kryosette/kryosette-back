@@ -1,31 +1,23 @@
 package com.substring.chat.services;
 
-import com.substring.chat.controllers.CreateMessageDto;
+import com.substring.chat.config.RateLimited;
 import com.substring.chat.controllers.MessageDto;
-import com.substring.chat.entities.Message;
-import com.substring.chat.entities.Room;
-import com.substring.chat.repositories.MessageRepository;
-import com.substring.chat.repositories.RoomRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.Instant;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/rooms/{roomId}/messages")
 @RequiredArgsConstructor
 public class MessageController {
     private final MessageService messageService;
+    private final TypingService typingService;
 
     @PostMapping
+    @RateLimited(5)
     public ResponseEntity<MessageDto> createMessage(
             @PathVariable Long roomId,
             @RequestBody MessageDto messageDto,
@@ -58,4 +50,5 @@ public class MessageController {
         List<MessageDto> messages = messageService.getMessagesByRoom(roomId, token);
         return ResponseEntity.ok(messages);
     }
+
 }

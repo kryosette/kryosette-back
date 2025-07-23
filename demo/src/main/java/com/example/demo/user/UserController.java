@@ -33,45 +33,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserController {
 
-//    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-
     private final UserRepository userRepository;
     private final TokenService tokenService;
     private final SubscriptionRepository subscriptionRepository;
     private final NotificationRepository notificationRepository;
     private final SimpMessagingTemplate messagingTemplate;
-//    @GetMapping("/me")
-//    public ResponseEntity<?> getCurrentUser(
-//            Authentication authentication
-//    ) {
-//        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-//        String username = userDetails.getUsername();
-//        User user = userRepository.findByEmail(username)
-//                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
-//        UserDto userDto = convertToDto(user);
-//
-//        return ResponseEntity.ok(userDto);
-//    }
-
-//    @GetMapping("/me")
-//    public ResponseEntity<UserDto> getCurrentUser(
-//            @RequestHeader("Authorization") String authHeader
-//    ) {
-//        String token = authHeader.substring(7); // Удаляем "Bearer "
-//
-//        return tokenService.getTokenData(token)
-//                .flatMap(tokenData -> userRepository.findById(tokenData.getUserId()))
-//                .map(user -> ResponseEntity.ok(mapToDto(user)))
-//                .orElse(ResponseEntity.status(401).build());
-//    }
-//
-//    private UserDto mapToDto(User user) {
-//        return new UserDto(
-//                user.getId(),
-//                user.getUsername(),
-//                user.getEmail()
-//        );
-//    }
 
     @GetMapping("/me")
     public ResponseEntity<String> getCurrentUser(
@@ -147,30 +113,14 @@ public class UserController {
 
         User user = userOptional.get();
 
-        UserDto userProfile = new UserDto(
+        UserDtoPrivate userProfile = new UserDtoPrivate(
                 user.getFirstname() + " " + user.getLastname(),
-                user.getEmail()
+                user.getEmail(),
+                user.getId()
         );
 
         return ResponseEntity.ok(userProfile);
     }
-
-
-//    @GetMapping("/usernames")
-//    public ResponseEntity<List<String>> getAllUsernames() {
-//        List<String> usernames = userRepository.findAllUsernames();
-//        return ResponseEntity.ok(usernames);
-//    }
-//
-//    private UserDto convertToDto(User user) {
-//        UserDto userDto = new UserDto();
-//        userDto.setId(String.valueOf(user.getId()));
-//        userDto.setFirstname(user.getFirstname());
-//        userDto.setLastname(user.getLastname());
-//        userDto.setEmail(user.getEmail());
-//        return userDto;
-//    }
-
 
     @Transactional
     @PostMapping("/subscribe/email/{targetEmail}")
