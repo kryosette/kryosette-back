@@ -18,6 +18,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -84,6 +85,10 @@ public class AuthenticationService {
 
         User user = (User) principal;
         UserDetails userDetails = (UserDetails) principal;
+
+        if (user.isAccountLocked()) {
+            throw new LockedException("Account is locked");
+        }
 
         var claims = new HashMap<String, Object>();
         claims.put("fullName", user.getFullName());
@@ -170,5 +175,36 @@ public class AuthenticationService {
         }
 
         return codeBuilder.toString();
+    }
+
+    public void lockUser(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        user.setAccountLocked(true);
+        userRepository.save(user);
+    }
+
+    public void unlockUser(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        user.setAccountLocked(false);
+        userRepository.save(user);
+    }
+
+    public void registerAdmin(RegistrationRequest request) throws MessagingException {
+        var adminRole = roleRepository.findByName("ADMIN")
+                .orElseThrow(() -> new IllegalStateException("ROLE ADMIN was not initiated"));
+
+        var user = User.builder()
+                .firstname(request.getFirstname())
+                .lastname(request.getLastname())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .accountLocked(false)
+                .enabled(true) // Админ активируется сразу
+                .roles(List.of(adminRole))
+                .build();
+
+        userRepository.save(user);
     }
 }

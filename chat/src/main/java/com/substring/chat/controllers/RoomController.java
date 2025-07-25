@@ -3,6 +3,8 @@ package com.substring.chat.controllers;
 import com.substring.chat.entities.*;
 import com.substring.chat.repositories.PrivateRoomRepository;
 import com.substring.chat.repositories.RoomRepository;
+import com.substring.chat.services.PrivateMessageService;
+import com.substring.chat.services.PrivateRoomService;
 import com.substring.chat.services.TypingService;
 import com.substring.chat.services.TypingStatusDto;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,9 @@ public class RoomController {
     private final RestTemplate restTemplate;
     private final TypingService typingService;
     private final PrivateRoomRepository privateRoomRepository;
+    private final UserBlockRepository userBlockRepository;
+    private final PrivateMessageService privateMessageService;
+    private final PrivateRoomService privateRoomService;
 
     @Value("${auth.service.url}")
     private String authServiceUrl;

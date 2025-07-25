@@ -18,10 +18,11 @@ public class PrivateMessage {
 
     private String content;
     private String sender;
-    private String userId;
     private Instant timestamp = Instant.now();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "private_room_id")
     private PrivateRoom privateRoom;
+
+    private boolean isDeleted = false;
 }

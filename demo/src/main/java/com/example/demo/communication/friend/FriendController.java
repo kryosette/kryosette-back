@@ -19,10 +19,10 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor
 public class FriendController {
     private final FriendService friendService;
-    private final Logger log = LoggerFactory.getLogger(FriendController.class); // Добавили Logger
+    private final Logger log = LoggerFactory.getLogger(FriendController.class);
 
     @PostMapping("/request/{receiverId}")
-    public ResponseEntity<CompletableFuture<FriendRequestDto>> sendFriendRequest(
+    public ResponseEntity<FriendRequestDto> sendFriendRequest(
             @AuthenticationPrincipal User userDetails,
             @PathVariable String receiverId,
             @RequestHeader("Authorization") String authHeader
@@ -30,23 +30,14 @@ public class FriendController {
         if (userDetails == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        String senderId = userDetails.getId();
+        String senderId = userDetails.getEmail();
         String tokenId = authHeader.substring(7);
         try {
-            CompletableFuture<FriendRequestDto> request = friendService.sendFriendRequest(senderId, String.valueOf(receiverId));
+            FriendRequestDto request = friendService.sendFriendRequest(senderId, String.valueOf(receiverId), tokenId);
             return ResponseEntity.ok(request);
         } catch (Exception e) {
-            if (e instanceof org.apache.catalina.connector.ClientAbortException ||
-                    e instanceof org.springframework.web.util.NestedServletException &&
-                            e.getCause() instanceof org.apache.catalina.connector.ClientAbortException) {
-                // Клиент отключился, игнорируем исключение
-                log.warn("Клиент отключился во время отправки запроса на дружбу: {}", e.getMessage());
-                return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build(); // Или другой подходящий статус
-            } else {
-                // Другая ошибка, логируем и возвращаем ошибку клиенту
-                log.error("Ошибка при отправке запроса на дружбу: ", e);
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-            }
+            log.error("Ошибка при отправке запроса на дружбу: ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -62,17 +53,8 @@ public class FriendController {
             FriendRequestDto request = friendService.acceptFriendRequest(requestId, currentUserId);
             return ResponseEntity.ok(request);
         } catch (Exception e) {
-            if (e instanceof org.apache.catalina.connector.ClientAbortException ||
-                    e instanceof org.springframework.web.util.NestedServletException &&
-                            e.getCause() instanceof org.apache.catalina.connector.ClientAbortException) {
-                // Клиент отключился, игнорируем исключение
-                log.warn("Клиент отключился во время принятия запроса на дружбу: {}", e.getMessage());
-                return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
-            } else {
-                // Другая ошибка, логируем и возвращаем ошибку клиенту
-                log.error("Ошибка при принятии запроса на дружбу: ", e);
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-            }
+            log.error("Ошибка при принятии запроса на дружбу: ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -88,17 +70,8 @@ public class FriendController {
             friendService.rejectFriendRequest(requestId, receiverId);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            if (e instanceof org.apache.catalina.connector.ClientAbortException ||
-                    e instanceof org.springframework.web.util.NestedServletException &&
-                            e.getCause() instanceof org.apache.catalina.connector.ClientAbortException) {
-                // Клиент отключился, игнорируем исключение
-                log.warn("Клиент отключился во время отклонения запроса на дружбу: {}", e.getMessage());
-                return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
-            } else {
-                // Другая ошибка, логируем и возвращаем ошибку клиенту
-                log.error("Ошибка при отклонении запроса на дружбу: ", e);
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-            }
+            log.error("Ошибка при отклонении запроса на дружбу: ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -113,17 +86,37 @@ public class FriendController {
             List<FriendRequestDto> requests = friendService.getPendingRequests(userId);
             return ResponseEntity.ok(requests);
         } catch (Exception e) {
-            if (e instanceof org.apache.catalina.connector.ClientAbortException ||
-                    e instanceof org.springframework.web.util.NestedServletException &&
-                            e.getCause() instanceof org.apache.catalina.connector.ClientAbortException) {
-                // Клиент отключился, игнорируем исключение
-                log.warn("Клиент отключился во время получения запросов на дружбу: {}", e.getMessage());
-                return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
-            } else {
-                // Другая ошибка, логируем и возвращаем ошибку клиенту
-                log.error("Ошибка при получении запросов на дружбу: ", e);
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-            }
+            log.error("Ошибка при получении запросов на дружбу: ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<List<FriendDto>> getFriends(
+            @AuthenticationPrincipal User userDetails) {
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        try {
+            List<FriendDto> friends = friendService.getFriends(userDetails.getId());
+            return ResponseEntity.ok(friends);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PostMapping("/remove/{friendId}")
+    public ResponseEntity<Void> removeFriend(
+            @AuthenticationPrincipal User userDetails,
+            @PathVariable String friendId) {
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        try {
+            friendService.removeFriend(userDetails.getId(), friendId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }

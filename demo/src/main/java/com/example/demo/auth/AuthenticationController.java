@@ -2,6 +2,8 @@ package com.example.demo.auth;
 
 import com.example.demo.security.opaque_tokens.TokenData;
 import com.example.demo.security.opaque_tokens.TokenService;
+import com.example.demo.user.User;
+import com.example.demo.user.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.json.JSONObject;
 import com.example.demo.auth.password.PasswordValidationService;
@@ -11,6 +13,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.crypto.Cipher;
@@ -33,6 +37,7 @@ public class AuthenticationController {
     private final TokenService tokenService;
     private final AuthenticationService service;
     private final PasswordValidationService passwordValidationService;
+    private final UserRepository userRepository;
 
     private static final String NODE_SERVER_ADDRESS = "127.0.0.1";
     private static final int NODE_SERVER_PORT = 8081;
@@ -180,5 +185,30 @@ public class AuthenticationController {
                 "username", tokenData.get().getUsername(),
                 "userId", tokenData.get().getUserId()
         ));
+    }
+
+    @PostMapping("/lock-user")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public void lockUser(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        user.setAccountLocked(true);
+        userRepository.save(user);
+    }
+
+    @PostMapping("/lock-user/{email}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> unlockUser(@PathVariable String email) {
+        service.unlockUser(email);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/register-admin")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> registerAdmin(
+            @RequestBody @Valid RegistrationRequest request
+    ) throws MessagingException {
+        service.registerAdmin(request);
+        return ResponseEntity.accepted().build();
     }
 }

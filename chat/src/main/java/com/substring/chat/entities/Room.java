@@ -22,6 +22,7 @@ public class Room {
     @Column
     private String name;
 
+    @Column
     private String description;
 
     private String createdBy;

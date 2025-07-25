@@ -5,6 +5,7 @@ import com.example.demo.exceptions.FriendRequestException;
 import com.example.demo.security.id_generator.SUUID2;
 import com.example.demo.user.User;
 import com.example.demo.user.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -23,20 +24,16 @@ import java.util.stream.Collectors;
 public class FriendService {
     private final FriendRequestRepository friendRequestRepository;
     private final UserRepository userRepository;
-    private final RoomRepository roomRepository;
-    private static final Executor exec = Executors.newCachedThreadPool();
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
-    public CompletableFuture<FriendRequestDto> sendFriendRequest(String senderId, String receiverId) {
-        return CompletableFuture.supplyAsync(() -> {
-
+    public FriendRequestDto sendFriendRequest(String senderId, String receiverId, String tokenId) {
             if (senderId.equals(receiverId)) {
                 throw new FriendRequestException("Cannot send friend request to yourself");
             }
 
-            User sender = userRepository.findById(senderId)
+            User sender = userRepository.findByEmail(senderId)
                     .orElseThrow(() -> new FriendRequestException("Sender not found"));
-            User receiver = userRepository.findById(receiverId)
+            User receiver = userRepository.findByEmail(receiverId)
                     .orElseThrow(() -> new FriendRequestException("Receiver not found"));
 
             if (friendRequestRepository.existsBySenderAndReceiverAndStatus(sender, receiver, FriendRequestStatus.PENDING)) {
@@ -56,7 +53,6 @@ public class FriendService {
 
             friendRequest = friendRequestRepository.save(friendRequest);
             return convertToDTO(friendRequest);
-        }, exec);
     }
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
@@ -130,5 +126,41 @@ public class FriendService {
                 .status(friendRequest.getStatus().name())
                 .createdAt(friendRequest.getCreatedAt())
                 .build();
+    }
+
+    public List<FriendDto> getFriends(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        return user.getFriends().stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    private FriendDto convertToDto(User friend) {
+        return FriendDto.builder()
+                .id(friend.getId())
+                .username(friend.getUsername())
+                .avatarUrl("/avatars/" + friend.getId() + ".jpg") // или friend.getAvatarUrl() если есть в User
+                .friendsSince(LocalDateTime.now()) // или реальная дата из связи если есть
+                .build();
+    }
+
+    @Transactional
+    public void removeFriend(String userId, String friendId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        User friend = userRepository.findById(friendId)
+                .orElseThrow(() -> new EntityNotFoundException("Friend not found"));
+
+        if (!user.getFriends().contains(friend)) {
+            throw new IllegalStateException("Users are not friends");
+        }
+
+        user.getFriends().remove(friend);
+        friend.getFriends().remove(user);
+
+        userRepository.saveAll(List.of(user, friend));
     }
 }

@@ -51,7 +51,8 @@ public class  User extends BaseEntity implements UserDetails, Principal {
     private String password;
 
     @JsonIgnore
-    private boolean accountLocked;
+    @Column(name = "is-locked")
+    private Boolean accountLocked = false;
 
     @JsonIgnore
     private boolean enabled;
@@ -73,6 +74,19 @@ public class  User extends BaseEntity implements UserDetails, Principal {
         return isOnline ||
                 (lastSeenAt != null &&
                         lastSeenAt.isAfter(LocalDateTime.now().minusMinutes(5)));
+    }
+
+    public boolean isAccountLocked() {
+        return Boolean.TRUE.equals(accountLocked);
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return !Boolean.TRUE.equals(accountLocked);
+    }
+
+    public void setAccountLocked(Boolean locked) {
+        this.accountLocked = locked != null ? locked : false;
     }
 
     @Getter
@@ -124,12 +138,6 @@ public class  User extends BaseEntity implements UserDetails, Principal {
     public boolean isAccountNonExpired() {
         return true;
     }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return !accountLocked;
-    }
-
     @Override
     public boolean isCredentialsNonExpired() {
         return true;

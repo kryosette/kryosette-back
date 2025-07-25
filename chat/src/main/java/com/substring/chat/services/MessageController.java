@@ -20,18 +20,10 @@ public class MessageController {
     @RateLimited(5)
     public ResponseEntity<MessageDto> createMessage(
             @PathVariable Long roomId,
-            @RequestBody MessageDto messageDto,
-            @RequestHeader("Authorization") String authHeader) {
-
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
-                    "Invalid authorization header: Authorization header must start with 'Bearer '");
-        }
-
-        String token = authHeader.replace("Bearer ", "");
+            @RequestBody MessageDto messageDto) {
         messageDto.setRoomId(roomId); // Устанавливаем roomId из path variable
 
-        MessageDto createdMessage = messageService.createMessage(messageDto, token);
+        MessageDto createdMessage = messageService.createMessage(messageDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdMessage);
     }
 

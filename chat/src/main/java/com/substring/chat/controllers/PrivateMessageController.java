@@ -2,26 +2,18 @@ package com.substring.chat.controllers;
 
 import com.substring.chat.config.RateLimited;
 import com.substring.chat.entities.*;
-import com.substring.chat.repositories.PrivateRoomRepository;
-import com.substring.chat.repositories.RoomRepository;
 import com.substring.chat.services.PrivateMessageService;
+import com.substring.chat.services.PrivateRoomService;
 import com.substring.chat.services.TypingService;
 import com.substring.chat.services.TypingStatusDto;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
-import jakarta.validation.Valid;
 
-import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/private-rooms/{privateRoomId}/messages")
@@ -29,6 +21,7 @@ import java.util.stream.Collectors;
 public class PrivateMessageController {
     private final PrivateMessageService privateMessageService;
     private final TypingService typingService;
+    private final PrivateRoomService privateRoomService;
 
     @PostMapping
     @RateLimited(5)
@@ -93,5 +86,83 @@ public class PrivateMessageController {
         String token = authHeader.replace("Bearer ", "");
         List<TypingStatusDto> statuses = typingService.getTypingStatuses(privateRoomId, token);
         return ResponseEntity.ok(statuses);
+    }
+
+
+    @PostMapping("/{messageId}/reactions")
+    public ResponseEntity<String> addReaction(
+            @PathVariable Long privateRoomId,
+            @PathVariable Long messageId,
+            @RequestBody String reaction,
+            @RequestHeader("Authorization") String authHeader
+    ) {
+        String token = authHeader.replace("Bearer ", "");
+
+        privateMessageService.addReaction(privateRoomId, messageId, reaction.trim(), token);
+        return ResponseEntity.ok(reaction);
+    }
+
+    @DeleteMapping("/{messageId}/reactions/{reaction}")
+    public ResponseEntity<Void> removeReaction(
+            @PathVariable Long privateRoomId,
+            @PathVariable Long messageId,
+            @PathVariable String reaction) {
+
+        privateMessageService.removeReaction(privateRoomId, messageId, reaction);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{messageId}/reactions")
+    public ResponseEntity<Map<String, Long>> getReactions(
+            @PathVariable Long privateRoomId,
+            @PathVariable Long messageId) {
+
+        Map<String, Long> reactions = privateMessageService.getReactions(messageId);
+        return ResponseEntity.ok(reactions != null ? reactions : new HashMap<>());
+    }
+
+
+    @DeleteMapping("/{messageId}")
+    public ResponseEntity<Void> deleteMessage(
+            @PathVariable Long privateRoomId,
+            @PathVariable Long messageId,
+            @RequestHeader("Authorization") String authHeader) {
+
+        String token = authHeader.replace("Bearer ", "");
+        privateMessageService.deleteMessage(privateRoomId, messageId, token);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/pin")
+    public ResponseEntity<Void> pinMessage(
+            @PathVariable Long privateRoomId,
+            @RequestBody PinMessageRequest request,
+            @RequestHeader("Authorization") String authHeader) {
+
+        String token = authHeader.replace("Bearer ", "");
+        privateRoomService.pinMessage(privateRoomId, request, token);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/block/{userId}")
+    public ResponseEntity<Void> blockUser(
+            @PathVariable Long privateRoomId,
+            @PathVariable String userId,
+            @RequestHeader("Authorization") String authHeader) {
+
+        String token = authHeader.replace("Bearer ", "");
+        privateRoomService.blockUser(privateRoomId, userId, token);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/block/{userId}")
+    public ResponseEntity<Void> unblockUser(
+            @PathVariable Long privateRoomId,
+            @PathVariable String userId,
+            @RequestHeader("Authorization") String authHeader) {
+
+        String token = authHeader.replace("Bearer ", "");
+        privateRoomService.unblockUser(privateRoomId, userId, token);
+        return ResponseEntity.noContent().build();
     }
 }

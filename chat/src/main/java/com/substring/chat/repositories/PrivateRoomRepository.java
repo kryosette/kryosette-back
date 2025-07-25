@@ -13,12 +13,9 @@ public interface PrivateRoomRepository extends JpaRepository<PrivateRoom, Long> 
 
     @Query("SELECT DISTINCT pr FROM PrivateRoom pr JOIN pr.participants p WHERE p.id.userId = :userId")
     List<PrivateRoom> findRoomsByUserId(@Param("userId") String userId);
-    @Query("SELECT DISTINCT pr FROM PrivateRoom pr " +
-            "JOIN pr.participants p1 " +
-            "JOIN pr.participants p2 " +
-            "WHERE p1.id.userId = :userId1 " +
-            "AND p2.id.userId = :userId2 " +
-            "AND SIZE(pr.participants) = 2")
+    @Query("SELECT pr FROM PrivateRoom pr " +
+            "WHERE (SELECT COUNT(p) FROM pr.participants p WHERE p.id.userId IN (:userId1, :userId2)) = 2 " +
+            "AND (SELECT COUNT(p) FROM pr.participants p) = 2")
     Optional<PrivateRoom> findPrivateRoomBetweenUsers(@Param("userId1") String userId1,
                                                       @Param("userId2") String userId2);
 }
