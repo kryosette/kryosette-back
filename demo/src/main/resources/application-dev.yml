@@ -1,6 +1,7 @@
 logging:
   level:
     org.springframework.web: DEBUG
+    org.springframework.cache: DEBUG
 spring:
   config:
     import: optional:configserver:http://localhost:8888
@@ -85,7 +86,7 @@ spring:
     cache:
       type: redis
       redis:
-        time-to-live: 60000
+        time-to-live: 8640000
         cache-null-values: false
   session:
     store-type: redis

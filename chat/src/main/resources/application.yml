@@ -7,7 +7,24 @@ feign:
       default:
         connectTimeout: 5000
         readTimeout: 5000
+logging:
+  level:
+    org.springframework.cache: DEBUG
 spring:
+  redis:
+    host: localhost
+    port: 6379
+    password: "1234"
+    ssl: false
+    lettuce:
+      pool:
+        max-active: 8  # Максимум соединений
+        max-idle: 8    # Максимум "простаивающих" соединений
+        min-idle: 0    # Минимум соединений в пуле
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=1000,expireAfterWrite=10m
   cloud:
     compatibility-verifier:
       enabled: false

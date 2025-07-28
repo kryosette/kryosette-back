@@ -1,9 +1,13 @@
 package com.substring.chat.services;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import com.substring.chat.entities.*;
 import com.substring.chat.repositories.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +17,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,6 +32,7 @@ public class PrivateMessageService {
     private String authServiceUrl;
 
     @Transactional
+    @CacheEvict(value = "roomMessages", key = "#messageDto.privateRoomId")
     public PrivateMessageDto createPrivateMessage(PrivateMessageDto messageDto, String token) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + token.trim());
@@ -69,38 +75,53 @@ public class PrivateMessageService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "roomMessages", key = "#privateRoomId")
     public List<PrivateMessageDto> getMessagesByPrivateRoom(Long privateRoomId, String token) {
-        // Verify token
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + token.trim());
-        ResponseEntity<Map> response = restTemplate.exchange(
-                authServiceUrl + "/api/v1/auth/verify",
-                HttpMethod.POST,
-                new HttpEntity<>(headers),
-                Map.class
-        );
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "Bearer " + token.trim());
+            ResponseEntity<Map> response = restTemplate.exchange(
+                    authServiceUrl + "/api/v1/auth/verify",
+                    HttpMethod.POST,
+                    new HttpEntity<>(headers),
+                    Map.class
+            );
 
-        if (!response.getStatusCode().is2xxSuccessful()) {
-            throw new SecurityException("Authentication failed");
-        }
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                throw new SecurityException("Authentication failed");
+            }
 
-        String userId = (String) Objects.requireNonNull(response.getBody()).get("userId");
+            String userId = (String) Objects.requireNonNull(response.getBody()).get("userId");
 
-        // Verify user is participant
-        PrivateRoom room = privateRoomRepository.findById(privateRoomId)
-                .orElseThrow(() -> new RuntimeException("Private room not found"));
+            PrivateRoom room = privateRoomRepository.findById(privateRoomId)
+                    .orElseThrow(() -> new RuntimeException("Private room not found"));
 
-        boolean isParticipant = room.getParticipants().stream()
-                .anyMatch(p -> p.getUserId().equals(userId));
+            boolean isParticipant = room.getParticipants().stream()
+                    .anyMatch(p -> p.getUserId().equals(userId));
 
-        if (!isParticipant) {
-            throw new SecurityException("User is not a participant of this private room");
-        }
+            if (!isParticipant) {
+                throw new SecurityException("User is not a participant of this private room");
+            }
 
-        // Get messages
         List<PrivateMessage> messages = privateMessageRepository.findByPrivateRoomIdOrderByTimestampAsc(privateRoomId);
+
+        Map<Long, Map<String, Long>> reactions = messageReactionRepository
+                .findReactionsForMessages(messages.stream().map(PrivateMessage::getId).collect(Collectors.toList()))
+                .stream()
+                .collect(Collectors.groupingBy(
+                        r -> r.getMessage().getId(),
+                        Collectors.toMap(
+                                MessageReaction::getReaction,
+                                r -> 1L,
+                                Long::sum
+                        )
+                ));
+
         return messages.stream()
-                .map(this::convertToDto)
+                .map(message -> {
+                    PrivateMessageDto dto = convertToDto(message);
+                    dto.setReactions(reactions.getOrDefault(message.getId(), Map.of()));
+                    return dto;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -112,6 +133,11 @@ public class PrivateMessageService {
         dto.setPrivateRoomId(message.getPrivateRoom().getId());
         dto.setTimestamp(message.getTimestamp());
         return dto;
+    }
+
+    @Cacheable(value = "authCache", key = "#token")
+    public Map<String, String> verifyTokenCached(String token) {
+        return verifyToken(token);
     }
 
     private Map<String, String> verifyToken(String token) {
@@ -137,6 +163,7 @@ public class PrivateMessageService {
         return body;
     }
 
+    @CacheEvict(value = "messageReactions", key = "#messageId")
     public void addReaction(Long roomId, Long messageId, String reaction, String token) {
         Map<String, String> authData = verifyToken(token);
 
@@ -160,6 +187,7 @@ public class PrivateMessageService {
         messageReactionRepository.deleteByMessageIdAndReaction(messageId, reaction);
     }
 
+    @Cacheable(value = "messageReactions", key = "#messageId")
     public Map<String, Long> getReactions(Long messageId) {
         List<Object[]> results = messageReactionRepository.countReactionsByMessageId(messageId);
         return results.stream()

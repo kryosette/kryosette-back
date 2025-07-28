@@ -3,7 +3,7 @@ package com.substring.chat.entities;
 import lombok.Data;
 
 import java.time.Instant;
-import java.util.Set;
+import java.util.Map;
 
 @Data
 public class PrivateMessageDto {
@@ -13,5 +13,5 @@ public class PrivateMessageDto {
     private Long privateRoomId;
     private String userId;
     private Instant timestamp;
-    private String reactions;
+    private Map<String, Long> reactions;
 }

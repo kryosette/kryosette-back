@@ -7,6 +7,8 @@ import com.substring.chat.services.PrivateRoomService;
 import com.substring.chat.services.TypingService;
 import com.substring.chat.services.TypingStatusDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -90,6 +92,7 @@ public class PrivateMessageController {
 
 
     @PostMapping("/{messageId}/reactions")
+    @CacheEvict(value = "messageReactions", key = "#messageId")
     public ResponseEntity<String> addReaction(
             @PathVariable Long privateRoomId,
             @PathVariable Long messageId,
@@ -113,6 +116,7 @@ public class PrivateMessageController {
     }
 
     @GetMapping("/{messageId}/reactions")
+    @Cacheable(value = "messageReactions", key = "#messageId")
     public ResponseEntity<Map<String, Long>> getReactions(
             @PathVariable Long privateRoomId,
             @PathVariable Long messageId) {

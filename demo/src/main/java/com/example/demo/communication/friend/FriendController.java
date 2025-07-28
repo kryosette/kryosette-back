@@ -13,6 +13,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * REST controller for managing friend relationships including:
+ * - Sending/accepting/rejecting friend requests
+ * - Listing friends and pending requests
+ * - Removing friends
+ *
+ * <p>All endpoints require authentication via Spring Security.
+ */
 @RestController
 @PreAuthorize("isAuthenticated()")
 @RequestMapping("friends")
@@ -21,12 +29,18 @@ public class FriendController {
     private final FriendService friendService;
     private final Logger log = LoggerFactory.getLogger(FriendController.class);
 
+    /**
+     * Sends a friend request from authenticated user to specified receiver
+     * @param userDetails Authenticated user from security context
+     * @param receiverId Target user ID for friend request
+     * @param authHeader Bearer token for request validation
+     * @return Created friend request or error status
+     */
     @PostMapping("/request/{receiverId}")
     public ResponseEntity<FriendRequestDto> sendFriendRequest(
             @AuthenticationPrincipal User userDetails,
             @PathVariable String receiverId,
-            @RequestHeader("Authorization") String authHeader
-    ) {
+            @RequestHeader("Authorization") String authHeader) {
         if (userDetails == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -36,11 +50,17 @@ public class FriendController {
             FriendRequestDto request = friendService.sendFriendRequest(senderId, String.valueOf(receiverId), tokenId);
             return ResponseEntity.ok(request);
         } catch (Exception e) {
-            log.error("Ошибка при отправке запроса на дружбу: ", e);
+            log.error("Error sending friend request: ", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
+    /**
+     * Accepts pending friend request
+     * @param userDetails Authenticated user from security context
+     * @param requestId ID of friend request to accept
+     * @return Accepted friend request or error status
+     */
     @PostMapping("/accept/{requestId}")
     public ResponseEntity<FriendRequestDto> acceptFriendRequest(
             @AuthenticationPrincipal User userDetails,
@@ -53,11 +73,17 @@ public class FriendController {
             FriendRequestDto request = friendService.acceptFriendRequest(requestId, currentUserId);
             return ResponseEntity.ok(request);
         } catch (Exception e) {
-            log.error("Ошибка при принятии запроса на дружбу: ", e);
+            log.error("Error accepting friend request: ", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
+    /**
+     * Rejects pending friend request
+     * @param userDetails Authenticated user from security context
+     * @param requestId ID of friend request to reject
+     * @return Empty response or error status
+     */
     @PostMapping("/reject/{requestId}")
     public ResponseEntity<Void> rejectFriendRequest(
             @AuthenticationPrincipal User userDetails,
@@ -70,11 +96,16 @@ public class FriendController {
             friendService.rejectFriendRequest(requestId, receiverId);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            log.error("Ошибка при отклонении запроса на дружбу: ", e);
+            log.error("Error rejecting friend request: ", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
+    /**
+     * Retrieves all pending friend requests for authenticated user
+     * @param userDetails Authenticated user from security context
+     * @return List of pending requests or error status
+     */
     @GetMapping("/requests/pending")
     public ResponseEntity<List<FriendRequestDto>> getPendingRequests(
             @AuthenticationPrincipal User userDetails) {
@@ -86,11 +117,16 @@ public class FriendController {
             List<FriendRequestDto> requests = friendService.getPendingRequests(userId);
             return ResponseEntity.ok(requests);
         } catch (Exception e) {
-            log.error("Ошибка при получении запросов на дружбу: ", e);
+            log.error("Error getting pending requests: ", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
+    /**
+     * Retrieves current friends list for authenticated user
+     * @param userDetails Authenticated user from security context
+     * @return List of friends or error status
+     */
     @GetMapping
     public ResponseEntity<List<FriendDto>> getFriends(
             @AuthenticationPrincipal User userDetails) {
@@ -105,6 +141,12 @@ public class FriendController {
         }
     }
 
+    /**
+     * Removes friend relationship between authenticated user and specified friend
+     * @param userDetails Authenticated user from security context
+     * @param friendId ID of friend to remove
+     * @return Empty response or error status
+     */
     @PostMapping("/remove/{friendId}")
     public ResponseEntity<Void> removeFriend(
             @AuthenticationPrincipal User userDetails,
