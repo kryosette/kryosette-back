@@ -29,6 +29,11 @@ public class AuthorizationTokenArgumentResolver implements HandlerMethodArgument
         String authHeader = request.getHeader("Authorization");
         ExtractAuthorizationToken annotation = parameter.getParameterAnnotation(ExtractAuthorizationToken.class);
 
+//        assert annotation != null; // not safe (java -ea MyClass  # -ea = enable assertions, It won't work without it, and it's not reliable.)
+        if (annotation == null) {
+            throw new IllegalStateException("Security annotation is missing!"); // safe
+        }
+
         if (annotation.required() && (authHeader == null || !authHeader.startsWith("Bearer "))) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
