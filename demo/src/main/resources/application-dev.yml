@@ -117,6 +117,11 @@ rabbitmq:
   routing_key: notification.routing.key
 
 server:
+#  ssl:
+#    enabled: true
+#    key-store: classpath:keystore.p12
+#    key-store-password: 123456
+#    key-alias: localhost
   port: 8088
 
 eureka:

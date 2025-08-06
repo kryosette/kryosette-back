@@ -52,6 +52,11 @@ spring:
   application:
     name: chat
 server:
+#  ssl:
+#    enabled: true
+#    key-store: classpath:keystore.p12
+#    key-store-password: 123456
+#    key-alias: localhost
   port: 8092
 
 eureka:

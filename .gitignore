@@ -1,3 +1,5 @@
 *uploads
 *.idea
 *.gz
+*.p12
+*.yml

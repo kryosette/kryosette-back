@@ -44,6 +44,9 @@ public class  User extends BaseEntity implements UserDetails, Principal {
     private String firstname;
     private String lastname;
 
+    @Column(name = "full_name")
+    private String fullName;
+
     @Column(unique = true)
     private String email;
 

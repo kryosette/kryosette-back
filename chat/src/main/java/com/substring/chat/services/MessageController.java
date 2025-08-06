@@ -21,7 +21,7 @@ public class MessageController {
     public ResponseEntity<MessageDto> createMessage(
             @PathVariable Long roomId,
             @RequestBody MessageDto messageDto) {
-        messageDto.setRoomId(roomId); // Устанавливаем roomId из path variable
+        messageDto.setRoomId(roomId);
 
         MessageDto createdMessage = messageService.createMessage(messageDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdMessage);
@@ -32,7 +32,6 @@ public class MessageController {
             @PathVariable Long roomId,
             @RequestHeader("Authorization") String authHeader) {
 
-        // Проверка авторизации
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
                     "Invalid authorization header");

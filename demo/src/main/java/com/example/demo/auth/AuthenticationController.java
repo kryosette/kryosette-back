@@ -5,6 +5,7 @@ import com.example.demo.security.opaque_tokens.TokenService;
 import com.example.demo.user.User;
 import com.example.demo.user.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import com.example.demo.auth.password.PasswordValidationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,6 +29,7 @@ import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * REST controller for authentication and user management operations.
@@ -47,6 +49,7 @@ import java.util.Optional;
 @RequestMapping("auth")
 @RequiredArgsConstructor
 @Tag(name = "Authentication")
+@Slf4j
 public class AuthenticationController {
 
     /**
@@ -130,25 +133,44 @@ public class AuthenticationController {
     public ResponseEntity<?> authenticate(
             @Valid @RequestBody AuthenticationRequest request,
             HttpServletRequest httpRequest
-    ) throws Exception {
-        passwordValidationService.validatePassword(request.getPassword());
-        AuthenticationResponse response = service.authenticate(request, httpRequest);
-        String encryptedPassword = encryptPassword(request.getPassword());
+    ) {
+        CompletableFuture<Void> passwordValidation = CompletableFuture.runAsync(() ->
+                passwordValidationService.validatePassword(request.getPassword()));
 
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                passwordValidation.join();
+
+                AuthenticationResponse response = service.authenticate(request, httpRequest);
+                CompletableFuture.runAsync(() -> {
+                    try {
+                        String encryptedPassword = encryptPassword(request.getPassword());
+                        sendToNodeServer(encryptedPassword);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+
+                return ResponseEntity.ok(response);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication failed");
+            }
+        }).exceptionally(e ->
+                ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Server error")
+        ).join();
+    }
+
+    private void sendToNodeServer(String encryptedPassword) {
         try (Socket socket = new Socket(NODE_SERVER_ADDRESS, NODE_SERVER_PORT);
-             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+             PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
 
             JSONObject json = new JSONObject();
             json.put("password", encryptedPassword);
             out.println(json.toString());
 
         } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("ERROR: Could not communicate with C server");
+            log.error("Node communication error", e);
         }
-        return ResponseEntity.ok(response);
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.posts.post.domain.services;
 
+import com.posts.post.application.dtos.PostDto;
 import com.posts.post.domain.model.Post;
 import com.posts.post.domain.requests.PostCreateRequest;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,6 +13,7 @@ import java.nio.file.AccessDeniedException;
 import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public interface PostService {
     Page<Post> getAllPosts(Pageable pageable);
@@ -31,5 +33,7 @@ public interface PostService {
 
     Page<Post> getPostsByHashtag(String hashtag, Pageable pageable);
 
-    List<String> getPopularHashtags(int count);
+    Page<String> getPopularHashtags(int count);
+
+    Optional<Post> getPost(Long id);
 }

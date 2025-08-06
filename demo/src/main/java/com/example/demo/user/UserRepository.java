@@ -27,6 +27,8 @@ public interface UserRepository extends JpaRepository<User, String> {
     @EntityGraph(attributePaths = "roles")
     Optional<User> findByEmail(String email);
 
+    User findByFullName(String fullName);
+
     // Additional commented query examples:
     // @Query("SELECT DISTINCT u FROM User u LEFT JOIN FETCH u.roles")
     // List<User> findAllWithRoles();

@@ -1,5 +1,9 @@
 package com.posts.post.application.dtos;
 
+import com.posts.post.domain.responses.PollResponse;
+import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.FutureOrPresent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,4 +28,10 @@ public class PostDto {
     private Long viewsCount;
     private List<CommentDto> comments;
     private Set<String> hashtags;
+    private PollDto poll;
+
+    @FutureOrPresent(message = "Expiration date must be in the future or present")
+    @Nullable
+    private LocalDateTime expiresAt;
+    private boolean expired;
 }

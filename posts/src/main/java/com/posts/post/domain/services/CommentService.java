@@ -1,6 +1,7 @@
 package com.posts.post.domain.services;
 
 import com.posts.post.application.dtos.CommentDto;
+import com.posts.post.domain.aspect.GetToken;
 import com.posts.post.domain.model.Comment;
 import com.posts.post.domain.model.Post;
 import com.posts.post.domain.repositories.CommentRepository;
@@ -29,9 +30,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
     private final RestTemplate restTemplate;
-
-    @Value("${auth.service.url}")
-    private String authServiceUrl;
+    private final GetToken getToken;
 
     /**
      * Creates a new comment for a specific post.
@@ -50,21 +49,9 @@ public class CommentService {
             CreateCommentDto commentDto,
             String token
     ) throws UserPrincipalNotFoundException {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + token.trim());
-        ResponseEntity<Map> response = restTemplate.exchange(
-                authServiceUrl + "/api/v1/auth/verify",
-                HttpMethod.POST,
-                new HttpEntity<>(headers),
-                Map.class
-        );
+        String userId = getToken.verifyTokenAndGetUserId(token);
+        String email = getToken.verifyTokenAndGetEmail(token);
 
-        if (!response.getStatusCode().is2xxSuccessful()) {
-            throw new SecurityException("Ошибка авторизации: " + response.getBody());
-        }
-
-        String userId = (String) Objects.requireNonNull(response.getBody()).get("userId");
-        String username = (String) Objects.requireNonNull(response.getBody().get("username"));
         if (userId == null) {
             throw new UserPrincipalNotFoundException("User ID не найден в токене");
         }
@@ -76,7 +63,7 @@ public class CommentService {
         comment.setContent(commentDto.getContent());
         comment.setPost(post);
         comment.setUserId(userId);
-        comment.setUsername(username);
+        comment.setUsername(email);
         comment.setIsPinned(false);
 
         Comment savedComment = commentRepository.save(comment);
@@ -125,31 +112,6 @@ public class CommentService {
                 comment.getCreatedAt(),
                 comment.getIsPinned()
         );
-    }
-
-    /**
-     * Verifies the user's token by sending a request to the authentication service.
-     *
-     * @param token The user's authorization token.
-     * @return Map<String, String> A map containing the user's information (userId, username).
-     * @throws SecurityException if there is an authorization error.
-     */
-    private Map<String, String> verifyToken(String token) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + token.trim());
-
-        ResponseEntity<Map> response = restTemplate.exchange(
-                authServiceUrl + "/api/v1/auth/verify",
-                HttpMethod.POST,
-                new HttpEntity<>(headers),
-                Map.class
-        );
-
-        if (!response.getStatusCode().is2xxSuccessful()) {
-            throw new SecurityException("Ошибка авторизации");
-        }
-
-        return (Map<String, String>) response.getBody();
     }
 
     /**

@@ -41,7 +41,6 @@ public class OpaqueTokenFilter extends OncePerRequestFilter {
 
         String token = authHeader.substring(7);
 
-        // Проверка токена в Redis/БД
         tokenService.getTokenData(token).ifPresent(tokenData -> {
             UserDetails userDetails = userDetailsService.loadUserByUsername(tokenData.getUsername());
 

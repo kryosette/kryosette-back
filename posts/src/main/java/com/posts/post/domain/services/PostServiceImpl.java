@@ -1,14 +1,9 @@
 package com.posts.post.domain.services;
 
-import com.posts.post.domain.model.Post;
-import com.posts.post.domain.model.PostView;
-import com.posts.post.domain.repositories.PostRepository;
-import com.posts.post.domain.repositories.PostViewRepository;
+import com.posts.post.domain.aspect.GetToken;
+import com.posts.post.domain.model.*;
+import com.posts.post.domain.repositories.*;
 import com.posts.post.domain.requests.PostCreateRequest;
-import com.posts.post.infrastructure.config.AuthServiceClient;
-import com.posts.post.domain.repositories.CommentRepository;
-import com.posts.post.domain.model.Like;
-import com.posts.post.domain.repositories.LikeRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,16 +12,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.nio.file.AccessDeniedException;
 import java.nio.file.attribute.UserPrincipalNotFoundException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
@@ -42,6 +37,10 @@ public class PostServiceImpl implements PostService {
     private final ExecutorService executorService = Executors.newFixedThreadPool(10);
     private final CommentRepository commentRepository;
     private final PostViewRepository postViewRepository;
+    private final GetToken getToken;
+    private final PollService pollService;
+    private final PollOptionRepository pollOptionRepository;
+    private final PollRepository pollRepository;
 
     @Value("${auth.service.url}")
     private String authServiceUrl;
@@ -53,7 +52,7 @@ public class PostServiceImpl implements PostService {
      * @return Page object containing posts and pagination details
      */
     public Page<Post> getAllPosts(Pageable pageable) {
-        return postRepository.findAllByOrderByCreatedAtDesc(pageable);
+        return postRepository.findAllActive(pageable);
     }
 
     /**
@@ -67,17 +66,19 @@ public class PostServiceImpl implements PostService {
      */
     @Transactional
     public Post createPost(PostCreateRequest request, String token) throws UserPrincipalNotFoundException {
-        Map<String, String> authData = verifyToken(token);
+        String userId = getToken.verifyTokenAndGetUserId(token);
+        String email = getToken.verifyTokenAndGetEmail(token);
 
-        if (authData.get("userId") == null || authData.get("username") == null) {
+        if (userId == null || email == null) {
             throw new UserPrincipalNotFoundException("User credentials not found in token");
         }
 
         Post post = new Post();
         post.setTitle(request.getTitle());
         post.setContent(request.getContent());
-        post.setAuthorId(authData.get("userId"));
-        post.setAuthor(authData.get("username"));
+        post.setAuthorId(userId);
+        post.setAuthor(email);
+        post.setExpiresAt(request.getExpiresAt());
 
         if (request.getHashtags() != null) {
             Set<String> normalizedHashtags = request.getHashtags().stream()
@@ -86,37 +87,37 @@ public class PostServiceImpl implements PostService {
             post.setHashtags(normalizedHashtags);
         }
 
-        return postRepository.save(post);
-    }
+        Post savedPost = postRepository.save(post);
 
-    /**
-     * Asynchronously verifies an opaque authentication token with the auth service
-     *
-     * @param token opaque authentication token to verify
-     * @return CompletableFuture containing user claims if verification succeeds
-     * @throws CompletionException if token verification fails
-     */
-    private Map<String, String> verifyToken(String token) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + token.trim());
+        // Create poll if included in request
+        if (request.getPoll() != null) {
+            Poll poll = new Poll();
+            poll.setPost(savedPost);
+            poll.setQuestion(request.getPoll().getQuestion());
+            poll.setMultipleChoice(request.getPoll().isMultipleChoice());
 
-        ResponseEntity<Map> response = restTemplate.exchange(
-                authServiceUrl + "/api/v1/auth/verify",
-                HttpMethod.POST,
-                new HttpEntity<>(headers),
-                Map.class
-        );
+            if (request.getPoll().getExpiresAt() != null) {
+                poll.setExpiresAt(request.getPoll().getExpiresAt()
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDateTime());
+            }
 
-        if (!response.getStatusCode().is2xxSuccessful()) {
-            throw new SecurityException("Authentication failed: " + response.getStatusCode());
+            Poll savedPoll = pollRepository.save(poll);
+
+            List<PollOption> options = request.getPoll().getOptions().stream()
+                    .map(optionText -> {
+                        PollOption option = new PollOption();
+                        option.setPoll(savedPoll);
+                        option.setText(optionText);
+                        return option;
+                    })
+                    .collect(Collectors.toList());
+
+            pollOptionRepository.saveAll(options);
+            savedPoll.setOptions(options);
         }
 
-        Map<String, String> body = response.getBody();
-        if (body == null) {
-            throw new SecurityException("Empty response from auth service");
-        }
-
-        return body;
+        return savedPost;
     }
 
     /**
@@ -132,18 +133,8 @@ public class PostServiceImpl implements PostService {
     @Transactional
     public void deletePost(String token, Integer postId)
             throws AccessDeniedException, UserPrincipalNotFoundException {
-        // Verify token and get user ID
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + token.trim());
+        String userId = getToken.verifyTokenAndGetUserId(token);
 
-        ResponseEntity<Map> response = restTemplate.exchange(
-                authServiceUrl + "/api/v1/auth/verify",
-                HttpMethod.POST,
-                new HttpEntity<>(headers),
-                Map.class
-        );
-
-        String userId = (String) Objects.requireNonNull(response.getBody()).get("userId");
         if (userId == null) {
             throw new UserPrincipalNotFoundException("User ID not found in token");
         }
@@ -154,9 +145,7 @@ public class PostServiceImpl implements PostService {
         log.info("Attempting to delete post {} by user {}", postId, userId);
 
         likeRepository.deleteByPostId(post.getId());
-
         commentRepository.deleteByPostId(post.getId());
-
         postRepository.delete(post);
     }
 
@@ -174,25 +163,11 @@ public class PostServiceImpl implements PostService {
             String token,
             Integer postId
     ) throws UserPrincipalNotFoundException {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + token.trim());
-
-        ResponseEntity<Map> response = restTemplate.exchange(
-                authServiceUrl + "/api/v1/auth/verify",
-                HttpMethod.POST,
-                new HttpEntity<>(headers),
-                Map.class
-        );
-
         Post post = postRepository.findById(Long.valueOf(postId))
                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
+        String userId = getToken.verifyTokenAndGetUserId(token);
 
-        if (!response.getStatusCode().is2xxSuccessful()) {
-            throw new SecurityException("Ошибка авторизации: " + response.getBody());
-        }
-
-        String userId = (String) Objects.requireNonNull(response.getBody()).get("userId");
         if (userId == null) {
             throw new UserPrincipalNotFoundException("User ID не найден в токене");
         }
@@ -223,25 +198,12 @@ public class PostServiceImpl implements PostService {
             String token,
             Long postId
     ) throws UserPrincipalNotFoundException {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + token.trim());
-
-        ResponseEntity<Map> response = restTemplate.exchange(
-                authServiceUrl + "/api/v1/auth/verify",
-                HttpMethod.POST,
-                new HttpEntity<>(headers),
-                Map.class
-        );
 
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
+        String userId = getToken.verifyTokenAndGetUserId(token);
 
-        if (!response.getStatusCode().is2xxSuccessful()) {
-            throw new SecurityException("Ошибка авторизации: " + response.getBody());
-        }
-
-        String userId = (String) Objects.requireNonNull(response.getBody()).get("userId");
         if (userId == null) {
             throw new UserPrincipalNotFoundException("User ID не найден в токене");
         }
@@ -251,23 +213,8 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     public void recordPostView(String token, Long postId, HttpServletRequest request) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + token.trim());
+        String userId = getToken.verifyTokenAndGetUserId(token);
 
-        ResponseEntity<Map> response = restTemplate.exchange(
-                authServiceUrl + "/api/v1/auth/verify",
-                HttpMethod.POST,
-                new HttpEntity<>(headers),
-                Map.class
-        );
-
-        if (!response.getStatusCode().is2xxSuccessful()) {
-            throw new SecurityException("Ошибка авторизации: " + response.getBody());
-        }
-
-        String userId = (String) Objects.requireNonNull(response.getBody()).get("userId");
-
-        // Record view only if user hasn't viewed this post before
         if (!postViewRepository.existsByPostIdAndUserId(postId, userId)) {
             PostView view = new PostView(postId, userId);
             postViewRepository.save(view);
@@ -289,7 +236,28 @@ public class PostServiceImpl implements PostService {
         return postRepository.findByHashtagsContaining(normalizedHashtag, pageable);
     }
 
-    public List<String> getPopularHashtags(int count) {
-        return postRepository.findPopularHashtags(PageRequest.of(0, count));
+    /*
+    * spring.data.web.pageable.max-page-size = 100 (safe)
+    * */
+    @Override
+    public Page<String> getPopularHashtags(int count) {
+        LocalDateTime dateFrom = LocalDateTime.now();
+
+        Pageable pageable = PageRequest.of(0, count); // safe
+        return postRepository.findPopularHashtags(dateFrom, pageable);
     }
+
+    @Override
+    public Optional<Post> getPost(Long id) {
+        return postRepository.findActiveById(id);
+    }
+
+    @Scheduled(cron = "0 0 0 * * ?")
+    @Transactional
+    public void cleanupExpiredPosts() {
+        log.info("Cleaning up expired posts...");
+        int deletedCount = postRepository.deleteExpiredPosts();
+        log.info("Deleted {} expired posts", deletedCount);
+    }
+
 }

@@ -1,9 +1,14 @@
 package com.posts.post.domain.repositories;
 
+import com.posts.post.domain.model.PollOption;
 import com.posts.post.domain.model.PostView;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import java.util.List;
+import java.util.Map;
 
 public interface PostViewRepository extends JpaRepository<PostView, Long> {
     @Query("SELECT COUNT(pv) FROM PostView pv WHERE pv.postId = :postId")

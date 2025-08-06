@@ -1,13 +1,21 @@
 package com.posts.post.application.controllers;
 
+import com.posts.post.application.dtos.OptionVoteCount;
+import com.posts.post.application.dtos.PollDto;
+import com.posts.post.application.dtos.PollOptionDto;
 import com.posts.post.application.dtos.PostDto;
 import com.posts.post.domain.annotations.ExtractAuthorizationToken;
+import com.posts.post.domain.model.Poll;
+import com.posts.post.domain.model.PollOption;
 import com.posts.post.domain.model.Post;
-import com.posts.post.domain.repositories.PostRepository;
+import com.posts.post.domain.repositories.*;
+import com.posts.post.domain.requests.PollRequest;
 import com.posts.post.domain.requests.PostCreateRequest;
+import com.posts.post.domain.responses.PollResponse;
+import com.posts.post.domain.responses.VoteRequest;
+import com.posts.post.domain.services.PollService;
 import com.posts.post.domain.services.PostService;
 import com.posts.post.infrastructure.config.AuthServiceClient;
-import com.posts.post.domain.repositories.LikeRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -29,8 +37,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.nio.file.AccessDeniedException;
 import java.nio.file.attribute.UserPrincipalNotFoundException;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("posts")
@@ -46,6 +54,10 @@ public class PostController {
     private final PostService postService;
     private final PostRepository postRepository;
     private final LikeRepository likeRepository;
+    private final PollService pollService;
+    private final PollRepository pollRepository;
+    private final PollOptionRepository pollOptionRepository;
+    private final PollVoteRepository pollVoteRepository;
 
     /**
      * Creates a new blog post after validating the authentication token
@@ -67,11 +79,19 @@ public class PostController {
         } catch (UserPrincipalNotFoundException | SecurityException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (Exception e) {
+            log.error("Error creating post", e); // Add logging
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Ошибка при создании поста: " + e.getMessage()
+                    "Error creating post: " + e.getMessage()
             );
         }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PostDto> getPost(@PathVariable Long id) {
+        return postService.getPost(id)
+                .map(post -> ResponseEntity.ok(mapPostToDto(post)))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found or expired"));
     }
 
     /**
@@ -198,15 +218,70 @@ public class PostController {
      */
     private PostDto mapPostToDto(Post post) {
         PostDto dto = new PostDto();
+        // Базовые поля поста
         dto.setId(post.getId());
         dto.setTitle(post.getTitle());
         dto.setContent(post.getContent());
         dto.setCreatedAt(post.getCreatedAt());
         dto.setAuthorName(post.getAuthor());
-        dto.setHashtags(post.getHashtags());
+        dto.setExpiresAt(post.getExpiresAt());
+        dto.setExpired(post.isExpired());
 
+        // Хэштеги (защита от null)
+        dto.setHashtags(post.getHashtags() != null ?
+                new HashSet<>(post.getHashtags()) :
+                Collections.emptySet());
+
+        // Статистика просмотров
         Map<String, Long> viewStats = postService.getPostViewStats(post.getId());
-        dto.setViewsCount(viewStats.get("totalViews"));
+        dto.setViewsCount(viewStats != null ? viewStats.getOrDefault("totalViews", 0L) : 0L);
+
+        // Обработка опроса (если есть)
+        if (post.getPoll() != null) {
+            PollDto pollDto = new PollDto();
+            pollDto.setId(post.getPoll().getId());
+            pollDto.setQuestion(post.getPoll().getQuestion());
+            pollDto.setMultipleChoice(post.getPoll().isMultipleChoice());
+            pollDto.setExpiresAt(post.getPoll().getExpiresAt());
+            pollDto.setCreatedAt(post.getPoll().getCreatedAt());
+
+            // Получаем все варианты ответов для этого опроса
+            List<PollOption> options = pollOptionRepository.findByPollId(post.getPoll().getId());
+
+            // Получаем ID всех вариантов для одного запроса подсчета голосов
+            List<Long> optionIds = options.stream()
+                    .map(PollOption::getId)
+                    .collect(Collectors.toList());
+
+            // Получаем количество голосов для всех вариантов одним запросом
+            Map<Long, Long> voteCounts = pollVoteRepository.countVotesByOptionId(optionIds)
+                    .stream()
+                    .collect(Collectors.toMap(
+                            OptionVoteCount::getOptionId,
+                            OptionVoteCount::getVoteCount
+                    ));
+
+            // Маппим варианты ответов с количеством голосов
+            List<PollOptionDto> optionDtos = options.stream()
+                    .map(option -> {
+                        PollOptionDto optionDto = new PollOptionDto();
+                        optionDto.setId(option.getId());
+                        optionDto.setText(option.getText());
+                        optionDto.setVoteCount(voteCounts.getOrDefault(option.getId(), 0L));
+                        return optionDto;
+                    })
+                    .collect(Collectors.toList());
+
+            pollDto.setOptions(optionDtos);
+
+            // Общее количество голосов в опросе
+            long totalVotes = voteCounts.values().stream()
+                    .mapToLong(Long::longValue)
+                    .sum();
+            pollDto.setTotalVotes(totalVotes);
+
+            dto.setPoll(pollDto);
+        }
 
         return dto;
     }
@@ -236,9 +311,9 @@ public class PostController {
     }
 
     @GetMapping("/hashtags/popular")
-    public ResponseEntity<List<String>> getPopularHashtags(
+    public ResponseEntity<Page<String>> getPopularHashtags(
             @RequestParam(defaultValue = "10") int count) {
-        List<String> popularHashtags = postService.getPopularHashtags(count);
+        Page<String> popularHashtags = postService.getPopularHashtags(count);
         return ResponseEntity.ok(popularHashtags);
     }
 
@@ -254,5 +329,50 @@ public class PostController {
 
         return ResponseEntity.ok(posts);
     }
+
+    @PostMapping("/{postId}/polls")
+    @ResponseStatus(HttpStatus.CREATED)
+    public PollResponse createPoll(
+            @PathVariable Long postId,
+            @RequestBody @Valid PollRequest request,
+            @ExtractAuthorizationToken String token
+    ) throws UserPrincipalNotFoundException {
+        return pollService.createPoll(postId, request, token);
+    }
+
+    /**
+     * Gets a poll for a post
+     */
+    @GetMapping("/{postId}/polls")
+    public PollResponse getPoll(
+            @PathVariable Long postId,
+            @ExtractAuthorizationToken String token
+    ) throws UserPrincipalNotFoundException {
+        return pollService.getPoll(postId, token);
+    }
+
+    /**
+     * Votes in a poll
+     */
+    @PostMapping("/{postId}/polls/vote")
+    public PollResponse vote(
+            @PathVariable Long postId,
+            @RequestBody @Valid VoteRequest request,
+            @ExtractAuthorizationToken String token
+    ) throws UserPrincipalNotFoundException {
+        return pollService.vote(postId, request, token);
+    }
+
+    /**
+     * Deletes a poll
+     */
+//    @DeleteMapping("/{postId}/polls")
+//    public ResponseEntity<?> deletePoll(
+//            @PathVariable Long postId,
+//            @ExtractAuthorizationToken String token
+//    ) throws UserPrincipalNotFoundException {
+//        pollService.deletePoll(postId, token);
+//        return ResponseEntity.noContent().build();
+//    }
 
 }

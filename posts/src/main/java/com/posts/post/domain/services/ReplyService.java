@@ -2,6 +2,7 @@ package com.posts.post.domain.services;
 
 import com.posts.post.application.dtos.CreateReplyDto;
 import com.posts.post.application.dtos.ReplyDto;
+import com.posts.post.domain.aspect.GetToken;
 import com.posts.post.domain.model.Comment;
 import com.posts.post.domain.model.Reply;
 import com.posts.post.domain.repositories.CommentRepository;
@@ -29,9 +30,7 @@ public class ReplyService {
     private final ReplyRepository replyRepository;
     private final CommentRepository commentRepository;
     private final RestTemplate restTemplate;
-
-    @Value("${auth.service.url}")
-    private String authServiceUrl;
+    private final GetToken getToken;
 
     /**
      * Creates a new reply to a specific comment.  This method verifies the user's
@@ -49,21 +48,9 @@ public class ReplyService {
      */
     @Transactional
     public ReplyDto createReply(Long commentId, CreateReplyDto dto, String token) throws UserPrincipalNotFoundException {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + token.trim());
-        ResponseEntity<Map> response = restTemplate.exchange(
-                authServiceUrl + "/api/v1/auth/verify",
-                HttpMethod.POST,
-                new HttpEntity<>(headers),
-                Map.class
-        );
+        String userId = getToken.verifyTokenAndGetUserId(token);
+        String email = getToken.verifyTokenAndGetEmail(token);
 
-        if (!response.getStatusCode().is2xxSuccessful()) {
-            throw new SecurityException("Ошибка авторизации: " + response.getBody());
-        }
-
-        String userId = (String) Objects.requireNonNull(response.getBody()).get("userId");
-        String username = (String) Objects.requireNonNull(response.getBody().get("username"));
         if (userId == null) {
             throw new UserPrincipalNotFoundException("User ID не найден в токене");
         }
@@ -75,7 +62,7 @@ public class ReplyService {
         reply.setContent(dto.getContent());
         reply.setComment(comment);
         reply.setUserId(userId);
-        reply.setUsername(username);
+        reply.setUsername(email);
 
         Reply savedReply = replyRepository.save(reply);
         return convertToDto(savedReply);
@@ -110,31 +97,5 @@ public class ReplyService {
         dto.setCreatedAt(reply.getCreatedAt());
         dto.setCommentId(reply.getComment().getId());
         return dto;
-    }
-
-    /**
-     * Verifies the user's token by sending a request to the authentication service.
-     *
-     * @param token The user's authorization token.
-     * @return Map<String, String> A map containing the user's information (userId,
-     * username).
-     * @throws SecurityException if there is an authorization error.
-     */
-    private Map<String, String> verifyToken(String token) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + token.trim());
-
-        ResponseEntity<Map> response = restTemplate.exchange(
-                authServiceUrl + "/api/v1/auth/verify",
-                HttpMethod.POST,
-                new HttpEntity<>(headers),
-                Map.class
-        );
-
-        if (!response.getStatusCode().is2xxSuccessful()) {
-            throw new SecurityException("Ошибка авторизации");
-        }
-
-        return (Map<String, String>) response.getBody();
     }
 }

@@ -8,9 +8,12 @@ import com.example.demo.user.role.RoleRepository;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.CacheManager;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,6 +27,7 @@ import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Core authentication service handling user registration, authentication,
@@ -43,6 +47,7 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthenticationService {
 
     private final TokenService tokenService;
@@ -52,6 +57,7 @@ public class AuthenticationService {
     private final RoleRepository roleRepository;
     private final EmailService emailService;
     private final TokenRepository tokenRepository;
+    private final CacheManager cacheManager;
 
     /**
      * Frontend activation URL for account verification emails.
@@ -106,42 +112,37 @@ public class AuthenticationService {
      * </ol>
      */
     public AuthenticationResponse authenticate(AuthenticationRequest request, HttpServletRequest httpRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
+        try {
+            String cacheKey = "auth_attempt:" + request.getEmail();
+            if (Objects.requireNonNull(cacheManager.getCache("authAttempts")).get(cacheKey) != null) {
+                throw new LockedException("Too many attempts");
+            }
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        Object principal = authentication.getPrincipal();
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
+            );
 
-        if (!(principal instanceof UserDetails) || !(principal instanceof User)) {
-            System.err.println("Incorrect principal type. Check your UserDetailsService implementation.");
-            throw new IllegalStateException("Incorrect UserDetails type. Please check your UserDetailsService configuration.");
+            User user = (User) authentication.getPrincipal();
+
+            if (user.isAccountLocked()) {
+                Objects.requireNonNull(cacheManager.getCache("lockedAccounts")).put(user.getEmail(), true);
+                throw new LockedException("Account is locked");
+            }
+
+            String deviceHash = generateDeviceHash(httpRequest, user.getUsername());
+            String token = tokenService.generateToken(user, user.getId(), deviceHash);
+
+            return AuthenticationResponse.builder()
+                    .token(token)
+                    .build();
+
+        } catch (BadCredentialsException e) {
+            log.warn("Failed login attempt for: " + request.getEmail());
+            throw e;
         }
-
-        User user = (User) principal;
-        UserDetails userDetails = (UserDetails) principal;
-
-        if (user.isAccountLocked()) {
-            throw new LockedException("Account is locked");
-        }
-
-        var claims = new HashMap<String, Object>();
-        claims.put("fullName", user.getFullName());
-
-        String deviceHash = generateDeviceHash(httpRequest, user.getUsername());
-
-        String token = tokenService.generateToken(
-                userDetails,
-                user.getId(),
-                deviceHash
-        );
-
-        return AuthenticationResponse.builder()
-                .token(token)
-                .build();
     }
 
     /**

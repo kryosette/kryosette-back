@@ -48,6 +48,9 @@ public class Post {
     @ElementCollection
     private List<String> fileUrls;
 
+    @OneToOne(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Poll poll;
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
@@ -60,12 +63,13 @@ public class Post {
     @Column(name = "hashtag")
     private Set<String> hashtags = new HashSet<>();
 
+    private LocalDateTime expiresAt;
+
     public Post(String title, String content, Long id) {
         this.title = title;
         this.content = content;
         this.id = id;
     }
-
 
     public Long getAuthorId() {
         this.id = id;
@@ -75,6 +79,10 @@ public class Post {
     public String getAuthorUsername() {
         this.id = id;
         return null;
+    }
+
+    public boolean isExpired() {
+        return expiresAt != null && expiresAt.isBefore(LocalDateTime.now());
     }
 
     public void setAuthorId(String author) {

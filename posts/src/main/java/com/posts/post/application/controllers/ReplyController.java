@@ -24,7 +24,7 @@ public class ReplyController {
      *
      * @param commentId The ID of the comment being replied to.
      * @param dto       The data transfer object containing the reply information.
-     * @param authHeader The authorization header containing the user's token.
+     * @param @ExtractAuthorizationToken The authorization header containing the user's token.
      * @return ResponseEntity containing the created ReplyDto with HTTP status CREATED.
      * @throws UserPrincipalNotFoundException if the user principal cannot be found based on the token.
      * @throws ResponseStatusException if the authorization header is invalid.
