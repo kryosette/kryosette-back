@@ -92,10 +92,10 @@ public class AuthenticationController {
      *                  <li>email</li>
      *                  <li>password</li>
      *                  <li>other user details</li>
-     *                </ul>
+     *                </ ul>
      * @return HTTP 202 (Accepted) on success
      * @throws MessagingException If account activation email fails to send
-     * @see RegistrationRequest For request structure
+     * @see RegistrationR equest For request structure
      */
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.ACCEPTED)
@@ -137,12 +137,12 @@ public class AuthenticationController {
         CompletableFuture<Void> passwordValidation = CompletableFuture.runAsync(() ->
                 passwordValidationService.validatePassword(request.getPassword()));
 
-        return CompletableFuture.supplyAsync(() -> {
+        return CompletableFuture.supplyAsync(() -> { // Can return a value (T)
             try {
                 passwordValidation.join();
 
                 AuthenticationResponse response = service.authenticate(request, httpRequest);
-                CompletableFuture.runAsync(() -> {
+                CompletableFuture.runAsync(() -> { // No return (void)
                     try {
                         String encryptedPassword = encryptPassword(request.getPassword());
                         sendToNodeServer(encryptedPassword);

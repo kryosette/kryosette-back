@@ -5,7 +5,6 @@ import com.posts.post.application.dtos.PollDto;
 import com.posts.post.application.dtos.PollOptionDto;
 import com.posts.post.application.dtos.PostDto;
 import com.posts.post.domain.annotations.ExtractAuthorizationToken;
-import com.posts.post.domain.model.Poll;
 import com.posts.post.domain.model.PollOption;
 import com.posts.post.domain.model.Post;
 import com.posts.post.domain.repositories.*;
@@ -15,15 +14,11 @@ import com.posts.post.domain.responses.PollResponse;
 import com.posts.post.domain.responses.VoteRequest;
 import com.posts.post.domain.services.PollService;
 import com.posts.post.domain.services.PostService;
-import com.posts.post.infrastructure.config.AuthServiceClient;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.common.errors.ResourceNotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -79,7 +74,7 @@ public class PostController {
         } catch (UserPrincipalNotFoundException | SecurityException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (Exception e) {
-            log.error("Error creating post", e); // Add logging
+            log.error("Error creating post", e);
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR,
                     "Error creating post: " + e.getMessage()
