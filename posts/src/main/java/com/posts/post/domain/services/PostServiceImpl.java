@@ -249,7 +249,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Optional<Post> getPost(Long id) {
-        return postRepository.findActiveById(id);
+                return postRepository.findActiveById(id);
     }
 
     @Scheduled(cron = "0 0 0 * * ?")

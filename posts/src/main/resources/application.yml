@@ -2,8 +2,15 @@ file:
   uploads:
     photos-output-path: ./uploads
 logging:
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} | %-5level | %msg%n"
+  logger:
+    METRICS_AGGREGATOR:
+      level: INFO
+  file:
+    name: logs/metrics.log
   level:
-    org.springframework.web.client: DEBUG
+    com.posts: INFO
 auth:
   service:
     url: http://localhost:8088

@@ -1,0 +1,921 @@
+2025-08-11 12:38:50 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:38:50 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:38:50 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:38:50 | WARN  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:38:50 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:38:50 | WARN  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:38:50 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:38:50 | WARN  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:38:52 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:38:52 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:38:52 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:38:54 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:38:54 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:38:54 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:38:54 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:38:54 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:38:54 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:38:55 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:38:55 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:38:55 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:38:55 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:38:56 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:38:56 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:38:56 | WARN  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:38:56 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:38:58 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:38:58 | WARN  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "
+    alter table post_hashtags 
+       add column id bigint not null auto_increment" via JDBC [Incorrect table definition; there can be only one auto column and it must be defined as a key]
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:94)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlString(AbstractSchemaMigrator.java:576)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlStrings(AbstractSchemaMigrator.java:516)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.migrateTable(AbstractSchemaMigrator.java:334)
+	at org.hibernate.tool.schema.internal.GroupedSchemaMigratorImpl.performTablesMigration(GroupedSchemaMigratorImpl.java:84)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.performMigration(AbstractSchemaMigrator.java:233)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.doMigration(AbstractSchemaMigrator.java:112)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.performDatabaseAction(SchemaManagementToolCoordinator.java:280)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.lambda$process$5(SchemaManagementToolCoordinator.java:144)
+	at java.base/java.util.HashMap.forEach(HashMap.java:1429)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.process(SchemaManagementToolCoordinator.java:141)
+	at org.hibernate.boot.internal.SessionFactoryObserverForSchemaExport.sessionFactoryCreated(SessionFactoryObserverForSchemaExport.java:37)
+	at org.hibernate.internal.SessionFactoryObserverChain.sessionFactoryCreated(SessionFactoryObserverChain.java:35)
+	at org.hibernate.internal.SessionFactoryImpl.<init>(SessionFactoryImpl.java:324)
+	at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:463)
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1517)
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:66)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:390)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:419)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:400)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:366)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1859)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1808)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:601)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:346)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:207)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:970)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350)
+	at com.posts.post.PostsApplication.main(PostsApplication.java:15)
+Caused by: java.sql.SQLSyntaxErrorException: Incorrect table definition; there can be only one auto column and it must be defined as a key
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:112)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
+	at com.mysql.cj.jdbc.StatementImpl.executeInternal(StatementImpl.java:837)
+	at com.mysql.cj.jdbc.StatementImpl.execute(StatementImpl.java:685)
+	at com.zaxxer.hikari.pool.ProxyStatement.execute(ProxyStatement.java:94)
+	at com.zaxxer.hikari.pool.HikariProxyStatement.execute(HikariProxyStatement.java)
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:80)
+	... 37 common frames omitted
+2025-08-11 12:38:58 | WARN  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "
+    alter table replies 
+       modify column user_id varchar(255) not null" via JDBC [Cannot change column 'user_id': used in a foreign key constraint 'FKruvm5n3992eiu5vlpcyt295b2']
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:94)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlString(AbstractSchemaMigrator.java:576)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlStrings(AbstractSchemaMigrator.java:516)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.migrateTable(AbstractSchemaMigrator.java:334)
+	at org.hibernate.tool.schema.internal.GroupedSchemaMigratorImpl.performTablesMigration(GroupedSchemaMigratorImpl.java:84)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.performMigration(AbstractSchemaMigrator.java:233)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.doMigration(AbstractSchemaMigrator.java:112)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.performDatabaseAction(SchemaManagementToolCoordinator.java:280)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.lambda$process$5(SchemaManagementToolCoordinator.java:144)
+	at java.base/java.util.HashMap.forEach(HashMap.java:1429)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.process(SchemaManagementToolCoordinator.java:141)
+	at org.hibernate.boot.internal.SessionFactoryObserverForSchemaExport.sessionFactoryCreated(SessionFactoryObserverForSchemaExport.java:37)
+	at org.hibernate.internal.SessionFactoryObserverChain.sessionFactoryCreated(SessionFactoryObserverChain.java:35)
+	at org.hibernate.internal.SessionFactoryImpl.<init>(SessionFactoryImpl.java:324)
+	at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:463)
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1517)
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:66)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:390)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:419)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:400)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:366)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1859)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1808)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:601)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:346)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:207)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:970)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350)
+	at com.posts.post.PostsApplication.main(PostsApplication.java:15)
+Caused by: java.sql.SQLException: Cannot change column 'user_id': used in a foreign key constraint 'FKruvm5n3992eiu5vlpcyt295b2'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:121)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
+	at com.mysql.cj.jdbc.StatementImpl.executeInternal(StatementImpl.java:837)
+	at com.mysql.cj.jdbc.StatementImpl.execute(StatementImpl.java:685)
+	at com.zaxxer.hikari.pool.ProxyStatement.execute(ProxyStatement.java:94)
+	at com.zaxxer.hikari.pool.HikariProxyStatement.execute(HikariProxyStatement.java)
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:80)
+	... 37 common frames omitted
+2025-08-11 12:38:58 | WARN  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "
+    create index idx_posts_hashtags 
+       on posts (hashtag)" via JDBC [Key column 'hashtag' doesn't exist in table]
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:94)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlString(AbstractSchemaMigrator.java:576)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlStrings(AbstractSchemaMigrator.java:516)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applyIndexes(AbstractSchemaMigrator.java:361)
+	at org.hibernate.tool.schema.internal.GroupedSchemaMigratorImpl.performTablesMigration(GroupedSchemaMigratorImpl.java:96)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.performMigration(AbstractSchemaMigrator.java:233)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.doMigration(AbstractSchemaMigrator.java:112)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.performDatabaseAction(SchemaManagementToolCoordinator.java:280)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.lambda$process$5(SchemaManagementToolCoordinator.java:144)
+	at java.base/java.util.HashMap.forEach(HashMap.java:1429)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.process(SchemaManagementToolCoordinator.java:141)
+	at org.hibernate.boot.internal.SessionFactoryObserverForSchemaExport.sessionFactoryCreated(SessionFactoryObserverForSchemaExport.java:37)
+	at org.hibernate.internal.SessionFactoryObserverChain.sessionFactoryCreated(SessionFactoryObserverChain.java:35)
+	at org.hibernate.internal.SessionFactoryImpl.<init>(SessionFactoryImpl.java:324)
+	at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:463)
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1517)
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:66)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:390)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:419)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:400)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:366)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1859)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1808)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:601)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:346)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:207)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:970)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350)
+	at com.posts.post.PostsApplication.main(PostsApplication.java:15)
+Caused by: java.sql.SQLSyntaxErrorException: Key column 'hashtag' doesn't exist in table
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:112)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
+	at com.mysql.cj.jdbc.StatementImpl.executeInternal(StatementImpl.java:837)
+	at com.mysql.cj.jdbc.StatementImpl.execute(StatementImpl.java:685)
+	at com.zaxxer.hikari.pool.ProxyStatement.execute(ProxyStatement.java:94)
+	at com.zaxxer.hikari.pool.HikariProxyStatement.execute(HikariProxyStatement.java)
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:80)
+	... 37 common frames omitted
+2025-08-11 12:38:58 | WARN  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "
+    alter table comments 
+       add constraint FKh4c7lvsc298whoyd4w9ta25cr 
+       foreign key (post_id) 
+       references posts (id)" via JDBC [Cannot add or update a child row: a foreign key constraint fails (`book_social_network`.`#sql-13c0_b8e`, CONSTRAINT `FKh4c7lvsc298whoyd4w9ta25cr` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`))]
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:94)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlString(AbstractSchemaMigrator.java:576)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlStrings(AbstractSchemaMigrator.java:516)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applyForeignKeys(AbstractSchemaMigrator.java:448)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.performMigration(AbstractSchemaMigrator.java:269)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.doMigration(AbstractSchemaMigrator.java:112)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.performDatabaseAction(SchemaManagementToolCoordinator.java:280)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.lambda$process$5(SchemaManagementToolCoordinator.java:144)
+	at java.base/java.util.HashMap.forEach(HashMap.java:1429)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.process(SchemaManagementToolCoordinator.java:141)
+	at org.hibernate.boot.internal.SessionFactoryObserverForSchemaExport.sessionFactoryCreated(SessionFactoryObserverForSchemaExport.java:37)
+	at org.hibernate.internal.SessionFactoryObserverChain.sessionFactoryCreated(SessionFactoryObserverChain.java:35)
+	at org.hibernate.internal.SessionFactoryImpl.<init>(SessionFactoryImpl.java:324)
+	at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:463)
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1517)
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:66)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:390)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:419)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:400)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:366)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1859)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1808)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:601)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:346)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:207)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:970)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350)
+	at com.posts.post.PostsApplication.main(PostsApplication.java:15)
+Caused by: java.sql.SQLIntegrityConstraintViolationException: Cannot add or update a child row: a foreign key constraint fails (`book_social_network`.`#sql-13c0_b8e`, CONSTRAINT `FKh4c7lvsc298whoyd4w9ta25cr` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`))
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:109)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
+	at com.mysql.cj.jdbc.StatementImpl.executeInternal(StatementImpl.java:837)
+	at com.mysql.cj.jdbc.StatementImpl.execute(StatementImpl.java:685)
+	at com.zaxxer.hikari.pool.ProxyStatement.execute(ProxyStatement.java:94)
+	at com.zaxxer.hikari.pool.HikariProxyStatement.execute(HikariProxyStatement.java)
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:80)
+	... 36 common frames omitted
+2025-08-11 12:38:59 | WARN  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "
+    alter table likes 
+       add constraint FKry8tnr4x2vwemv2bb0h5hyl0x 
+       foreign key (post_id) 
+       references posts (id)" via JDBC [Cannot add or update a child row: a foreign key constraint fails (`book_social_network`.`#sql-13c0_b8e`, CONSTRAINT `FKry8tnr4x2vwemv2bb0h5hyl0x` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`))]
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:94)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlString(AbstractSchemaMigrator.java:576)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlStrings(AbstractSchemaMigrator.java:516)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applyForeignKeys(AbstractSchemaMigrator.java:448)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.performMigration(AbstractSchemaMigrator.java:269)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.doMigration(AbstractSchemaMigrator.java:112)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.performDatabaseAction(SchemaManagementToolCoordinator.java:280)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.lambda$process$5(SchemaManagementToolCoordinator.java:144)
+	at java.base/java.util.HashMap.forEach(HashMap.java:1429)
+	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.process(SchemaManagementToolCoordinator.java:141)
+	at org.hibernate.boot.internal.SessionFactoryObserverForSchemaExport.sessionFactoryCreated(SessionFactoryObserverForSchemaExport.java:37)
+	at org.hibernate.internal.SessionFactoryObserverChain.sessionFactoryCreated(SessionFactoryObserverChain.java:35)
+	at org.hibernate.internal.SessionFactoryImpl.<init>(SessionFactoryImpl.java:324)
+	at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:463)
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1517)
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:66)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:390)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:419)
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:400)
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:366)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1859)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1808)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:601)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:346)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:207)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:970)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350)
+	at com.posts.post.PostsApplication.main(PostsApplication.java:15)
+Caused by: java.sql.SQLIntegrityConstraintViolationException: Cannot add or update a child row: a foreign key constraint fails (`book_social_network`.`#sql-13c0_b8e`, CONSTRAINT `FKry8tnr4x2vwemv2bb0h5hyl0x` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`))
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:109)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
+	at com.mysql.cj.jdbc.StatementImpl.executeInternal(StatementImpl.java:837)
+	at com.mysql.cj.jdbc.StatementImpl.execute(StatementImpl.java:685)
+	at com.zaxxer.hikari.pool.ProxyStatement.execute(ProxyStatement.java:94)
+	at com.zaxxer.hikari.pool.HikariProxyStatement.execute(HikariProxyStatement.java)
+	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:80)
+	... 36 common frames omitted
+2025-08-11 12:38:59 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:38:59 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:01 | WARN  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:03 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:03 | WARN  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:03 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:03 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:03 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:03 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:03 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:03 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:03 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:03 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:03 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:03 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:03 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:03 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:03 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:04 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:04 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:04 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:04 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:04 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:04 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:04 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:04 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:04 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:04 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:04 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:31 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:31 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:31 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:32.148767400 | URI: /posts/52/likes/count | Method: GET | Status: 200 | Time: 494ms
+2025-08-11T12:39:32.148767400 | URI: /posts/51/likes/count | Method: GET | Status: 200 | Time: 494ms
+2025-08-11T12:39:32.148767400 | URI: /posts/48/likes/count | Method: GET | Status: 200 | Time: 494ms
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:32.174363500 | URI: /posts/47/likes/count | Method: GET | Status: 200 | Time: 19ms
+2025-08-11T12:39:32.177378100 | URI: /posts/52/likes/check | Method: GET | Status: 200 | Time: 523ms
+2025-08-11T12:39:32.180378100 | URI: /posts/51/likes/check | Method: GET | Status: 200 | Time: 526ms
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:32.201376900 | URI: /posts/47/likes/check | Method: GET | Status: 200 | Time: 46ms
+2025-08-11T12:39:32.202378400 | URI: /posts/48/likes/check | Method: GET | Status: 200 | Time: 48ms
+2025-08-11T12:39:32.209378 | URI: /posts/46/likes/count | Method: GET | Status: 200 | Time: 28ms
+2025-08-11T12:39:32.216422800 | URI: /posts/45/likes/count | Method: GET | Status: 200 | Time: 23ms
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:32.231378100 | URI: /posts/44/likes/count | Method: GET | Status: 200 | Time: 19ms
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:32.246373300 | URI: /posts/46/likes/check | Method: GET | Status: 200 | Time: 63ms
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:32.254374700 | URI: /posts/43/likes/count | Method: GET | Status: 200 | Time: 31ms
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:32.273900900 | URI: /posts/36/likes/count | Method: GET | Status: 200 | Time: 23ms
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:32.288911900 | URI: /posts/45/likes/check | Method: GET | Status: 200 | Time: 62ms
+2025-08-11T12:39:32.289913700 | URI: /posts/44/likes/check | Method: GET | Status: 200 | Time: 77ms
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:32.302910100 | URI: /posts/43/likes/check | Method: GET | Status: 200 | Time: 62ms
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:32.325916600 | URI: /posts/35/likes/count | Method: GET | Status: 200 | Time: 31ms
+2025-08-11 12:39:32 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:32.328912400 | URI: /posts/36/likes/check | Method: GET | Status: 200 | Time: 65ms
+2025-08-11T12:39:32.338914 | URI: /posts/35/likes/check | Method: GET | Status: 200 | Time: 45ms
+2025-08-11 12:39:32 | WARN  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:32.408021400 | URI: /posts | Method: GET | Status: 200 | Time: 754ms
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:34.217457500 | URI: /posts | Method: GET | Status: 200 | Time: 174ms
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:34.536899700 | URI: /posts/52/likes/count | Method: GET | Status: 200 | Time: 17ms
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:34.562914900 | URI: /posts/51/likes/count | Method: GET | Status: 200 | Time: 28ms
+2025-08-11T12:39:34.565910700 | URI: /posts/52/likes/check | Method: GET | Status: 200 | Time: 41ms
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:34.577442100 | URI: /posts/48/likes/count | Method: GET | Status: 200 | Time: 29ms
+2025-08-11T12:39:34.583437400 | URI: /posts/51/likes/check | Method: GET | Status: 200 | Time: 47ms
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:34.602440100 | URI: /posts/47/likes/count | Method: GET | Status: 200 | Time: 24ms
+2025-08-11T12:39:34.615441600 | URI: /posts/48/likes/check | Method: GET | Status: 200 | Time: 49ms
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:34.630444400 | URI: /posts/47/likes/check | Method: GET | Status: 200 | Time: 48ms
+2025-08-11T12:39:34.654439300 | URI: /posts/46/likes/count | Method: GET | Status: 200 | Time: 18ms
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:34.699978400 | URI: /posts/45/likes/count | Method: GET | Status: 200 | Time: 18ms
+2025-08-11T12:39:34.708970400 | URI: /posts/46/likes/check | Method: GET | Status: 200 | Time: 42ms
+2025-08-11T12:39:34.709969300 | URI: /posts/43/likes/count | Method: GET | Status: 200 | Time: 16ms
+2025-08-11T12:39:34.710971400 | URI: /posts/44/likes/count | Method: GET | Status: 200 | Time: 21ms
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:34.731973700 | URI: /posts/35/likes/count | Method: GET | Status: 200 | Time: 16ms
+2025-08-11T12:39:34.733970900 | URI: /posts/36/likes/count | Method: GET | Status: 200 | Time: 17ms
+2025-08-11T12:39:34.741973200 | URI: /posts/45/likes/check | Method: GET | Status: 200 | Time: 56ms
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:34.762981700 | URI: /posts/43/likes/check | Method: GET | Status: 200 | Time: 57ms
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:34.769982100 | URI: /posts/44/likes/check | Method: GET | Status: 200 | Time: 65ms
+2025-08-11T12:39:34.776494700 | URI: /posts/35/likes/check | Method: GET | Status: 200 | Time: 42ms
+2025-08-11T12:39:34.776494700 | URI: /posts/36/likes/check | Method: GET | Status: 200 | Time: 63ms
+2025-08-11 12:39:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:35.476140600 | URI: /posts/52/view | Method: POST | Status: 200 | Time: 37ms
+2025-08-11 12:39:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:35.930990500 | URI: /posts/51/view | Method: POST | Status: 200 | Time: 22ms
+2025-08-11 12:39:36 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:36 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:36 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:36 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:36.322708500 | URI: /posts/48/view | Method: POST | Status: 200 | Time: 28ms
+2025-08-11 12:39:37 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:37 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:37 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:37 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:37.377452800 | URI: /posts/52/view | Method: POST | Status: 200 | Time: 31ms
+2025-08-11T12:39:40.792852800 | URI: /metrics/posts | Method: GET | Status: 500 | Time: 21ms
+2025-08-11T12:39:47.975041400 | URI: /posts | Method: GET | Status: 200 | Time: 167ms
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:48.231685200 | URI: /posts/52/likes/count | Method: GET | Status: 200 | Time: 13ms
+2025-08-11T12:39:48.234684900 | URI: /posts/51/likes/count | Method: GET | Status: 200 | Time: 14ms
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:48.263687800 | URI: /posts/48/likes/count | Method: GET | Status: 200 | Time: 16ms
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:48.270686700 | URI: /posts/52/likes/check | Method: GET | Status: 200 | Time: 51ms
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:48.272689200 | URI: /posts/47/likes/count | Method: GET | Status: 200 | Time: 13ms
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:48.295221600 | URI: /posts/51/likes/check | Method: GET | Status: 200 | Time: 59ms
+2025-08-11T12:39:48.295221600 | URI: /posts/46/likes/count | Method: GET | Status: 200 | Time: 23ms
+2025-08-11T12:39:48.300222400 | URI: /posts/47/likes/check | Method: GET | Status: 200 | Time: 39ms
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:48.311221800 | URI: /posts/48/likes/check | Method: GET | Status: 200 | Time: 54ms
+2025-08-11T12:39:48.313223700 | URI: /posts/45/likes/count | Method: GET | Status: 200 | Time: 16ms
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:48.332220600 | URI: /posts/44/likes/count | Method: GET | Status: 200 | Time: 31ms
+2025-08-11T12:39:48.333219200 | URI: /posts/46/likes/check | Method: GET | Status: 200 | Time: 53ms
+2025-08-11T12:39:48.333219200 | URI: /posts/43/likes/count | Method: GET | Status: 200 | Time: 18ms
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:48.354222500 | URI: /posts/36/likes/count | Method: GET | Status: 200 | Time: 15ms
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:48.367220300 | URI: /posts/35/likes/count | Method: GET | Status: 200 | Time: 18ms
+2025-08-11T12:39:48.370219400 | URI: /posts/45/likes/check | Method: GET | Status: 200 | Time: 72ms
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:48.376222500 | URI: /posts/44/likes/check | Method: GET | Status: 200 | Time: 68ms
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:48.388232300 | URI: /posts/36/likes/check | Method: GET | Status: 200 | Time: 47ms
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:48.403754500 | URI: /posts/43/likes/check | Method: GET | Status: 200 | Time: 67ms
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:48 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:48.421754600 | URI: /posts/35/likes/check | Method: GET | Status: 200 | Time: 58ms
+2025-08-11 12:39:52 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:52 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:52 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:52 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:52.280392 | URI: /posts/52/view | Method: POST | Status: 200 | Time: 34ms
+2025-08-11 12:39:52 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:52 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:52 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:52 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:52.515531100 | URI: /posts/51/view | Method: POST | Status: 200 | Time: 30ms
+2025-08-11 12:39:52 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:52 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:52 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:39:52 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:39:52.889782300 | URI: /posts/48/view | Method: POST | Status: 200 | Time: 32ms
+2025-08-11T12:39:58.605097 | URI: /metrics/posts | Method: GET | Status: 500 | Time: 3ms
+2025-08-11 12:40:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:40:26.427566100 | URI: /posts/52/likes/count | Method: GET | Status: 200 | Time: 12ms
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:40:26.468578 | URI: /posts/52/likes/check | Method: GET | Status: 200 | Time: 33ms
+2025-08-11T12:40:26.479095700 | URI: /posts/51/likes/count | Method: GET | Status: 200 | Time: 12ms
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:40:26.499105400 | URI: /posts/48/likes/count | Method: GET | Status: 200 | Time: 13ms
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:40:26.514091 | URI: /posts/51/likes/check | Method: GET | Status: 200 | Time: 39ms
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:40:26.538094300 | URI: /posts/47/likes/count | Method: GET | Status: 200 | Time: 12ms
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:40:26.556095500 | URI: /posts/46/likes/count | Method: GET | Status: 200 | Time: 16ms
+2025-08-11T12:40:26.564107600 | URI: /posts/48/likes/check | Method: GET | Status: 200 | Time: 46ms
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:40:26.569109600 | URI: /posts/45/likes/count | Method: GET | Status: 200 | Time: 16ms
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:40:26.579631100 | URI: /posts/46/likes/check | Method: GET | Status: 200 | Time: 37ms
+2025-08-11T12:40:26.580632100 | URI: /posts/47/likes/check | Method: GET | Status: 200 | Time: 42ms
+2025-08-11T12:40:26.588633800 | URI: /posts/44/likes/count | Method: GET | Status: 200 | Time: 17ms
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:40:26.603629200 | URI: /posts/45/likes/check | Method: GET | Status: 200 | Time: 47ms
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:40:26.623631100 | URI: /posts/43/likes/count | Method: GET | Status: 200 | Time: 15ms
+2025-08-11T12:40:26.626632500 | URI: /posts/44/likes/check | Method: GET | Status: 200 | Time: 44ms
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:40:26.662643100 | URI: /posts/36/likes/count | Method: GET | Status: 200 | Time: 16ms
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:40:26.680166300 | URI: /posts/43/likes/check | Method: GET | Status: 200 | Time: 44ms
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:40:26.698166400 | URI: /posts/36/likes/check | Method: GET | Status: 200 | Time: 48ms
+2025-08-11T12:40:26.700167500 | URI: /posts/35/likes/count | Method: GET | Status: 200 | Time: 15ms
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:26 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11T12:40:26.740165400 | URI: /posts/35/likes/check | Method: GET | Status: 200 | Time: 43ms
+2025-08-11 12:40:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:40:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:41:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:41:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:41:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:41:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:41:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:41:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:41:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:41:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:41:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:41:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:41:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:41:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:41:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:41:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:42:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:42:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:42:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:42:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:42:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:42:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:42:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:42:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:42:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:42:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:42:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:42:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:42:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:42:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:43:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:43:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:43:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:43:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:43:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:43:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:43:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:43:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:43:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:43:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:43:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:43:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:43:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:43:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:44:03 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:44:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:44:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:44:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:44:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:44:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:44:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:44:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:44:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:44:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:44:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:44:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:44:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:44:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:44:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:45:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:45:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:45:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:45:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:45:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:45:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:45:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:45:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:45:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:45:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:45:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:45:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:45:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:45:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:46:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:46:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:46:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:46:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:46:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:46:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:46:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:46:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:46:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:46:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:46:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:46:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:46:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:46:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:47:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:47:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:47:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:47:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:47:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:47:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:47:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:47:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:47:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:47:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:47:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:47:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:47:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:47:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:48:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:48:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:48:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:48:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:48:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:48:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:48:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:48:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:48:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:48:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:48:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:48:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:48:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:48:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:49:03 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:49:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:49:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:49:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:49:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:49:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:49:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:49:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:49:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:49:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:49:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:49:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:49:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:49:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:49:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:50:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:50:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:50:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:50:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:50:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:50:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:50:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:50:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:50:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:50:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:50:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:50:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:50:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:50:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:51:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:51:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:51:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:51:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:51:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:51:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:51:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:51:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:51:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:51:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:51:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:51:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:51:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:51:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:52:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:52:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:52:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:52:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:52:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:52:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:52:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:52:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:52:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:52:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:52:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:52:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:52:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:52:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:53:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:53:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:53:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:53:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:53:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:53:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:53:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:53:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:53:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:53:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:53:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:53:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:53:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:53:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:54:03 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:54:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:54:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:54:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:54:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:54:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:54:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:54:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:54:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:54:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:54:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:54:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:54:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:54:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:54:34 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:55:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:55:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:55:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:55:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:55:04 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:55:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:55:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:55:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:55:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:55:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:55:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:55:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:55:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:55:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:56:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:56:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:56:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:56:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:56:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:56:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:56:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:56:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:56:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:56:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:56:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:56:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:56:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:56:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:57:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:57:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:57:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:57:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:57:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:57:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:57:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:57:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:57:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:57:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:57:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:57:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:57:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:57:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:58:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:58:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:58:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:58:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:58:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:58:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:58:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:58:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:58:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:58:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:58:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:58:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:58:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:58:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:59:03 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:59:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:59:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:59:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:59:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:59:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:59:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:59:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:59:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:59:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:59:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:59:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:59:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:59:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 12:59:35 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 13:00:00 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 13:00:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 13:00:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 13:00:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 13:00:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 13:00:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 13:00:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 13:00:05 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 13:00:21 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 13:00:21 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 13:00:21 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 13:00:21 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 13:00:21 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 13:00:21 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 13:00:21 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 13:00:21 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 13:00:21 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 13:00:21 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 13:00:21 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 13:00:21 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 13:00:21 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 13:00:21 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 13:00:24 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 13:00:24 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 13:00:24 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 13:00:24 | DEBUG | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 13:00:24 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 
+2025-08-11 13:00:24 | INFO  | URI: %PARSER_ERROR[requestURI] | Method: %PARSER_ERROR[requestMethod] | Time: %PARSER_ERROR[executionTime]ms 

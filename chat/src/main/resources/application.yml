@@ -1,3 +1,6 @@
+chat:
+  cache:
+    expiration: 3600000
 auth:
   service:
     url: http://localhost:8088
@@ -9,6 +12,13 @@ feign:
         readTimeout: 5000
 logging:
   level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
+        SQL: DEBUG
     org.springframework.cache: DEBUG
 spring:
   redis:
@@ -41,7 +51,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: false
+    show-sql: true
     properties:
       hibernate:
         format_sql: true
