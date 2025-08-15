@@ -18,6 +18,7 @@ import java.nio.file.AccessDeniedException;
 import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,6 +30,9 @@ public class PollServiceImpl implements PollService {
     private final PollVoteRepository pollVoteRepository;
     private final PostRepository postRepository;
     private final GetToken getToken;
+
+    ExecutorService executor = Executors.newFixedThreadPool(4);
+    CompletionService<PollVote> completionService = new ExecutorCompletionService<>(executor);
 
     @Override
     @Transactional
@@ -106,14 +110,25 @@ public class PollServiceImpl implements PollService {
                 throw new ResourceNotFoundException("One or more options not found");
             }
 
-            List<PollVote> votes = options.stream()
-                    .map(option -> {
-                        PollVote vote = new PollVote();
-                        vote.setOption(option);
-                        vote.setUserId(userId);
-                        return vote;
-                    })
-                    .collect(Collectors.toList());
+//            List<Future<PollVote>> futures = options.stream()
+//                    .map(option -> completionService.submit(() -> {
+//                        PollVote vote = new PollVote();
+//                        vote.setOption(option);
+//                        vote.setUserId(userId);
+//                        return vote;
+//                    }))
+//                    .toList();
+
+            List<PollVote> votes = new ArrayList<>();
+            for (int i = 0; i < options.size(); i++) {
+                try {
+                    Future<PollVote> future = completionService.take();
+                    votes.add(future.get());
+                } catch (InterruptedException | ExecutionException e) {
+                    Thread.currentThread().interrupt();
+                    throw new RuntimeException("Error processing vote", e);
+                }
+            }
 
             pollVoteRepository.saveAll(votes);
         }
@@ -129,7 +144,6 @@ public class PollServiceImpl implements PollService {
         Poll poll = pollRepository.findByPostId(postId)
                 .orElseThrow(() -> new ResourceNotFoundException("Poll not found"));
 
-        // Проверка прав на удаление (например, только автор поста или админ)
         if (!poll.getPost().getAuthorId().equals(userId)) {
             throw new AccessDeniedException("You don't have permission to delete this poll");
         }
@@ -143,7 +157,6 @@ public class PollServiceImpl implements PollService {
     public void processExpiredPolls() {
         List<Poll> expiredPolls = pollRepository.findExpiredPolls();
         log.info("Found {} expired polls to process", expiredPolls.size());
-        // Можно добавить логику обработки, например, уведомления
     }
 
     private PollResponse mapToPollResponse(Poll poll, String userId, boolean voted) {

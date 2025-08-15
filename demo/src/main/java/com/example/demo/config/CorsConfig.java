@@ -15,6 +15,7 @@ public class CorsConfig {
     private static final String[] ALLOWED_ORIGINS = {
             "http://localhost:3000",
             "http://192.168.1.88:3000",
+            "http://192.168.1.92:3000",
             "http://localhost:8080",
             "http://localhost:8091"
     };
@@ -63,18 +64,7 @@ public class CorsConfig {
                         .allowedMethods("*")
                         .allowedHeaders("*")
                         .allowCredentials(true);
-                registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:3000", "http://localhost:8091", "http://192.168.1.88:3000")
-                        .allowedMethods("*")
-                        .allowedHeaders("*")
-                        .allowCredentials(true);
 
-                registry.addMapping("/**")
-                        .allowedOrigins(ALLOWED_ORIGINS)
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowedHeaders("*")
-                        .allowCredentials(true)
-                        .maxAge(3600);
             }
         };
     }
