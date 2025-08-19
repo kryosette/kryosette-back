@@ -214,7 +214,7 @@ public class AuthenticationController {
     /**
      * Normalizes a key to the required size by truncating or zero-padding.
      *
-     * @param key Original key string
+u     * @param key Original key string
      * @param requiredSize Desired key length in bytes
      * @return Normalized key bytes
      */

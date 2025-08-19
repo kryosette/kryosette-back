@@ -133,7 +133,7 @@ public class AuthenticationService {
             }
 
             String deviceHash = generateDeviceHash(httpRequest, user.getUsername());
-            String token = tokenService.generateToken(user, user.getId(), deviceHash);
+            String token = tokenService.generateToken(user, user.getId(), deviceHash               );
 
             return AuthenticationResponse.builder()
                     .token(token)
