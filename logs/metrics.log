@@ -1,28 +1,31 @@
-2025-08-23 12:26:13 | INFO  | Starting PostsApplication using Java 21.0.6 with PID 15216 (C:\Users\dmako\kryosette\kryosette-back\posts\target\classes started by dmako in C:\Users\dmako\kryosette\kryosette-back)
-2025-08-23 12:26:13 | INFO  | No active profile set, falling back to 1 default profile: "default"
-2025-08-23 12:26:13 | INFO  | Fetching config from server at : http://localhost:8888
-2025-08-23 12:26:13 | WARN  | Could not locate PropertySource ([ConfigServerConfigDataResource@867ba60 uris = array<String>['http://localhost:8888'], optional = true, profiles = 'default']): Could not extract response: no suitable HttpMessageConverter found for response type [class org.springframework.cloud.config.environment.Environment] and content type [text/html;charset=UTF-8]
-2025-08-23 12:26:13 | INFO  | Fetching config from server at : http://localhost:8888
-2025-08-23 12:26:13 | WARN  | Could not locate PropertySource ([ConfigServerConfigDataResource@11ce2e22 uris = array<String>['http://localhost:8888'], optional = true, profiles = 'default']): Could not extract response: no suitable HttpMessageConverter found for response type [class org.springframework.cloud.config.environment.Environment] and content type [text/html;charset=UTF-8]
-2025-08-23 12:26:13 | INFO  | Fetching config from server at : http://localhost:8888
-2025-08-23 12:26:13 | WARN  | Could not locate PropertySource ([ConfigServerConfigDataResource@63a5d002 uris = array<String>['http://localhost:8888'], optional = true, profiles = 'default']): Could not extract response: no suitable HttpMessageConverter found for response type [class org.springframework.cloud.config.environment.Environment] and content type [text/html;charset=UTF-8]
-2025-08-23 12:26:17 | INFO  | Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2025-08-23 12:26:17 | INFO  | Finished Spring Data repository scanning in 434 ms. Found 9 JPA repository interfaces.
-2025-08-23 12:26:18 | INFO  | BeanFactory id=93a46047-0b8c-350d-9266-5fbf6d2c7d68
-2025-08-23 12:26:20 | INFO  | Tomcat initialized with port 8091 (http)
-2025-08-23 12:26:20 | INFO  | Starting service [Tomcat]
-2025-08-23 12:26:20 | INFO  | Starting Servlet engine: [Apache Tomcat/10.1.36]
-2025-08-23 12:26:20 | INFO  | Initializing Spring embedded WebApplicationContext
-2025-08-23 12:26:20 | INFO  | Root WebApplicationContext: initialization completed in 7172 ms
-2025-08-23 12:26:21 | INFO  | HHH000204: Processing PersistenceUnitInfo [name: default]
-2025-08-23 12:26:21 | INFO  | HHH000412: Hibernate ORM core version 6.6.8.Final
-2025-08-23 12:26:22 | INFO  | HHH000026: Second-level cache disabled
-2025-08-23 12:26:23 | INFO  | No LoadTimeWeaver setup: ignoring JPA class transformer
-2025-08-23 12:26:23 | INFO  | HikariPool-1 - Starting...
-2025-08-23 12:26:24 | INFO  | HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4b5ceb5d
-2025-08-23 12:26:24 | INFO  | HikariPool-1 - Start completed.
-2025-08-23 12:26:24 | WARN  | HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2025-08-23 12:26:24 | INFO  | HHH10001005: Database info:
+2025-08-28 17:33:49 | INFO  | Starting PostsApplication using Java 21.0.6 with PID 31216 (C:\Users\dmako\kryosette\kryosette-back\posts\target\classes started by dmako in C:\Users\dmako\kryosette\kryosette-back)
+2025-08-28 17:33:49 | INFO  | No active profile set, falling back to 1 default profile: "default"
+2025-08-28 17:33:49 | INFO  | Fetching config from server at : http://localhost:8888
+2025-08-28 17:33:49 | INFO  | Exception on Url - http://localhost:8888:org.springframework.web.client.ResourceAccessException: I/O error on GET request for "http://localhost:8888/posts/default": Connection refused: getsockopt. Will be trying the next url if available
+2025-08-28 17:33:49 | WARN  | Could not locate PropertySource ([ConfigServerConfigDataResource@680bddf5 uris = array<String>['http://localhost:8888'], optional = true, profiles = 'default']): I/O error on GET request for "http://localhost:8888/posts/default": Connection refused: getsockopt
+2025-08-28 17:33:49 | INFO  | Fetching config from server at : http://localhost:8888
+2025-08-28 17:33:49 | INFO  | Exception on Url - http://localhost:8888:org.springframework.web.client.ResourceAccessException: I/O error on GET request for "http://localhost:8888/posts/default": Connection refused: getsockopt. Will be trying the next url if available
+2025-08-28 17:33:49 | WARN  | Could not locate PropertySource ([ConfigServerConfigDataResource@1bf0f6f6 uris = array<String>['http://localhost:8888'], optional = true, profiles = 'default']): I/O error on GET request for "http://localhost:8888/posts/default": Connection refused: getsockopt
+2025-08-28 17:33:49 | INFO  | Fetching config from server at : http://localhost:8888
+2025-08-28 17:33:49 | INFO  | Exception on Url - http://localhost:8888:org.springframework.web.client.ResourceAccessException: I/O error on GET request for "http://localhost:8888/posts/default": Connection refused: getsockopt. Will be trying the next url if available
+2025-08-28 17:33:49 | WARN  | Could not locate PropertySource ([ConfigServerConfigDataResource@56bc3fac uris = array<String>['http://localhost:8888'], optional = true, profiles = 'default']): I/O error on GET request for "http://localhost:8888/posts/default": Connection refused: getsockopt
+2025-08-28 17:33:53 | INFO  | Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-28 17:33:54 | INFO  | Finished Spring Data repository scanning in 406 ms. Found 9 JPA repository interfaces.
+2025-08-28 17:33:55 | INFO  | BeanFactory id=93a46047-0b8c-350d-9266-5fbf6d2c7d68
+2025-08-28 17:33:57 | INFO  | Tomcat initialized with port 8091 (http)
+2025-08-28 17:33:57 | INFO  | Starting service [Tomcat]
+2025-08-28 17:33:57 | INFO  | Starting Servlet engine: [Apache Tomcat/10.1.36]
+2025-08-28 17:33:57 | INFO  | Initializing Spring embedded WebApplicationContext
+2025-08-28 17:33:57 | INFO  | Root WebApplicationContext: initialization completed in 7739 ms
+2025-08-28 17:33:58 | INFO  | HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-08-28 17:33:59 | INFO  | HHH000412: Hibernate ORM core version 6.6.8.Final
+2025-08-28 17:33:59 | INFO  | HHH000026: Second-level cache disabled
+2025-08-28 17:34:00 | INFO  | No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-28 17:34:00 | INFO  | HikariPool-1 - Starting...
+2025-08-28 17:34:01 | INFO  | HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4f5df012
+2025-08-28 17:34:01 | INFO  | HikariPool-1 - Start completed.
+2025-08-28 17:34:01 | WARN  | HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-08-28 17:34:01 | INFO  | HHH10001005: Database info:
 	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
 	Database driver: undefined/unknown
 	Database version: 8.0.39
@@ -30,8 +33,8 @@
 	Isolation level: undefined/unknown
 	Minimum pool size: undefined/unknown
 	Maximum pool size: undefined/unknown
-2025-08-23 12:26:27 | INFO  | HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2025-08-23 12:26:29 | WARN  | GenerationTarget encountered exception accepting command : Error executing DDL "
+2025-08-28 17:34:05 | INFO  | HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-28 17:34:07 | WARN  | GenerationTarget encountered exception accepting command : Error executing DDL "
     alter table post_hashtags 
        add column id bigint not null auto_increment" via JDBC [Incorrect table definition; there can be only one auto column and it must be defined as a key]
 org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "
@@ -84,7 +87,7 @@ Caused by: java.sql.SQLSyntaxErrorException: Incorrect table definition; there c
 	at com.zaxxer.hikari.pool.HikariProxyStatement.execute(HikariProxyStatement.java)
 	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:80)
 	... 37 common frames omitted
-2025-08-23 12:26:29 | WARN  | GenerationTarget encountered exception accepting command : Error executing DDL "
+2025-08-28 17:34:07 | WARN  | GenerationTarget encountered exception accepting command : Error executing DDL "
     alter table replies 
        modify column user_id varchar(255) not null" via JDBC [Cannot change column 'user_id': used in a foreign key constraint 'FKruvm5n3992eiu5vlpcyt295b2']
 org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "
@@ -137,7 +140,7 @@ Caused by: java.sql.SQLException: Cannot change column 'user_id': used in a fore
 	at com.zaxxer.hikari.pool.HikariProxyStatement.execute(HikariProxyStatement.java)
 	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:80)
 	... 37 common frames omitted
-2025-08-23 12:26:29 | WARN  | GenerationTarget encountered exception accepting command : Error executing DDL "
+2025-08-28 17:34:07 | WARN  | GenerationTarget encountered exception accepting command : Error executing DDL "
     create index idx_posts_hashtags 
        on posts (hashtag)" via JDBC [Key column 'hashtag' doesn't exist in table]
 org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "
@@ -190,16 +193,16 @@ Caused by: java.sql.SQLSyntaxErrorException: Key column 'hashtag' doesn't exist 
 	at com.zaxxer.hikari.pool.HikariProxyStatement.execute(HikariProxyStatement.java)
 	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:80)
 	... 37 common frames omitted
-2025-08-23 12:26:29 | WARN  | GenerationTarget encountered exception accepting command : Error executing DDL "
+2025-08-28 17:34:08 | WARN  | GenerationTarget encountered exception accepting command : Error executing DDL "
     alter table comments 
        add constraint FKh4c7lvsc298whoyd4w9ta25cr 
        foreign key (post_id) 
-       references posts (id)" via JDBC [Cannot add or update a child row: a foreign key constraint fails (`book_social_network`.`#sql-1310_1087`, CONSTRAINT `FKh4c7lvsc298whoyd4w9ta25cr` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`))]
+       references posts (id)" via JDBC [Cannot add or update a child row: a foreign key constraint fails (`book_social_network`.`#sql-1310_172b`, CONSTRAINT `FKh4c7lvsc298whoyd4w9ta25cr` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`))]
 org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "
     alter table comments 
        add constraint FKh4c7lvsc298whoyd4w9ta25cr 
        foreign key (post_id) 
-       references posts (id)" via JDBC [Cannot add or update a child row: a foreign key constraint fails (`book_social_network`.`#sql-1310_1087`, CONSTRAINT `FKh4c7lvsc298whoyd4w9ta25cr` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`))]
+       references posts (id)" via JDBC [Cannot add or update a child row: a foreign key constraint fails (`book_social_network`.`#sql-1310_172b`, CONSTRAINT `FKh4c7lvsc298whoyd4w9ta25cr` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`))]
 	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:94)
 	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlString(AbstractSchemaMigrator.java:576)
 	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlStrings(AbstractSchemaMigrator.java:516)
@@ -237,7 +240,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350)
 	at com.posts.post.PostsApplication.main(PostsApplication.java:15)
-Caused by: java.sql.SQLIntegrityConstraintViolationException: Cannot add or update a child row: a foreign key constraint fails (`book_social_network`.`#sql-1310_1087`, CONSTRAINT `FKh4c7lvsc298whoyd4w9ta25cr` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`))
+Caused by: java.sql.SQLIntegrityConstraintViolationException: Cannot add or update a child row: a foreign key constraint fails (`book_social_network`.`#sql-1310_172b`, CONSTRAINT `FKh4c7lvsc298whoyd4w9ta25cr` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`))
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:109)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
 	at com.mysql.cj.jdbc.StatementImpl.executeInternal(StatementImpl.java:837)
@@ -246,16 +249,16 @@ Caused by: java.sql.SQLIntegrityConstraintViolationException: Cannot add or upda
 	at com.zaxxer.hikari.pool.HikariProxyStatement.execute(HikariProxyStatement.java)
 	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:80)
 	... 36 common frames omitted
-2025-08-23 12:26:29 | WARN  | GenerationTarget encountered exception accepting command : Error executing DDL "
+2025-08-28 17:34:08 | WARN  | GenerationTarget encountered exception accepting command : Error executing DDL "
     alter table likes 
        add constraint FKry8tnr4x2vwemv2bb0h5hyl0x 
        foreign key (post_id) 
-       references posts (id)" via JDBC [Cannot add or update a child row: a foreign key constraint fails (`book_social_network`.`#sql-1310_1087`, CONSTRAINT `FKry8tnr4x2vwemv2bb0h5hyl0x` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`))]
+       references posts (id)" via JDBC [Cannot add or update a child row: a foreign key constraint fails (`book_social_network`.`#sql-1310_172b`, CONSTRAINT `FKry8tnr4x2vwemv2bb0h5hyl0x` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`))]
 org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "
     alter table likes 
        add constraint FKry8tnr4x2vwemv2bb0h5hyl0x 
        foreign key (post_id) 
-       references posts (id)" via JDBC [Cannot add or update a child row: a foreign key constraint fails (`book_social_network`.`#sql-1310_1087`, CONSTRAINT `FKry8tnr4x2vwemv2bb0h5hyl0x` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`))]
+       references posts (id)" via JDBC [Cannot add or update a child row: a foreign key constraint fails (`book_social_network`.`#sql-1310_172b`, CONSTRAINT `FKry8tnr4x2vwemv2bb0h5hyl0x` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`))]
 	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:94)
 	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlString(AbstractSchemaMigrator.java:576)
 	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlStrings(AbstractSchemaMigrator.java:516)
@@ -293,7 +296,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350)
 	at com.posts.post.PostsApplication.main(PostsApplication.java:15)
-Caused by: java.sql.SQLIntegrityConstraintViolationException: Cannot add or update a child row: a foreign key constraint fails (`book_social_network`.`#sql-1310_1087`, CONSTRAINT `FKry8tnr4x2vwemv2bb0h5hyl0x` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`))
+Caused by: java.sql.SQLIntegrityConstraintViolationException: Cannot add or update a child row: a foreign key constraint fails (`book_social_network`.`#sql-1310_172b`, CONSTRAINT `FKry8tnr4x2vwemv2bb0h5hyl0x` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`))
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:109)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:114)
 	at com.mysql.cj.jdbc.StatementImpl.executeInternal(StatementImpl.java:837)
@@ -302,172 +305,109 @@ Caused by: java.sql.SQLIntegrityConstraintViolationException: Cannot add or upda
 	at com.zaxxer.hikari.pool.HikariProxyStatement.execute(HikariProxyStatement.java)
 	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:80)
 	... 36 common frames omitted
-2025-08-23 12:26:29 | INFO  | Initialized JPA EntityManagerFactory for persistence unit 'default'
-2025-08-23 12:26:31 | INFO  | Hibernate is in classpath; If applicable, HQL parser will be used.
-2025-08-23 12:26:33 | WARN  | spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2025-08-23 12:26:36 | INFO  | Cannot determine local hostname
-2025-08-23 12:26:38 | INFO  | Cannot determine local hostname
-2025-08-23 12:26:38 | INFO  | Eureka HTTP Client uses RestTemplate.
-2025-08-23 12:26:38 | WARN  | Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
-2025-08-23 12:26:38 | INFO  | Exposing 1 endpoint beneath base path '/actuator'
-2025-08-23 12:26:39 | INFO  | Setting initial instance status as: STARTING
-2025-08-23 12:26:39 | INFO  | Initializing Eureka in region us-east-1
-2025-08-23 12:26:39 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 12:26:39 | INFO  | Disable delta property : false
-2025-08-23 12:26:39 | INFO  | Single vip registry refresh property : null
-2025-08-23 12:26:39 | INFO  | Force full registry fetch : false
-2025-08-23 12:26:39 | INFO  | Application is null : false
-2025-08-23 12:26:39 | INFO  | Registered Applications size is zero : true
-2025-08-23 12:26:39 | INFO  | Application version is -1: true
-2025-08-23 12:26:39 | INFO  | Getting all instance registry info from the eureka server
-2025-08-23 12:26:40 | INFO  | The response status is 200
-2025-08-23 12:26:40 | INFO  | Starting heartbeat executor: renew interval is: 30
-2025-08-23 12:26:40 | INFO  | InstanceInfoReplicator onDemand update allowed rate per min is 4
-2025-08-23 12:26:40 | INFO  | Discovery Client initialized at timestamp 1755941200464 with initial instances count: 0
-2025-08-23 12:26:40 | INFO  | Registering application POSTS with eureka with status UP
-2025-08-23 12:26:40 | INFO  | Saw local status change event StatusChangeEvent [timestamp=1755941200476, current=UP, previous=STARTING]
-2025-08-23 12:26:40 | INFO  | DiscoveryClient_POSTS/localhost:posts:8091: registering service...
-2025-08-23 12:26:40 | INFO  | Tomcat started on port 8091 (http) with context path '/'
-2025-08-23 12:26:40 | INFO  | Updating port to 8091
-2025-08-23 12:26:40 | INFO  | DiscoveryClient_POSTS/localhost:posts:8091 - registration status: 204
-2025-08-23 12:26:41 | INFO  | Cannot determine local hostname
-2025-08-23 12:26:41 | INFO  | Started PostsApplication in 31.933 seconds (process running for 37.837)
-2025-08-23 12:27:10 | INFO  | Disable delta property : false
-2025-08-23 12:27:10 | INFO  | Single vip registry refresh property : null
-2025-08-23 12:27:10 | INFO  | Force full registry fetch : false
-2025-08-23 12:27:10 | INFO  | Application is null : false
-2025-08-23 12:27:10 | INFO  | Registered Applications size is zero : true
-2025-08-23 12:27:10 | INFO  | Application version is -1: false
-2025-08-23 12:27:10 | INFO  | Getting all instance registry info from the eureka server
-2025-08-23 12:27:10 | INFO  | The response status is 200
-2025-08-23 12:31:39 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 12:36:39 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 12:41:39 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 12:46:39 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 12:51:39 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 12:56:39 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 13:00:00 | INFO  | Found 7 expired polls to process
-2025-08-23 13:01:39 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 13:06:39 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 13:11:39 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 13:16:39 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 13:21:39 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 13:26:39 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 13:31:39 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 13:36:39 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 13:41:39 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 13:46:39 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 13:51:39 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 13:56:39 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 14:00:00 | INFO  | Found 7 expired polls to process
-2025-08-23 14:01:39 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 14:06:39 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 14:38:11 | WARN  | HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=30m44s883ms614µs900ns).
-2025-08-23 14:41:54 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 14:46:54 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 14:51:54 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 14:56:54 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 15:01:54 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 15:06:54 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 15:11:54 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 15:16:54 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 15:21:54 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 15:26:54 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 15:30:14 | INFO  | Found 7 expired polls to process
-2025-08-23 15:31:54 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 15:36:54 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 15:41:54 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 15:46:54 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 15:51:54 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 15:56:54 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 16:00:00 | INFO  | Found 7 expired polls to process
-2025-08-23 16:01:54 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 16:06:54 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 16:11:54 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 16:16:54 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 16:21:54 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 16:26:54 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 16:31:54 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 16:36:54 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 16:41:54 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 16:57:14 | WARN  | HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=13m2s497ms922µs800ns).
-2025-08-23 16:59:27 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 17:04:27 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 17:09:27 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 17:12:32 | INFO  | Found 7 expired polls to process
-2025-08-23 17:14:27 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 17:19:27 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 17:24:27 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 17:29:27 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 17:34:27 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 17:39:27 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 17:44:27 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 17:49:27 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 17:54:27 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 17:59:27 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 18:00:00 | INFO  | Found 7 expired polls to process
-2025-08-23 18:04:27 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 18:09:27 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 18:14:27 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 18:19:27 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 18:24:27 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 18:29:27 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 18:34:27 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 18:39:27 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 18:44:27 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 18:49:27 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 18:54:27 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 18:59:27 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 19:00:00 | INFO  | Found 7 expired polls to process
-2025-08-23 19:04:27 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 19:09:27 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 19:14:27 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 19:19:27 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 19:36:47 | WARN  | HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=13m32s373ms285µs300ns).
-2025-08-23 19:37:29 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 19:42:29 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 19:47:29 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 19:52:29 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 19:57:29 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 20:02:29 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 20:07:29 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 20:12:29 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 20:13:02 | INFO  | Found 7 expired polls to process
-2025-08-23 20:17:29 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 20:22:29 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 20:27:29 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 20:32:29 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 20:37:29 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 20:42:29 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 20:47:29 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 20:52:29 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 21:09:49 | WARN  | HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=16m1s86ms167µs900ns).
-2025-08-23 21:13:00 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 21:15:31 | INFO  | Found 7 expired polls to process
-2025-08-23 21:18:00 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 21:23:00 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 21:28:00 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 21:33:00 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 21:38:00 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 21:43:00 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 21:48:00 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 21:53:00 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 21:58:00 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 22:00:00 | INFO  | Found 7 expired polls to process
-2025-08-23 22:03:00 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 22:08:00 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 22:13:00 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 22:18:01 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 22:23:01 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 22:28:01 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 22:33:01 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 22:38:01 | INFO  | Resolving eureka endpoints via configuration
-2025-08-23 22:40:38 | INFO  | Unregistering application POSTS with eureka with status DOWN
-2025-08-23 22:40:38 | INFO  | Saw local status change event StatusChangeEvent [timestamp=1755978038605, current=DOWN, previous=UP]
-2025-08-23 22:40:38 | INFO  | DiscoveryClient_POSTS/localhost:posts:8091: registering service...
-2025-08-23 22:40:38 | INFO  | Commencing graceful shutdown. Waiting for active requests to complete
-2025-08-23 22:40:38 | INFO  | Graceful shutdown complete
-2025-08-23 22:40:38 | INFO  | Request execution error. endpoint=DefaultEndpoint{ serviceUrl='http://localhost:8761/eureka/} exception=I/O error on POST request for "http://localhost:8761/eureka/apps/POSTS": Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt stacktrace=org.springframework.web.client.ResourceAccessException: I/O error on POST request for "http://localhost:8761/eureka/apps/POSTS": Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt
+2025-08-28 17:34:08 | INFO  | Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-28 17:34:10 | INFO  | Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-08-28 17:34:13 | WARN  | spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-08-28 17:34:15 | INFO  | Cannot determine local hostname
+2025-08-28 17:34:18 | INFO  | Cannot determine local hostname
+2025-08-28 17:34:18 | INFO  | Eureka HTTP Client uses RestTemplate.
+2025-08-28 17:34:18 | WARN  | Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2025-08-28 17:34:18 | INFO  | Exposing 1 endpoint beneath base path '/actuator'
+2025-08-28 17:34:18 | INFO  | Setting initial instance status as: STARTING
+2025-08-28 17:34:18 | INFO  | Initializing Eureka in region us-east-1
+2025-08-28 17:34:18 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 17:34:18 | INFO  | Disable delta property : false
+2025-08-28 17:34:18 | INFO  | Single vip registry refresh property : null
+2025-08-28 17:34:18 | INFO  | Force full registry fetch : false
+2025-08-28 17:34:18 | INFO  | Application is null : false
+2025-08-28 17:34:18 | INFO  | Registered Applications size is zero : true
+2025-08-28 17:34:18 | INFO  | Application version is -1: true
+2025-08-28 17:34:18 | INFO  | Getting all instance registry info from the eureka server
+2025-08-28 17:34:19 | INFO  | The response status is 200
+2025-08-28 17:34:19 | INFO  | Starting heartbeat executor: renew interval is: 30
+2025-08-28 17:34:19 | INFO  | InstanceInfoReplicator onDemand update allowed rate per min is 4
+2025-08-28 17:34:19 | INFO  | Discovery Client initialized at timestamp 1756391659755 with initial instances count: 0
+2025-08-28 17:34:19 | INFO  | Registering application POSTS with eureka with status UP
+2025-08-28 17:34:19 | INFO  | Saw local status change event StatusChangeEvent [timestamp=1756391659755, current=UP, previous=STARTING]
+2025-08-28 17:34:19 | INFO  | DiscoveryClient_POSTS/localhost:posts:8091: registering service...
+2025-08-28 17:34:19 | INFO  | Tomcat started on port 8091 (http) with context path '/'
+2025-08-28 17:34:19 | INFO  | Updating port to 8091
+2025-08-28 17:34:19 | INFO  | DiscoveryClient_POSTS/localhost:posts:8091 - registration status: 204
+2025-08-28 17:34:20 | INFO  | Cannot determine local hostname
+2025-08-28 17:34:20 | INFO  | Started PostsApplication in 34.867 seconds (process running for 37.965)
+2025-08-28 17:34:49 | INFO  | Disable delta property : false
+2025-08-28 17:34:49 | INFO  | Single vip registry refresh property : null
+2025-08-28 17:34:49 | INFO  | Force full registry fetch : false
+2025-08-28 17:34:49 | INFO  | Application is null : false
+2025-08-28 17:34:49 | INFO  | Registered Applications size is zero : true
+2025-08-28 17:34:49 | INFO  | Application version is -1: false
+2025-08-28 17:34:49 | INFO  | Getting all instance registry info from the eureka server
+2025-08-28 17:34:49 | INFO  | The response status is 200
+2025-08-28 17:39:18 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 17:44:18 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 17:49:18 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 17:54:18 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 17:59:18 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 18:00:00 | INFO  | Found 7 expired polls to process
+2025-08-28 18:04:18 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 18:09:18 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 18:14:18 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 18:19:18 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 18:24:18 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 18:29:18 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 18:34:18 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 18:39:18 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 18:44:18 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 18:49:18 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 18:54:18 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 18:59:18 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 19:00:00 | INFO  | Found 7 expired polls to process
+2025-08-28 19:04:19 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 19:09:19 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 19:14:19 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 19:19:19 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 19:24:19 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 19:29:19 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 19:34:19 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 19:39:19 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 19:44:19 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 20:14:29 | WARN  | HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=29m26s891ms614µs200ns).
+2025-08-28 20:18:15 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 20:23:15 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 20:28:15 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 20:28:56 | INFO  | Found 7 expired polls to process
+2025-08-28 20:33:15 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 20:38:15 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 20:43:15 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 20:48:15 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 20:53:15 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 20:58:15 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 21:00:00 | INFO  | Found 7 expired polls to process
+2025-08-28 21:03:15 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 21:08:16 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 21:13:16 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 21:18:16 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 21:23:16 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 21:28:16 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 21:33:16 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 21:38:16 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 21:43:16 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 21:48:16 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 21:53:16 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 21:58:16 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 22:00:00 | INFO  | Found 7 expired polls to process
+2025-08-28 22:03:16 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 22:08:16 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 22:13:16 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 22:18:16 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 22:23:16 | INFO  | Resolving eureka endpoints via configuration
+2025-08-28 22:36:10 | WARN  | HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=9m40s99ms311µs900ns).
+2025-08-28 22:36:14 | INFO  | Unregistering application POSTS with eureka with status DOWN
+2025-08-28 22:36:14 | INFO  | Saw local status change event StatusChangeEvent [timestamp=1756409774289, current=DOWN, previous=UP]
+2025-08-28 22:36:14 | INFO  | DiscoveryClient_POSTS/localhost:posts:8091: registering service...
+2025-08-28 22:36:15 | INFO  | Commencing graceful shutdown. Waiting for active requests to complete
+2025-08-28 22:36:15 | INFO  | Graceful shutdown complete
+2025-08-28 22:36:15 | INFO  | Request execution error. endpoint=DefaultEndpoint{ serviceUrl='http://localhost:8761/eureka/} exception=I/O error on POST request for "http://localhost:8761/eureka/apps/POSTS": Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt stacktrace=org.springframework.web.client.ResourceAccessException: I/O error on POST request for "http://localhost:8761/eureka/apps/POSTS": Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt
 	at org.springframework.web.client.RestTemplate.createResourceAccessException(RestTemplate.java:925)
 	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:905)
 	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:840)
@@ -528,8 +468,8 @@ Caused by: org.apache.hc.client5.http.HttpHostConnectException: Connect to http:
 	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:899)
 	... 21 more
 
-2025-08-23 22:40:38 | WARN  | Request execution failed with message: I/O error on POST request for "http://localhost:8761/eureka/apps/POSTS": Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt
-2025-08-23 22:40:38 | INFO  | Request execution error. endpoint=DefaultEndpoint{ serviceUrl='http://localhost:8761/eureka/}, exception=I/O error on POST request for "http://localhost:8761/eureka/apps/POSTS": Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt stacktrace=org.springframework.web.client.ResourceAccessException: I/O error on POST request for "http://localhost:8761/eureka/apps/POSTS": Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt
+2025-08-28 22:36:15 | WARN  | Request execution failed with message: I/O error on POST request for "http://localhost:8761/eureka/apps/POSTS": Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt
+2025-08-28 22:36:15 | INFO  | Request execution error. endpoint=DefaultEndpoint{ serviceUrl='http://localhost:8761/eureka/}, exception=I/O error on POST request for "http://localhost:8761/eureka/apps/POSTS": Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt stacktrace=org.springframework.web.client.ResourceAccessException: I/O error on POST request for "http://localhost:8761/eureka/apps/POSTS": Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt
 	at org.springframework.web.client.RestTemplate.createResourceAccessException(RestTemplate.java:925)
 	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:905)
 	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:840)
@@ -591,8 +531,8 @@ Caused by: org.apache.hc.client5.http.HttpHostConnectException: Connect to http:
 	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:899)
 	... 22 more
 
-2025-08-23 22:40:38 | WARN  | Request execution failed with message: I/O error on POST request for "http://localhost:8761/eureka/apps/POSTS": Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt
-2025-08-23 22:40:38 | WARN  | DiscoveryClient_POSTS/localhost:posts:8091 - registration failed Cannot execute request on any known server
+2025-08-28 22:36:15 | WARN  | Request execution failed with message: I/O error on POST request for "http://localhost:8761/eureka/apps/POSTS": Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt
+2025-08-28 22:36:15 | WARN  | DiscoveryClient_POSTS/localhost:posts:8091 - registration failed Cannot execute request on any known server
 com.netflix.discovery.shared.transport.TransportException: Cannot execute request on any known server
 	at com.netflix.discovery.shared.transport.decorator.RetryableEurekaHttpClient.execute(RetryableEurekaHttpClient.java:112)
 	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator.register(EurekaHttpClientDecorator.java:56)
@@ -608,7 +548,7 @@ com.netflix.discovery.shared.transport.TransportException: Cannot execute reques
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
 	at java.base/java.lang.Thread.run(Thread.java:1583)
-2025-08-23 22:40:38 | WARN  | There was a problem with the instance info replicator
+2025-08-28 22:36:16 | WARN  | There was a problem with the instance info replicator
 com.netflix.discovery.shared.transport.TransportException: Cannot execute request on any known server
 	at com.netflix.discovery.shared.transport.decorator.RetryableEurekaHttpClient.execute(RetryableEurekaHttpClient.java:112)
 	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator.register(EurekaHttpClientDecorator.java:56)
@@ -624,12 +564,12 @@ com.netflix.discovery.shared.transport.TransportException: Cannot execute reques
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
 	at java.base/java.lang.Thread.run(Thread.java:1583)
-2025-08-23 22:40:39 | INFO  | Closing JPA EntityManagerFactory for persistence unit 'default'
-2025-08-23 22:40:39 | INFO  | HikariPool-1 - Shutdown initiated...
-2025-08-23 22:40:39 | INFO  | HikariPool-1 - Shutdown completed.
-2025-08-23 22:40:39 | INFO  | Shutting down DiscoveryClient ...
-2025-08-23 22:40:42 | INFO  | Unregistering ...
-2025-08-23 22:40:42 | INFO  | Request execution error. endpoint=DefaultEndpoint{ serviceUrl='http://localhost:8761/eureka/}, exception=I/O error on DELETE request for "http://localhost:8761/eureka/apps/POSTS/localhost:posts:8091": Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt stacktrace=org.springframework.web.client.ResourceAccessException: I/O error on DELETE request for "http://localhost:8761/eureka/apps/POSTS/localhost:posts:8091": Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt
+2025-08-28 22:36:16 | INFO  | Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-08-28 22:36:16 | INFO  | HikariPool-1 - Shutdown initiated...
+2025-08-28 22:36:16 | INFO  | HikariPool-1 - Shutdown completed.
+2025-08-28 22:36:16 | INFO  | Shutting down DiscoveryClient ...
+2025-08-28 22:36:19 | INFO  | Unregistering ...
+2025-08-28 22:36:19 | INFO  | Request execution error. endpoint=DefaultEndpoint{ serviceUrl='http://localhost:8761/eureka/}, exception=I/O error on DELETE request for "http://localhost:8761/eureka/apps/POSTS/localhost:posts:8091": Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt stacktrace=org.springframework.web.client.ResourceAccessException: I/O error on DELETE request for "http://localhost:8761/eureka/apps/POSTS/localhost:posts:8091": Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt
 	at org.springframework.web.client.RestTemplate.createResourceAccessException(RestTemplate.java:925)
 	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:905)
 	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:840)
@@ -707,8 +647,8 @@ Caused by: org.apache.hc.client5.http.HttpHostConnectException: Connect to http:
 	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:899)
 	... 38 more
 
-2025-08-23 22:40:42 | WARN  | Request execution failed with message: I/O error on DELETE request for "http://localhost:8761/eureka/apps/POSTS/localhost:posts:8091": Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt
-2025-08-23 22:40:42 | ERROR | DiscoveryClient_POSTS/localhost:posts:8091 - de-registration failedCannot execute request on any known server
+2025-08-28 22:36:19 | WARN  | Request execution failed with message: I/O error on DELETE request for "http://localhost:8761/eureka/apps/POSTS/localhost:posts:8091": Connect to http://localhost:8761 [localhost/127.0.0.1, localhost/0:0:0:0:0:0:0:1] failed: Connection refused: getsockopt
+2025-08-28 22:36:19 | ERROR | DiscoveryClient_POSTS/localhost:posts:8091 - de-registration failedCannot execute request on any known server
 com.netflix.discovery.shared.transport.TransportException: Cannot execute request on any known server
 	at com.netflix.discovery.shared.transport.decorator.RetryableEurekaHttpClient.execute(RetryableEurekaHttpClient.java:112)
 	at com.netflix.discovery.shared.transport.decorator.EurekaHttpClientDecorator.cancel(EurekaHttpClientDecorator.java:71)
@@ -740,4 +680,4 @@ com.netflix.discovery.shared.transport.TransportException: Cannot execute reques
 	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
 	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:116)
 	at java.base/java.lang.Thread.run(Thread.java:1583)
-2025-08-23 22:40:42 | INFO  | Completed shut down of DiscoveryClient
+2025-08-28 22:36:19 | INFO  | Completed shut down of DiscoveryClient

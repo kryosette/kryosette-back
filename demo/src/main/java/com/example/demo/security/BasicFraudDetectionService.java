@@ -24,7 +24,6 @@ public class BasicFraudDetectionService {
         String ipAddress = getClientIP();
 
         return false;
-
     }
 
     private String getClientIP() {
