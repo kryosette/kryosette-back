@@ -117,6 +117,7 @@ rabbitmq:
   routing_key: notification.routing.key
 
 server:
+  address: 0.0.0.0
 #  ssl:
 #    enabled: true
 #    key-store: classpath:keystore.p12

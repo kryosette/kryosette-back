@@ -2,8 +2,10 @@ package com.example.demo.auth;
 
 import com.example.demo.security.opaque_tokens.TokenData;
 import com.example.demo.security.opaque_tokens.TokenService;
+import com.example.demo.sevices.BanRequest;
 import com.example.demo.user.User;
 import com.example.demo.user.UserRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
@@ -13,8 +15,10 @@ import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.connection.RedisServer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
@@ -337,5 +341,47 @@ u     * @param key Original key string
     ) throws MessagingException {
         service.registerAdmin(request);
         return ResponseEntity.accepted().build();
+    }
+
+    @PostMapping("/lock-user-by-device")
+    public void lockUserByDevice(@RequestBody BanRequest request) {
+        log.info("Received ban request: {}", request);
+
+        // Ищем пользователя по device hash
+        String username = tokenService.findUsernameByDeviceHash(request.getDeviceHash());
+
+        if (username == null) {
+            throw new UsernameNotFoundException("No user found for device: " + request.getDeviceHash());
+        }
+
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+
+        user.setAccountLocked(true);
+        userRepository.save(user);
+
+        log.info("User {} locked by device hash: {}, reason: {}, level: {}",
+                user.getEmail(), request.getDeviceHash(), request.getReason(), request.getLevel());
+    }
+
+    @PostMapping("/lock-user-by-ip")
+    public void lockUserByIp(@RequestBody BanRequest request) {
+        log.info("Received IP ban request: {}", request);
+
+        // Сначала находим device hash по IP
+        String deviceHash = tokenService.findDeviceHashByIp(request.getDeviceHash()); // здесь deviceHash = IP
+
+        if (deviceHash == null) {
+            throw new UsernameNotFoundException("No device hash found for IP: " + request.getDeviceHash());
+        }
+
+        // Затем блокируем по device hash
+        BanRequest deviceBanRequest = new BanRequest();
+        deviceBanRequest.setDeviceHash(deviceHash);
+        deviceBanRequest.setReason(request.getReason());
+        deviceBanRequest.setDuration(request.getDuration());
+        deviceBanRequest.setLevel(request.getLevel());
+
+        lockUserByDevice(deviceBanRequest);
     }
 }

@@ -23,6 +23,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -133,7 +136,8 @@ public class AuthenticationService {
             }
 
             String deviceHash = generateDeviceHash(httpRequest, user.getUsername());
-            String token = tokenService.generateToken(user, user.getId(), deviceHash               );
+            String clientIp = getClientIpAddress(httpRequest);
+            String token = tokenService.generateToken(user, user.getId(), deviceHash, clientIp);
 
             return AuthenticationResponse.builder()
                     .token(token)
@@ -142,6 +146,61 @@ public class AuthenticationService {
         } catch (BadCredentialsException e) {
             log.warn("Failed login attempt for: " + request.getEmail());
             throw e;
+        }
+    }
+
+    /**
+     * Extracts client IP address from HttpServletRequest considering proxies and load balancers.
+     *
+     * @param request HTTP request
+     * @return Client IP address or "unknown" if cannot determine
+     */
+    private String getClientIpAddress(HttpServletRequest request) {
+        // Порядок проверки заголовков важен!
+        String[] headers = {
+                "X-Forwarded-For",
+                "X-Real-IP",
+                "Proxy-Client-IP",
+                "WL-Proxy-Client-IP",
+                "HTTP_CLIENT_IP",
+                "HTTP_X_FORWARDED_FOR"
+        };
+
+        for (String header : headers) {
+            String ip = request.getHeader(header);
+            if (isValidIpAddress(ip)) {
+                // X-Forwarded-For может содержать список IP: "client, proxy1, proxy2"
+                if (header.equals("X-Forwarded-For") && ip.contains(",")) {
+                    String[] ips = ip.split(",");
+                    ip = ips[0].trim(); // берем первый IP (клиент)
+                }
+                return ip;
+            }
+        }
+
+        // Если заголовки не помогли, берем remote address
+        return request.getRemoteAddr();
+    }
+
+    /**
+     * Validates IP address format.
+     *
+     * @param ip IP address to validate
+     * @return true if valid IPv4 or IPv6 address
+     */
+    private boolean isValidIpAddress(String ip) {
+        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
+            return false;
+        }
+
+        try {
+            // Проверяем IPv4 и IPv6
+            InetAddress inetAddress = InetAddress.getByName(ip);
+            return !inetAddress.isAnyLocalAddress() &&
+                    !inetAddress.isLoopbackAddress() &&
+                    !inetAddress.isLinkLocalAddress();
+        } catch (UnknownHostException e) {
+            return false;
         }
     }
 

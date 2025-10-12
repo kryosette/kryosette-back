@@ -8,8 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Map;
-
 
 public interface PollVoteRepository extends JpaRepository<PollVote, Long> {
     @Query("SELECT v.option.id as optionId, COUNT(v) as voteCount " +
