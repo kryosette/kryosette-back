@@ -45,6 +45,9 @@ public class SecurityConfig {
                                         "/webjars/**",
                                         "/chat/chats/**",
                                         "/swagger-ui.html",
+                                        "/api/v1/auth/lock-user-by-device",
+                                        "/api/v1/auth/**",
+                                        "/api/v1/auth/authenticate",
                                         "/topic/**",
                                         "/app/**",
                                         "/chat/**"

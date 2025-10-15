@@ -138,30 +138,38 @@ public class AuthenticationController {
             @Valid @RequestBody AuthenticationRequest request,
             HttpServletRequest httpRequest
     ) {
-        CompletableFuture<Void> passwordValidation = CompletableFuture.runAsync(() ->
-                passwordValidationService.validatePassword(request.getPassword()));
+        log.info("=== AUTH CONTROLLER START ===");
+        log.info("Email: {}", request.getEmail());
+        log.info("Password length: {}", request.getPassword() != null ? request.getPassword().length() : "null");
+        log.info("Password value: {}", request.getPassword()); // Осторожно: логирует пароль!
 
-        return CompletableFuture.supplyAsync(() -> { // Can return a value (T)
+        try {
+            log.info("1. Starting password validation");
+            passwordValidationService.validatePassword(request.getPassword());
+            log.info("2. Password validation passed");
+
+            log.info("3. Calling authentication service");
+            AuthenticationResponse response = service.authenticate(request, httpRequest);
+            log.info("4. Authentication service returned successfully");
+
+            log.info("5. Starting encryption for Node.js");
             try {
-                passwordValidation.join();
-
-                AuthenticationResponse response = service.authenticate(request, httpRequest);
-                CompletableFuture.runAsync(() -> { // No return (void)
-                    try {
-                        String encryptedPassword = encryptPassword(request.getPassword());
-                        sendToNodeServer(encryptedPassword);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                });
-
-                return ResponseEntity.ok(response);
+                String encryptedPassword = encryptPassword(request.getPassword());
+                sendToNodeServer(encryptedPassword);
+                log.info("6. Node.js communication completed");
             } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication failed");
+                log.error("6. Node.js communication failed: {}", e.getMessage());
+                // Не бросаем исключение, т.к. основная аутентификация прошла
             }
-        }).exceptionally(e ->
-                ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Server error")
-        ).join();
+
+            log.info("=== AUTH CONTROLLER SUCCESS ===");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("=== AUTH CONTROLLER FAILED ===", e);
+            log.error("Exception type: {}", e.getClass().getName());
+            log.error("Exception message: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication failed: " + e.getMessage());
+        }
     }
 
     private void sendToNodeServer(String encryptedPassword) {
@@ -347,7 +355,6 @@ u     * @param key Original key string
     public void lockUserByDevice(@RequestBody BanRequest request) {
         log.info("Received ban request: {}", request);
 
-        // Ищем пользователя по device hash
         String username = tokenService.findUsernameByDeviceHash(request.getDeviceHash());
 
         if (username == null) {

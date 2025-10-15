@@ -9,6 +9,7 @@ spring:
     name:
       auth
   security:
+    enabled: false
     encryption:
       key: mySuperSecretKeyWithAtLeast32Characters123
     token:

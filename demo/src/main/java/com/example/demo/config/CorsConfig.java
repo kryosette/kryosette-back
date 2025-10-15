@@ -64,6 +64,12 @@ public class CorsConfig {
                         .allowedMethods("*")
                         .allowedHeaders("*")
                         .allowCredentials(true);
+                registry.addMapping("/api/v1/auth/lock-user-by-device")
+                        .allowedOrigins("*")
+                        .allowedMethods("POST", "OPTIONS")
+                        .allowedHeaders("*")
+                        .allowCredentials(false)
+                        .maxAge(3600);
 
             }
         };
