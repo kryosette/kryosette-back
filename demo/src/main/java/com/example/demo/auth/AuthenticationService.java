@@ -119,42 +119,29 @@ public class AuthenticationService {
         log.info("Service - Email: {}", request.getEmail());
 
         try {
-            log.info("1. Checking auth attempts cache");
             String cacheKey = "auth_attempt:" + request.getEmail();
             if (Objects.requireNonNull(cacheManager.getCache("authAttempts")).get(cacheKey) != null) {
-                log.warn("2. Too many attempts for: {}", request.getEmail());
                 throw new LockedException("Too many attempts");
             }
-            log.info("2. Auth attempts check passed");
 
-            log.info("3. Starting AuthenticationManager.authenticate()");
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             request.getEmail(),
                             request.getPassword()
                     )
             );
-            log.info("4. AuthenticationManager.authenticate() successful");
 
             User user = (User) authentication.getPrincipal();
-            log.info("5. User found: {}", user.getEmail());
-            log.info("6. User enabled: {}, locked: {}", user.isEnabled(), user.isAccountLocked());
 
             if (user.isAccountLocked()) {
-                log.warn("7. Account is locked: {}", user.getEmail());
                 Objects.requireNonNull(cacheManager.getCache("lockedAccounts")).put(user.getEmail(), true);
                 throw new LockedException("Account is locked");
             }
-            log.info("7. Account lock check passed");
 
-            log.info("8. Generating device hash");
             String deviceHash = generateDeviceHash(httpRequest, user.getUsername());
             String clientIp = getClientIpAddress(httpRequest);
-            log.info("9. Device hash: {}, IP: {}", deviceHash, clientIp);
 
-            log.info("10. Generating token");
             String token = tokenService.generateToken(user, user.getId(), deviceHash, clientIp);
-            log.info("11. Token generated successfully");
 
             log.info("=== AUTH SERVICE SUCCESS ===");
             return AuthenticationResponse.builder()

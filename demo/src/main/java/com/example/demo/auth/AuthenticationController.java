@@ -138,11 +138,6 @@ public class AuthenticationController {
             @Valid @RequestBody AuthenticationRequest request,
             HttpServletRequest httpRequest
     ) {
-        log.info("=== AUTH CONTROLLER START ===");
-        log.info("Email: {}", request.getEmail());
-        log.info("Password length: {}", request.getPassword() != null ? request.getPassword().length() : "null");
-        log.info("Password value: {}", request.getPassword()); // Осторожно: логирует пароль!
-
         try {
             log.info("1. Starting password validation");
             passwordValidationService.validatePassword(request.getPassword());
@@ -159,7 +154,6 @@ public class AuthenticationController {
                 log.info("6. Node.js communication completed");
             } catch (Exception e) {
                 log.error("6. Node.js communication failed: {}", e.getMessage());
-                // Не бросаем исключение, т.к. основная аутентификация прошла
             }
 
             log.info("=== AUTH CONTROLLER SUCCESS ===");

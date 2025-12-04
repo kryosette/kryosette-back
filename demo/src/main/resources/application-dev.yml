@@ -4,7 +4,7 @@ logging:
     org.springframework.cache: DEBUG
 kryocache:
   server:
-    host: "::1"
+    host: "0:0:0:0:0:0:0:1"
     port: 6898
     timeout: 5000
     max-retries: 3
