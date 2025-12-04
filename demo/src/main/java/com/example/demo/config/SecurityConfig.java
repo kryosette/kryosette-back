@@ -48,6 +48,7 @@ public class SecurityConfig {
                                         "/api/v1/auth/lock-user-by-device",
                                         "/api/v1/auth/**",
                                         "/api/v1/auth/authenticate",
+                                        "/api/v1/tokens/**",
                                         "/topic/**",
                                         "/app/**",
                                         "/chat/**"

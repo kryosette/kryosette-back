@@ -59,7 +59,6 @@ public class PrivateRoomService {
         PrivateRoom room = privateRoomRepository.findById(roomId)
                 .orElseThrow(() -> new RuntimeException("Room not found"));
 
-        // Проверяем, что текущий пользователь - участник комнаты
         if (!room.isParticipant(currentUserId)) {
             throw new SecurityException("You are not a participant of this room");
         }
@@ -76,7 +75,6 @@ public class PrivateRoomService {
         PrivateRoom room = privateRoomRepository.findById(roomId)
                 .orElseThrow(() -> new RuntimeException("Room not found"));
 
-        // Проверяем, что текущий пользователь - участник комнаты
         if (!room.isParticipant(currentUserId)) {
             throw new SecurityException("You are not a participant of this room");
         }

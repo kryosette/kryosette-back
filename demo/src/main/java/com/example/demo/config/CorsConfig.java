@@ -38,6 +38,13 @@ public class CorsConfig {
                         .allowCredentials(true)
                         .maxAge(3600);
 
+                registry.addMapping("/api/v1/tokens/**")
+                        .allowedOrigins(ALLOWED_ORIGINS)
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                        .allowedHeaders("*")
+                        .allowCredentials(true)
+                        .maxAge(3600);
+
                 registry.addMapping("/api/v1/auth/**")
                         .allowedOrigins(ALLOWED_ORIGINS)
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")

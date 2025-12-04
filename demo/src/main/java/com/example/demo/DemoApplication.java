@@ -18,6 +18,7 @@ public class DemoApplication {
 
 	public static void main(String[] args) {
 		System.setProperty("jdk.tls.client.protocols", "TLSv1.3");
+        System.setProperty("java.net.preferIPv6Addresses", "true");
 		SpringApplication.run(DemoApplication.class, args);
 	}
 

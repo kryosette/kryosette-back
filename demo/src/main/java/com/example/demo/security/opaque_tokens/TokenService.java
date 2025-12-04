@@ -65,9 +65,6 @@ public class TokenService {
      */
     private final ObjectMapper objectMapper;
 
-    /**
-     * Token expiration time in milliseconds. Injected from Spring properties.
-     */
     @Value("${spring.security.token.expiration}")
     private long tokenExpiration;
 

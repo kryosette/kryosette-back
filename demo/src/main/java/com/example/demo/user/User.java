@@ -36,7 +36,7 @@ import static jakarta.persistence.FetchType.EAGER;
 @Entity
 @Table(name = "_user")
 @EntityListeners(AuditingEntityListener.class)
-public class  User extends BaseEntity implements UserDetails, Principal {
+public class User extends BaseEntity implements UserDetails, Principal {
 
     @Id
     @Column(name = "id", columnDefinition = "VARCHAR(32)", length = 32, unique = true, nullable = false)

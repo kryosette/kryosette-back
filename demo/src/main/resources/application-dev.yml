@@ -2,6 +2,12 @@ logging:
   level:
     org.springframework.web: DEBUG
     org.springframework.cache: DEBUG
+kryocache:
+  server:
+    host: "::1"
+    port: 6898
+    timeout: 5000
+    max-retries: 3
 spring:
   config:
     import: optional:configserver:http://localhost:8888
@@ -39,7 +45,7 @@ spring:
     listener:
       ack-mode: manual
   datasource:
-    url: jdbc:mysql://localhost:3306/book_social_network
+    url: jdbc:mysql://localhost:3306/kryosette
     username: root
     password: HoslDiBm5:DodLoPost
     driver-class-name: com.mysql.cj.jdbc.Driver
