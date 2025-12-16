@@ -109,8 +109,6 @@ public class KryocacheClient {
         lock.lock();
         try {
             for (int attempt = 0; attempt < maxRetries; attempt++) {
-                long startTime = System.currentTimeMillis();
-
                 try {
                     Socket socket = new Socket();
 
@@ -118,13 +116,12 @@ public class KryocacheClient {
                     InetAddress[] addresses = InetAddress.getAllByName(host);
 
                     List<InetAddress> ipv6Addresses = new ArrayList<>();
-                    List<InetAddress> ipv4Addresses = new ArrayList<>();
 
                     for (InetAddress addr : addresses) {
                         if (addr instanceof Inet6Address) {
                             ipv6Addresses.add(addr);
                         } else {
-                            ipv4Addresses.add(addr);
+                            return false;
                         }
                     }
 
@@ -147,8 +144,6 @@ public class KryocacheClient {
 
                     socket.connect(socketAddress, timeout);
 
-                    long connectTime = System.currentTimeMillis() - startTime;
-
                     try (OutputStream out = socket.getOutputStream();
                          BufferedReader in = new BufferedReader(
                                  new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8))) {
@@ -159,7 +154,6 @@ public class KryocacheClient {
                         out.flush();
 
                         String response = in.readLine();
-                        long totalTime = System.currentTimeMillis() - startTime;
 
                         boolean success = response != null && response.contains("OK");
 
@@ -234,8 +228,6 @@ public class KryocacheClient {
                     InetSocketAddress socketAddress = new InetSocketAddress(ipv6Address, port);
                     socket.connect(socketAddress, timeout);
 
-                    long connectTime = System.currentTimeMillis() - startTime;
-
                     try (OutputStream out = socket.getOutputStream();
                          BufferedReader in = new BufferedReader(
                                  new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8))) {
@@ -254,7 +246,6 @@ public class KryocacheClient {
                             lineCount++;
                         }
 
-                        long totalTime = System.currentTimeMillis() - startTime;
                         String responseStr = response.toString();
 
                         socket.close();
@@ -292,101 +283,4 @@ public class KryocacheClient {
         }
     }
 
-    public boolean ping() {
-        long startTime = System.currentTimeMillis();
-        String response = sendCommandWithResponse("PING\r\n");
-        long elapsedTime = System.currentTimeMillis() - startTime;
-
-        boolean success = response != null && response.contains("PONG");
-
-        if (success) {
-            log.info("   ✅ PING SUCCESS in {} ms: {}", elapsedTime, response);
-        } else {
-            log.error("   ❌ PING FAILED in {} ms", elapsedTime);
-            if (response == null) {
-                log.error("   No response received");
-            } else {
-                log.error("   Unexpected response: '{}'", response);
-            }
-        }
-
-        return success;
-    }
-
-    public String testConnection() {
-        StringBuilder result = new StringBuilder();
-        result.append("=== Connection Test ===\n");
-
-        result.append("\n1. DNS Resolution:\n");
-        try {
-            InetAddress[] addresses = InetAddress.getAllByName(host);
-            for (InetAddress addr : addresses) {
-                result.append(String.format("   - %s (IPv6: %s, Loopback: %s)\n",
-                        addr.getHostAddress(),
-                        addr instanceof Inet6Address,
-                        addr.isLoopbackAddress()));
-            }
-        } catch (Exception e) {
-            result.append("   ❌ Failed: ").append(e.getMessage()).append("\n");
-        }
-
-        result.append("\n2. Connection Test:\n");
-        try (Socket socket = new Socket()) {
-            socket.setSoTimeout(2000);
-
-            InetAddress addr = InetAddress.getByName(host);
-            result.append(String.format("   Trying %s:%d...\n", addr.getHostAddress(), port));
-
-            long start = System.currentTimeMillis();
-            socket.connect(new InetSocketAddress(addr, port), 2000);
-            long elapsed = System.currentTimeMillis() - start;
-
-            result.append(String.format("   ✅ Connected in %d ms\n", elapsed));
-            result.append(String.format("   Local: %s:%d\n",
-                    socket.getLocalAddress().getHostAddress(), socket.getLocalPort()));
-            result.append(String.format("   Remote: %s:%d\n",
-                    socket.getInetAddress().getHostAddress(), socket.getPort()));
-
-            result.append("\n3. Command Test:\n");
-            try {
-                OutputStream out = socket.getOutputStream();
-                BufferedReader in = new BufferedReader(
-                        new InputStreamReader(socket.getInputStream()));
-
-                out.write("PING\r\n".getBytes(StandardCharsets.UTF_8));
-                out.flush();
-
-                String response = in.readLine();
-                result.append("   Command: PING\n");
-                result.append("   Response: ").append(response != null ? response : "NULL").append("\n");
-
-            } catch (Exception e) {
-                result.append("   ❌ Command failed: ").append(e.getMessage()).append("\n");
-            }
-
-        } catch (SocketTimeoutException e) {
-            result.append("   ⏰ Timeout after 2000ms\n");
-        } catch (ConnectException e) {
-            result.append("   🔌 Connection refused\n");
-            result.append("   Possible causes:\n");
-            result.append("     - Server not running\n");
-            result.append("     - Wrong port\n");
-            result.append("     - Firewall blocking\n");
-        } catch (Exception e) {
-            result.append("   ❌ Error: ").append(e.getMessage()).append("\n");
-        }
-
-        result.append("\n=== End Test ===\n");
-
-        String testResult = result.toString();
-        log.info("Test Results:\n{}", testResult);
-        log.info("🔧 === END CONNECTION TEST ===");
-
-        return testResult;
-    }
-
-    public String getConfigInfo() {
-        return String.format("Host: %s, Port: %d, Timeout: %dms, Retries: %d",
-                host, port, timeout, maxRetries);
-    }
 }
