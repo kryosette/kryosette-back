@@ -34,22 +34,6 @@ import lombok.Setter;
 @Builder
 public class AuthenticationRequest {
 
-    /**
-     * User's email address serving as username.
-     * Must satisfy all conditions:
-     * <ol>
-     *   <li>Standard email format (user@domain.tld)</li>
-     *   <li>Non-empty string</li>
-     *   <li>Non-null value</li>
-     * </ol>
-     *
-     * @apiNote Backed by Java Bean Validation:
-     * <ul>
-     *   <li>{@link Email} for format validation</li>
-     *   <li>{@link NotEmpty} for content check</li>
-     *   <li>{@link NotNull} for null check</li>
-     * </ul>
-     */
     @Email(message = "Email is not well formatted")
     @NotEmpty(message = "Email is mandatory")
     @NotNull(message = "Email is mandatory")
