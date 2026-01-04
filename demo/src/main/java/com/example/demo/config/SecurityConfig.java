@@ -49,6 +49,7 @@ public class SecurityConfig {
                                         "/api/v1/auth/**",
                                         "/api/v1/auth/authenticate",
                                         "/api/v1/tokens/**",
+                                        "/api/v1/token/by-device/**",
                                         "/topic/**",
                                         "/app/**",
                                         "/chat/**"

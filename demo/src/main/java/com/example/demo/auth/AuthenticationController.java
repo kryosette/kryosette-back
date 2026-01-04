@@ -56,51 +56,13 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 public class AuthenticationController {
 
-    /**
-     * Service for generating and validating opaque tokens.
-     */
     private final TokenService tokenService;
-
-    /**
-     * Core authentication service.
-     */
     private final AuthenticationService service;
-
-    /**
-     * Service for password strength validation.
-     */
     private final PasswordValidationService passwordValidationService;
-
-    /**
-     * Repository for user data access.
-     */
     private final UserRepository userRepository;
-
-    /**
-     * Hardcoded address for the Node.js authentication server.
-     * @implNote Should be externalized to configuration in production.
-     */
     private static final String NODE_SERVER_ADDRESS = "127.0.0.1";
-
-    /**
-     * Hardcoded port for the Node.js authentication server.
-     * @implNote Should be externalized to configuration in production.
-     */
     private static final int NODE_SERVER_PORT = 8081;
 
-    /**
-     * Registers a new user account.
-     *
-     * @param request Validated registration request containing:
-     *                <ul>
-     *                  <li>email</li>
-     *                  <li>password</li>
-     *                  <li>other user details</li>
-     *                </ ul>
-     * @return HTTP 202 (Accepted) on success
-     * @throws MessagingException If account activation email fails to send
-     * @see RegistrationR equest For request structure
-     */
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public ResponseEntity<?> register(
@@ -274,8 +236,9 @@ u     * @param key Original key string
                     "message", "Authorization header must start with 'Bearer '"
             ));
         }
-
+        log.info("DEBUG [KryocacheClient.getToken]: token key = '{}'", authHeader);
         String token = authHeader.substring(7);
+        log.info("DEBUG [KryocacheClient.getToken]: token key = '{}'", token);
         Optional<TokenData> tokenData = tokenService.getTokenData(token);
 
         if (tokenData.isEmpty()) {
@@ -385,4 +348,19 @@ u     * @param key Original key string
 
         lockUserByDevice(deviceBanRequest);
     }
+
+    @GetMapping("/token/by-device/{deviceHash}")
+    public ResponseEntity<String> getTokenByDeviceHash(@PathVariable String deviceHash) {
+        try {
+            String tokenData = tokenService.findTokenByDeviceHash(deviceHash);
+            if (tokenData == null) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(tokenData);
+        } catch (Exception e) {
+            log.error("Failed to get token by device hash", e);
+            return ResponseEntity.status(500).build();
+        }
+    }
 }
+

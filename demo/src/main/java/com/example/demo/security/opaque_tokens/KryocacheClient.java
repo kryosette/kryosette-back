@@ -28,6 +28,9 @@ public class KryocacheClient {
     @Value("${kryocache.server.max-retries:3}")
     private int maxRetries;
 
+    @Value("${kryocache.max.tokens.per.device:2}")
+    private int maxTokensPerDevice;
+
     private final ReentrantLock lock = new ReentrantLock();
 
     @PostConstruct
@@ -84,20 +87,41 @@ public class KryocacheClient {
     }
 
     public boolean setToken(String token, String data, int ttlSeconds) {
-        String value = data + "|TTL:" + ttlSeconds;
-        return set(token, value);
+        if (token.startsWith("token:")) {
+            String value = data + "|TTL:" + ttlSeconds;
+            // return setWithTokenLimit(token, value, true, ttlSeconds);
+            return executeCommand("SET " + token + " " + value + "\r\n");
+        } else {
+            String value = data + "|TTL:" + ttlSeconds;
+            return executeCommand("SET " + token + " " + value + "\r\n");
+        }
     }
 
     public String getToken(String token) {
+        log.info("DEBUG [KryocacheClient.getToken]: token key = '{}'", token);
+
         String data = get(token);
-        if (data == null || data.isEmpty()) {
+        log.info("DEBUG [KryocacheClient.getToken]: raw response = '{}'", data);
+
+        if (data == null || data.isEmpty() || "NOT_FOUND".equals(data)) {
+            log.warn("DEBUG [KryocacheClient.getToken]: Token not found");
             return null;
+        }
+
+        // Убрать префикс "VALUE " если есть
+        if (data.startsWith("VALUE ")) {
+            data = data.substring(6).trim(); // Убираем "VALUE " и пробелы
+            log.info("DEBUG [KryocacheClient.getToken]: removed VALUE prefix, data = '{}'", data);
         }
 
         int ttlIndex = data.indexOf("|TTL:");
         if (ttlIndex > 0) {
-            return data.substring(0, ttlIndex);
+            String result = data.substring(0, ttlIndex);
+            log.info("DEBUG [KryocacheClient.getToken]: parsed value = '{}'", result);
+            return result;
         }
+
+        log.info("DEBUG [KryocacheClient.getToken]: no TTL, returning as-is = '{}'", data);
         return data;
     }
 
@@ -233,36 +257,35 @@ public class KryocacheClient {
                                  new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8))) {
 
                         byte[] commandBytes = command.getBytes(StandardCharsets.UTF_8);
-
                         out.write(commandBytes);
                         out.flush();
 
                         StringBuilder response = new StringBuilder();
-                        String line;
-                        int lineCount = 0;
+                        char[] buffer = new char[8192]; // Увеличить буфер
+                        int charsRead;
 
-                        while ((line = in.readLine()) != null) {
-                            response.append(line);
-                            lineCount++;
+                        // Читаем всё что есть, пока не кончится
+                        while ((charsRead = in.read(buffer)) != -1) {
+                            response.append(buffer, 0, charsRead);
+                            // Проверяем, не закончился ли ответ (по таймауту или признаку конца)
+                            if (!in.ready()) {
+                                Thread.sleep(100); // Даем время для получения оставшихся данных
+                                if (!in.ready()) {
+                                    break;
+                                }
+                            }
                         }
 
-                        String responseStr = response.toString();
+                        String responseStr = response.toString().trim();
+                        log.info("DEBUG [sendCommandWithResponse]: Full response ({} chars): '{}'",
+                                responseStr.length(), responseStr);
 
                         socket.close();
-
                         return responseStr;
                     }
 
-                } catch (SocketTimeoutException e) {
-                    log.error("   ⏰ Read timeout: {}", e.getMessage());
-                } catch (ConnectException e) {
-                    log.error("   🔌 Connection refused: {}", e.getMessage());
-                } catch (UnknownHostException e) {
-                    log.error("   🏷️ Unknown host: {}", e.getMessage());
-                } catch (IOException e) {
-                    log.error("   ❌ I/O Error: {}", e.getMessage());
                 } catch (Exception e) {
-                    log.error("   ⚠️ Unexpected error: {}", e.getMessage());
+                    log.error("   ⚠️ Error: {}", e.getMessage());
                 }
 
                 if (attempt < maxRetries - 1) {
@@ -282,5 +305,4 @@ public class KryocacheClient {
             lock.unlock();
         }
     }
-
 }

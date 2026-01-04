@@ -1,13 +1,10 @@
 package com.example.demo.security.opaque_tokens;
 
-import com.example.demo.user.UserDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.util.Pair;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -19,88 +16,28 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.Instant;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-
-/**
- * Service for managing token generation, validation, and invalidation.
- * Handles opaque tokens (non-JWT) stored in Redis with TTL-based expiration.
- * Also supports TAN (Transaction Authentication Number) generation/verification.
- *
- * <p>Tokens contain:
- * <ul>
- *   <li>Unique ID (UUID)</li>
- *   <li>User metadata (ID, username, authorities)</li>
- *   <li>Device fingerprint</li>
- *   <li>Issuance/expiration timestamps</li>
- * </ul>
- *
- * @see StringRedisTemplate For Redis operations
- * @see ObjectMapper For JSON serialization
- */
+@Slf4j
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class TokenService {
 
-    /**
-     * Redis client for token storage. Uses String serialization for JSON compatibility.
-     */
-    private final StringRedisTemplate redisTemplate;
-
-    /**
-     * JSON serializer/deserializer for token metadata.
-     */
+    private final KryocacheClient kryocacheClient;
     private final ObjectMapper objectMapper;
+    private static final int MAX_TOKENS_PER_DEVICE = 2; // Максимум 2 токена на deviceHash
+    private static final long TOKEN_EXPIRATION_MS = 3600000L; // 1 час
+    private static final long DEVICE_TOKEN_LIMIT_TTL = 86400L; // 24 часа в секундах
 
-    @Value("${spring.security.token.expiration}")
-    private long tokenExpiration;
-
-    /**
-     * Token issuer identifier. Injected from Spring properties.
-     */
-    @Value("${spring.security.token.issuer}")
-    private String issuer;
-
-
-    /**
-     * Generates a new opaque token and stores it in Redis.
-     *
-     * @param userDetails Spring Security user details (username, authorities)
-     * @param userId Unique user identifier (business-level ID)
-     * @param deviceHash Cryptographic hash of the device fingerprint
-     * @return Generated token ID (UUID)
-     * @throws TokenGenerationException If JSON serialization fails
-     * @implNote Token structure:
-     * <pre>{@code
-     * {
-     *   "id": "uuid",
-     *   "userId": "user123",
-     *   "username": "email@example.com",
-     *   "authorities": ["ROLE_USER"],
-     *   "deviceHash": "sha256-hash",
-     *   "issuedAt": "2023-01-01T00:00:00Z",
-     *   "expiresAt": "2023-01-01T01:00:00Z"
-     * }
-     * }</pre>
-     */
     public String generateToken(UserDetails userDetails, String userId, String deviceHash, String clientIp) {
         try {
+            if (!checkDeviceTokenLimit(deviceHash)) {
+                log.warn("Device token limit reached for deviceHash: {}. Max allowed: {}",
+                        deviceHash, MAX_TOKENS_PER_DEVICE);
+                throw new TokenGenerationException("Too many active tokens for this device");
+            }
+
             String tokenId = UUID.randomUUID().toString();
             Instant now = Instant.now();
-            Instant expiration = now.plusMillis(tokenExpiration);
+            Instant expiration = now.plusMillis(TOKEN_EXPIRATION_MS);
 
             TokenData tokenData = new TokenData(
                     tokenId,
@@ -114,18 +51,32 @@ public class TokenService {
                     expiration
             );
 
-            redisTemplate.opsForValue().set(
+            boolean success = kryocacheClient.setToken(
                     "token:" + tokenId,
                     objectMapper.writeValueAsString(tokenData),
-                    tokenExpiration,
-                    TimeUnit.MILLISECONDS
+                    (int) (TOKEN_EXPIRATION_MS / 1000)
             );
 
-            if (clientIp != null && !clientIp.isEmpty() && deviceHash != null) {
-                saveIpToDeviceMapping(clientIp, deviceHash);
-                saveDeviceToUserMapping(deviceHash, userDetails.getUsername());
+            if (!success) {
+                log.error("Failed to store token in Kryocache");
+                throw new TokenGenerationException("Failed to generate token");
             }
 
+            incrementDeviceTokenCounter(deviceHash);
+
+            saveTokenToDeviceMapping(tokenId, deviceHash);
+
+            if (deviceHash != null && !deviceHash.isEmpty()) {
+                saveDeviceToTokenMapping(deviceHash, tokenId);
+                saveDeviceToUserMapping(deviceHash, userDetails.getUsername());
+
+                if (clientIp != null && !clientIp.isEmpty()) {
+                    saveIpToDeviceMapping(clientIp, deviceHash);
+                }
+            }
+
+            log.info("Token generated successfully. TokenId: {}, DeviceHash: {}, User: {}",
+                    tokenId, deviceHash, userDetails.getUsername());
             return tokenId;
         } catch (JsonProcessingException e) {
             log.error("Failed to serialize token data", e);
@@ -133,20 +84,139 @@ public class TokenService {
         }
     }
 
+    private boolean checkDeviceTokenLimit(String deviceHash) {
+        if (deviceHash == null || deviceHash.isEmpty()) {
+            return true; // Для анонимных устройств без deviceHash нет лимита
+        }
+
+        try {
+            String counterKey = "device_token_counter:" + deviceHash;
+            String counterStr = kryocacheClient.getToken(counterKey);
+
+            if (counterStr == null || counterStr.isEmpty()) {
+                return true; // Еще нет токенов для этого deviceHash
+            }
+
+            int currentCount = Integer.parseInt(counterStr);
+            log.debug("Current token count for deviceHash {}: {}", deviceHash, currentCount);
+
+            return currentCount < MAX_TOKENS_PER_DEVICE;
+        } catch (Exception e) {
+            log.error("Failed to check device token limit for deviceHash: {}", deviceHash, e);
+            return true; // В случае ошибки разрешаем создание токена
+        }
+    }
+
+    private void saveTokenToDeviceMapping(String tokenId, String deviceHash) {
+        try {
+            kryocacheClient.setToken(
+                    "token_device:" + tokenId,
+                    deviceHash,
+                    (int) (TOKEN_EXPIRATION_MS / 1000) // TTL такой же как у токена
+            );
+            log.debug("Saved Token->Device mapping: {} -> {}", tokenId, deviceHash);
+        } catch (Exception e) {
+            log.error("Failed to save Token->Device mapping", e);
+        }
+    }
+
+    /**
+     * Увеличивает счетчик токенов для deviceHash
+     */
+    private void incrementDeviceTokenCounter(String deviceHash) {
+        if (deviceHash == null || deviceHash.isEmpty()) {
+            return;
+        }
+
+        try {
+            String counterKey = "device_token_counter:" + deviceHash;
+            String currentCounter = kryocacheClient.getToken(counterKey);
+
+            int newCount = 1;
+            if (currentCounter != null && !currentCounter.isEmpty()) {
+                try {
+                    newCount = Integer.parseInt(currentCounter) + 1;
+                } catch (NumberFormatException e) {
+                    log.warn("Invalid counter value for deviceHash {}: {}", deviceHash, currentCounter);
+                    newCount = 1;
+                }
+            }
+
+            // Устанавливаем TTL 24 часа, чтобы счетчик автоматически очищался
+            kryocacheClient.setToken(
+                    counterKey,
+                    String.valueOf(newCount),
+                    (int) DEVICE_TOKEN_LIMIT_TTL
+            );
+
+            log.debug("Incremented token counter for deviceHash {} to {}", deviceHash, newCount);
+        } catch (Exception e) {
+            log.error("Failed to increment device token counter for deviceHash: {}", deviceHash, e);
+        }
+    }
+
+    /**
+     * Уменьшает счетчик токенов для deviceHash
+     */
+    private void decrementDeviceTokenCounter(String deviceHash) {
+        if (deviceHash == null || deviceHash.isEmpty()) {
+            return;
+        }
+
+        try {
+            String counterKey = "device_token_counter:" + deviceHash;
+            String currentCounter = kryocacheClient.getToken(counterKey);
+
+            if (currentCounter != null && !currentCounter.isEmpty()) {
+                try {
+                    int currentCount = Integer.parseInt(currentCounter);
+                    int newCount = Math.max(0, currentCount - 1);
+
+                    kryocacheClient.setToken(
+                            counterKey,
+                            String.valueOf(newCount),
+                            (int) DEVICE_TOKEN_LIMIT_TTL
+                    );
+
+                    log.debug("Decremented token counter for deviceHash {} from {} to {}",
+                            deviceHash, currentCount, newCount);
+
+                    // Если счетчик достиг 0, удаляем ключ
+                    if (newCount == 0) {
+                        kryocacheClient.delete(counterKey);
+                    }
+                } catch (NumberFormatException e) {
+                    log.warn("Invalid counter value for deviceHash {}: {}", deviceHash, currentCounter);
+                    kryocacheClient.delete(counterKey);
+                }
+            }
+        } catch (Exception e) {
+            log.error("Failed to decrement device token counter for deviceHash: {}", deviceHash, e);
+        }
+    }
+
+    /**
+     * Get token expiration from properties (default 3600000ms = 1 hour)
+     */
+    private long getTokenExpiration() {
+        // Можно добавить @Value injection если нужно
+        return 3600000L; // 1 hour in milliseconds
+    }
+
     public void saveIpToDeviceMapping(String clientIp, String deviceHash) {
         try {
             // IP -> device hash (TTL 24 часа)
-            redisTemplate.opsForValue().set(
+            kryocacheClient.setToken(
                     "ip_device:" + clientIp,
                     deviceHash,
-                    Duration.ofHours(24)
+                    (int) Duration.ofHours(24).toSeconds()
             );
 
             // Device -> IP для обратного поиска
-            redisTemplate.opsForValue().set(
+            kryocacheClient.setToken(
                     "device_ip:" + deviceHash,
                     clientIp,
-                    Duration.ofHours(24)
+                    (int) Duration.ofHours(24).toSeconds()
             );
 
             log.debug("Saved IP->Device mapping: {} -> {}", clientIp, deviceHash);
@@ -155,12 +225,9 @@ public class TokenService {
         }
     }
 
-    /**
-     * Ищем device hash по IP
-     */
     public String findDeviceHashByIp(String ip) {
         try {
-            return redisTemplate.opsForValue().get("ip_device:" + ip);
+            return kryocacheClient.getToken("ip_device:" + ip);
         } catch (Exception e) {
             log.error("Failed to find device hash by IP: {}", ip, e);
             return null;
@@ -168,23 +235,17 @@ public class TokenService {
     }
 
     /**
-     * Ищем username по device hash через токены
+     * Ищем username по device hash
      */
     public String findUsernameByDeviceHash(String deviceHash) {
         try {
-            // Ищем все токены с этим device hash
-            // Это упрощенная реализация - в production нужно использовать Redis SCAN
-            // или хранить отдельный индекс device_hash -> username
-
-            // Альтернативно: храним device_hash -> username отдельно
-            String username = redisTemplate.opsForValue().get("device_user:" + deviceHash);
+            String username = kryocacheClient.getToken("device_user:" + deviceHash);
             if (username != null) {
                 return username;
             }
 
             log.warn("No username found for device hash: {}", deviceHash);
             return null;
-
         } catch (Exception e) {
             log.error("Failed to find username by device hash: {}", deviceHash, e);
             return null;
@@ -196,10 +257,10 @@ public class TokenService {
      */
     public void saveDeviceToUserMapping(String deviceHash, String username) {
         try {
-            redisTemplate.opsForValue().set(
+            kryocacheClient.setToken(
                     "device_user:" + deviceHash,
                     username,
-                    Duration.ofHours(24)
+                    (int) Duration.ofHours(24).toSeconds()
             );
             log.debug("Saved Device->User mapping: {} -> {}", deviceHash, username);
         } catch (Exception e) {
@@ -207,31 +268,24 @@ public class TokenService {
         }
     }
 
-    /**
-     * Ищем IP по device hash
-     */
-    public String findIpByDeviceHash(String deviceHash) {
-        try {
-            return redisTemplate.opsForValue().get("device_ip:" + deviceHash);
-        } catch (Exception e) {
-            log.error("Failed to find IP by device hash: {}", deviceHash, e);
-            return null;
-        }
-    }
+//    public String findIpByDeviceHash(String deviceHash) {
+//        try {
+//            return kryocacheClient.getToken("device_ip:" + deviceHash);
+//        } catch (Exception e) {
+//            log.error("Failed to find IP by device hash: {}", deviceHash, e);
+//            return null;
+//        }
+//    }
 
     /**
      * Validates a token's existence and expiration.
-     *
-     * @param tokenId Token ID to validate
-     * @return {@code true} if the token exists in Redis and is not expired,
-     *         {@code false} otherwise (including parse failures)
      */
     public boolean isTokenValid(String tokenId) {
         if (!StringUtils.hasText(tokenId)) {
             return false;
         }
 
-        String data = redisTemplate.opsForValue().get("token:" + tokenId);
+        String data = kryocacheClient.getToken("token:" + tokenId);
         if (data == null) {
             return false;
         }
@@ -245,45 +299,38 @@ public class TokenService {
         }
     }
 
-    /**
-     * Retrieves deserialized token data if valid.
-     *
-     * @param tokenId Token ID to lookup
-     * @return {@link Optional} containing {@link TokenData} if valid,
-     *         empty otherwise
-     */
     public Optional<TokenData> getTokenData(String tokenId) {
-        if (!isTokenValid(tokenId)) {
+        log.info("DEBUG [getTokenData]: tokenId = '{}'", tokenId);
+
+        if (!StringUtils.hasText(tokenId)) {
+            log.warn("DEBUG [getTokenData]: tokenId is null or empty");
+            return Optional.empty();
+        }
+
+        String key = "token:" + tokenId;
+        log.info("DEBUG [getTokenData]: Looking for key '{}' in Kryocache", key);
+
+        String data = kryocacheClient.getToken(key);
+        log.info("DEBUG [getTokenData]: Kryocache response for key '{}': '{}'", key, data);
+
+        if (data == null) {
+            log.warn("DEBUG [getTokenData]: Token data not found in Kryocache");
             return Optional.empty();
         }
 
         try {
-            String data = redisTemplate.opsForValue().get("token:" + tokenId);
-            if (data == null) {
-                return Optional.empty();
-            }
-            return Optional.of(objectMapper.readValue(data, TokenData.class));
+            TokenData tokenData = objectMapper.readValue(data, TokenData.class);
+            log.info("DEBUG [getTokenData]: Successfully parsed token data for user: {}",
+                    tokenData.getUsername());
+            return Optional.of(tokenData);
         } catch (JsonProcessingException e) {
-            log.error("Failed to parse token data", e);
+            log.error("DEBUG [getTokenData]: Failed to parse token data: {}", data, e);
             return Optional.empty();
         }
     }
 
     /**
      * Gets a filtered JSON representation of token data.
-     *
-     * @param tokenId Token ID to serialize
-     * @return JSON string containing username, userId, roles, and device hash,
-     *         or empty if token is invalid
-     * @implNote Output format:
-     * <pre>{@code
-     * {
-     *   "username": "email@example.com",
-     *   "userId": "user123",
-     *   "roles": ["ROLE_USER"],
-     *   "device": "sha256-hash"
-     * }
-     * }</pre>
      */
     public Optional<String> getTokenJsonData(String tokenId) {
         return getTokenData(tokenId).map(tokenData -> {
@@ -303,41 +350,29 @@ public class TokenService {
     }
 
     /**
-     * Invalidates a token by removing it from Redis.
-     *
-     * @param tokenId Token ID to invalidate
+     * Invalidates a token by removing it from Kryocache.
      */
     public void invalidateToken(String tokenId) {
         if (StringUtils.hasText(tokenId)) {
-            redisTemplate.delete("token:" + tokenId);
+            kryocacheClient.delete("token:" + tokenId);
         }
     }
 
     /**
      * Generates a Transaction Authentication Number (TAN) for time-sensitive operations.
-     *
-     * @param userId User ID to associate with the TAN
-     * @param operationId Operation identifier (e.g., "password-reset")
-     * @return Generated TAN (UUID format)
-     * @implNote TANs are stored in Redis with a 5-minute TTL
      */
     public String generateTan(String userId, String operationId) {
         String tan = UUID.randomUUID().toString();
-        redisTemplate.opsForValue().set(
+        kryocacheClient.setToken(
                 "tan:" + tan,
                 userId + ":" + operationId,
-                5, TimeUnit.MINUTES
+                (int) TimeUnit.MINUTES.toSeconds(5)
         );
         return tan;
     }
 
     /**
      * Verifies and consumes a TAN.
-     *
-     * @param tan TAN to verify
-     * @return {@link Optional} containing a {@link Pair} of (userId, operationId) if valid,
-     *         empty otherwise
-     * @implNote This method is atomic - successful verification deletes the TAN
      */
     public Optional<Pair<String, String>> verifyTan(String tan) {
         if (!StringUtils.hasText(tan)) {
@@ -345,12 +380,12 @@ public class TokenService {
         }
 
         String key = "tan:" + tan;
-        String value = redisTemplate.opsForValue().get(key);
+        String value = kryocacheClient.getToken(key);
         if (value == null) {
             return Optional.empty();
         }
 
-        redisTemplate.delete(key);
+        kryocacheClient.delete(key);
 
         String[] parts = value.split(":");
         if (parts.length != 2) {
@@ -361,14 +396,139 @@ public class TokenService {
     }
 
     /**
-     * Thrown when token generation fails due to serialization errors.
+     * Для обратной совместимости с TokenController
+     */
+    public String createToken(String userId, String userData, int ttlSeconds) {
+        // Создаем минимальный UserDetails
+        UserDetails userDetails = new org.springframework.security.core.userdetails.User(
+                userId,
+                "",
+                List.of(() -> "ROLE_USER")
+        );
+
+        return generateToken(
+                userDetails,
+                userId,
+                "legacy-device-hash",
+                "127.0.0.1"
+        );
+    }
+
+    /**
+     * Для обратной совместимости с TokenController
+     */
+    public boolean validateToken(String token) {
+        return isTokenValid(token);
+    }
+
+    /**
+     * Для обратной совместимости с TokenController
+     */
+    public TokenDataDev getTokenDataOld(String token) {
+        Optional<TokenData> tokenData = getTokenData(token);
+        if (tokenData.isEmpty()) {
+            return null;
+        }
+
+        TokenData td = tokenData.get();
+        return TokenDataDev.builder()
+                .tokenId(td.getTokenId())
+                .userId(td.getUserId())
+                .username(td.getUsername())
+                .authorities(td.getAuthorities())
+                .deviceHash(td.getDeviceHash())
+                .issuedAt(td.getIssuedAt().toEpochMilli())
+                .expiresAt(td.getExpiresAt().toEpochMilli())
+                .build();
+    }
+
+    /**
+     * Для обратной совместимости с TokenController
+     */
+    public boolean revokeToken(String token) {
+        invalidateToken(token);
+        return true;
+    }
+
+    /**
+     * Для обратной совместимости с TokenController
+     */
+    public boolean refreshToken(String token, int ttlSeconds) {
+        Optional<TokenData> tokenDataOpt = getTokenData(token);
+        if (tokenDataOpt.isEmpty()) {
+            return false;
+        }
+
+        TokenData tokenData = tokenDataOpt.get();
+        Instant newExpiration = Instant.now().plusSeconds(ttlSeconds);
+
+        // Обновляем время истечения
+        TokenData updatedTokenData = new TokenData(
+                tokenData.getTokenId(),
+                tokenData.getUserId(),
+                tokenData.getUsername(),
+                tokenData.getAuthorities(),
+                tokenData.getDeviceHash(),
+                tokenData.getIssuedAt(),
+                newExpiration
+        );
+
+        try {
+            boolean success = kryocacheClient.setToken(
+                    "token:" + token,
+                    objectMapper.writeValueAsString(updatedTokenData),
+                    ttlSeconds
+            );
+
+            return success;
+        } catch (JsonProcessingException e) {
+            log.error("Failed to serialize token data for refresh", e);
+            return false;
+        }
+    }
+
+    /**
+     * Thrown when token generation fails.
      */
     public static final class TokenGenerationException extends RuntimeException {
-        /**
-         * @param message Human-readable error description
-         */
         public TokenGenerationException(String message) {
             super(message);
+        }
+    }
+
+    public void saveDeviceToTokenMapping(String deviceHash, String tokenId) {
+        try {
+            kryocacheClient.setToken(
+                    "device_token:" + deviceHash,
+                    tokenId,
+                    (int) Duration.ofHours(24).toSeconds()
+            );
+            log.debug("Saved Device->Token mapping: {} -> {}", deviceHash, tokenId);
+        } catch (Exception e) {
+            log.error("Failed to save Device->Token mapping", e);
+        }
+    }
+
+    public String findTokenByDeviceHash(String deviceHash) {
+        try {
+            // Сначала получаем token_id по device_hash
+            String tokenId = kryocacheClient.getToken("device_token:" + deviceHash);
+            if (tokenId == null || tokenId.isEmpty()) {
+                log.warn("No token found for device hash: {}", deviceHash);
+                return null;
+            }
+
+            // Затем получаем сам токен по token_id
+            String tokenData = kryocacheClient.getToken("token:" + tokenId);
+            if (tokenData == null) {
+                log.warn("Token data not found for tokenId: {}", tokenId);
+                return null;
+            }
+
+            return tokenData;
+        } catch (Exception e) {
+            log.error("Failed to find token by device hash: {}", deviceHash, e);
+            return null;
         }
     }
 }

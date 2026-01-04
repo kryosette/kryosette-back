@@ -17,7 +17,8 @@ public class CorsConfig {
             "http://192.168.1.88:3000",
             "http://192.168.1.92:3000",
             "http://localhost:8080",
-            "http://localhost:8091"
+            "http://localhost:8091",
+            "http://10.193.204.156:3000"
     };
 
     @Bean
@@ -77,6 +78,13 @@ public class CorsConfig {
                         .allowedHeaders("*")
                         .allowCredentials(false)
                         .maxAge(3600);
+                registry.addMapping("/api/v1/auth/token/by-device/{deviceHash}")
+                        .allowedOrigins("*")
+                        .allowedMethods("POST", "OPTIONS", "GET")
+                        .allowedHeaders("*")
+                        .allowCredentials(false)
+                        .maxAge(3600);
+
 
             }
         };

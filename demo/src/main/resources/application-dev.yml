@@ -8,6 +8,10 @@ kryocache:
     port: 6898
     timeout: 5000
     max-retries: 3
+  max:
+    tokens:
+      per:
+        device: 2
 spring:
   config:
     import: optional:configserver:http://localhost:8888
