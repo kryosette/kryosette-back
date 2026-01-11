@@ -21055,3 +21055,9 @@
 [2026-01-03T18:38:55.872354] Count: 3 | Avg: 496.00ms | StdDev: 351.10 | Median: 724ms | P90: 764ms | P95: 764ms | P99: 764ms | Min: 0ms | Max: 764ms
 [2026-01-03T18:38:55.975012] Count: 3 | Avg: 491.67ms | StdDev: 347.38 | Median: 716ms | P90: 758ms | P95: 758ms | P99: 758ms | Min: 1ms | Max: 758ms
 [2026-01-03T18:38:56.084684] Count: 3 | Avg: 493.67ms | StdDev: 348.79 | Median: 719ms | P90: 761ms | P95: 761ms | P99: 761ms | Min: 1ms | Max: 761ms
+[2026-01-05T16:36:07.899967] Count: 1 | Avg: 12.00ms | StdDev: 0.00 | Median: 12ms | P90: 12ms | P95: 12ms | P99: 12ms | Min: 12ms | Max: 12ms
+[2026-01-05T16:36:08.027607] Count: 2 | Avg: 68.00ms | StdDev: 56.00 | Median: 124ms | P90: 124ms | P95: 124ms | P99: 124ms | Min: 12ms | Max: 124ms
+[2026-01-05T16:36:09.554540] Count: 1 | Avg: 1.00ms | StdDev: 0.00 | Median: 1ms | P90: 1ms | P95: 1ms | P99: 1ms | Min: 1ms | Max: 1ms
+[2026-01-05T16:36:09.554686] Count: 1 | Avg: 2.00ms | StdDev: 0.00 | Median: 2ms | P90: 2ms | P95: 2ms | P99: 2ms | Min: 2ms | Max: 2ms
+[2026-01-05T16:36:10.530153] Count: 2 | Avg: 486.50ms | StdDev: 485.50 | Median: 972ms | P90: 972ms | P95: 972ms | P99: 972ms | Min: 1ms | Max: 972ms
+[2026-01-05T16:36:10.814962] Count: 2 | Avg: 629.50ms | StdDev: 627.50 | Median: 1257ms | P90: 1257ms | P95: 1257ms | P99: 1257ms | Min: 2ms | Max: 1257ms
