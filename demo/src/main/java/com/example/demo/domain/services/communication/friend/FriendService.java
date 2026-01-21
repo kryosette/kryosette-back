@@ -68,13 +68,6 @@ public class FriendService {
         return convertToDTO(friendRequest);
     }
 
-    /**
-     * Accepts a pending friend request and establishes mutual friendship.
-     * @param requestId ID of friend request to accept
-     * @param currentUserId ID of user accepting request
-     * @return DTO of accepted friend request
-     * @throws FriendRequestException If validation fails
-     */
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public FriendRequestDto acceptFriendRequest(String requestId, String currentUserId) {
         FriendRequest friendRequest = friendRequestRepository.findById(String.valueOf(requestId))
