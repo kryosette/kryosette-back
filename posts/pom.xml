@@ -118,7 +118,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>com.posts.post.PostsApplication</mainClass>
+					<mainClass>com.posts.post.KryosettePosts</mainClass>
 				</configuration>
 			</plugin>
 		</plugins>
