@@ -1,23 +1,23 @@
-logging:
-  level:
-    org.springframework.web: DEBUG
-    org.springframework.cache: DEBUG
-kryocache:
-  server:
-    host: "0:0:0:0:0:0:0:1"
-    port: 6898
-    timeout: 5000
-    max-retries: 3
-  max:
-    tokens:
-      per:
-        device: 2
 spring:
   config:
     import: optional:configserver:http://localhost:8888
   application:
-    name:
-      auth
+    name: auth
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/kryosette
+    username: kryosette_user
+    password: HoslDiBm5:DodLoPost
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: create  # или update для разработки
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  
   security:
     enabled: false
     encryption:
@@ -28,12 +28,15 @@ spring:
     jwt:
       secret-key: 404E635266556A586E327357538782F413F4428472B4B6250645367566B5970
       expiration: 8640000
+  
   mailing:
     frontend:
-        activation-url: http://localhost:3000/activate-account
+      activation-url: http://localhost:3000/activate-account
+  
   file:
     uploads:
       photos-output-path: ./uploads
+  
   kafka:
     bootstrap-servers: localhost:9092
     producer:
@@ -48,23 +51,7 @@ spring:
       max-poll-records: 10
     listener:
       ack-mode: manual
-  datasource:
-    url: jdbc:mysql://localhost:3306/kryosette
-    username: root
-    password: HoslDiBm5:DodLoPost
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  jpa:
-    hibernate:
-      cache:
-        use_second_level_cache: true
-        region.factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
-      ddl-auto: update
-    show-sql: false
-    properties:
-      hibernate:
-        format_sql: true
-    database: mysql
-    database-platform: org.hibernate.dialect.MySQLDialect
+  
   resilience4j:
     ratelimiter:
       instances:
@@ -72,35 +59,35 @@ spring:
           limitForPeriod: 5
           limitRefreshPeriod: 10s
           timeoutDuration: 0s
+  
   jackson:
     default-property-inclusion: non_null
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: UTC
-
     serialization:
       fail-on-empty-beans: false
       write-dates-as-timestamps: false
-      indent-output: true  # Для красивого форматирования JSON (в разработке)
-
+      indent-output: true
     deserialization:
       fail-on-unknown-properties: false
-
     parser:
       allow-unquoted-field-names: true
       allow-single-quotes: true
+  
   redis:
     host: localhost
     port: 6379
     password: "1234"
-#    username: user
     ssl: false
     cache:
       type: redis
       redis:
         time-to-live: 8640000
         cache-null-values: false
+  
   session:
     store-type: redis
+  
   mail:
     host: localhost
     port: 1025
@@ -116,6 +103,7 @@ spring:
         connectiontimeout: 5000
         timeout: 3000
         writetimeout: 5000
+  
   rabbitmq:
     host: localhost
     port: 5672
@@ -129,11 +117,6 @@ rabbitmq:
 
 server:
   address: 0.0.0.0
-#  ssl:
-#    enabled: true
-#    key-store: classpath:keystore.p12
-#    key-store-password: 123456
-#    key-alias: localhost
   port: 8088
 
 eureka:
@@ -142,3 +125,19 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
+
+logging:
+  level:
+    org.springframework.web: DEBUG
+    org.springframework.cache: DEBUG
+
+kryocache:
+  server:
+    host: "0:0:0:0:0:0:0:1"
+    port: 6898
+    timeout: 5000
+    max-retries: 3
+  max:
+    tokens:
+      per:
+        device: 2

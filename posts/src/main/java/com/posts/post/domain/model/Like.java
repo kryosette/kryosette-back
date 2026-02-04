@@ -27,6 +27,13 @@ public class Like {
     @Column(name = "created_at", nullable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
-    
+
+    /*
+    This is the optimistic locking mechanism in JPA/Hibernate.
+    Instead of locking rows in the database for the duration of a transaction (pessimistic locking),
+    we allow everyone to read and modify the data, but check whether it has changed when saving.
+     */
+    @Version
+    private Long version;
 }
 

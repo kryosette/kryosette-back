@@ -1,6 +1,59 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/kryosette
+    username: kryosette_user
+    password: HoslDiBm5:DodLoPost
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      connection-timeout: 30000
+      maximum-pool-size: 10
+
+  jpa:
+    hibernate:
+      ddl-auto: create  # или update для разработки
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  jackson:
+    time-zone: UTC
+
+  data:
+    web:
+      pageable:
+        max-page-size: 100
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  kafka:
+    consumer:
+      group-id: post-service-group
+      auto-offset-reset: earliest
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    topic:
+      name: post_topics
+
+  config:
+    import: optional:configserver:http://localhost:8888
+
+  application:
+    name: posts
+
 file:
   uploads:
     photos-output-path: ./uploads
+
 logging:
   pattern:
     file: "%d{yyyy-MM-dd HH:mm:ss} | %-5level | %msg%n"
@@ -11,66 +64,17 @@ logging:
     name: logs/metrics.log
   level:
     com.posts: INFO
+
 auth:
   service:
     url: http://localhost:8088
+
 feign:
   client:
     config:
       default:
         connectTimeout: 5000
         readTimeout: 5000
-spring:
-  jackson:
-    time-zone: UTC
-  data:
-    web:
-      pageable:
-        max-page-size: 100
-  servlet:
-    multipart:
-      enabled: true
-      max-file-size: 10MB
-      max-request-size: 10MB
-  datasource:
-    url: jdbc:mysql://localhost:3306/kryosette
-    username: root
-    password: HoslDiBm5:DodLoPost
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: false
-    properties:
-      hibernate:
-        jdbc:
-          time-zone: UTC
-        format_sql: true
-    database: mysql
-    database-platform: org.hibernate.dialect.MySQLDialect
-  kafka:
-    consumer:
-      group-id: post-service-group # Указываем явно
-      auto-offset-reset: earliest
-    producer:
-      bootstrap-servers: localhost:9092
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-    topic:
-      name: post_topics
-  config:
-    import: optional:configserver:http://localhost:8888
-  application:
-    name: posts
-#  application:
-#    name: post-service
-server:
-#  ssl:
-#    enabled: true
-#    key-store: classpath:keystore.p12
-#    key-store-password: 123456
-#    key-alias: localhost
-  port: 8091
 
 eureka:
   instance:
@@ -78,3 +82,6 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
+
+server:
+  port: 8091

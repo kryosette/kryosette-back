@@ -65,7 +65,7 @@ services:
     restart: always
 
   prometheus:
-    image: bitnami/prometheus:latest
+    image: prom/prometheus:latest
     ports:
       - "9090:9090"
     volumes:
