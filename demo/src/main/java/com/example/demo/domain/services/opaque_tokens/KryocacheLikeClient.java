@@ -84,6 +84,61 @@ public class KryocacheLikeClient {
         startSyncScheduler();
     }
 
+    public long incrementLikeCount(String postId) {
+        String key = "like:count:" + postId;
+
+        LongAdder localCounter = localCounters.computeIfAbsent(key, k -> new LongAdder());
+        localCounter.increment();
+
+        asyncSyncToKryocache(key, "INCR");
+
+        return localCounter.sum();
+    }
+
+    private long getBaseCountFromKryocache(String postId) {
+        String key = "like:count:" + postId;
+        String result = sendCommandWithResponse("GET" + key + "\r\n");
+
+        if (result == null || result.isEmpty() || "NOT_FOUNT".equals(result)) {
+            return 0L;
+        }
+
+        try {
+            return Long.parseLong(result);
+        } catch (NumberFormatException e) {
+            log.warn("");
+            return 0L;
+        }
+    }
+
+    /*
+    async sync
+     */
+    public void asyncSyncToKryocache(String key, String operation) {
+        Thread.ofVirtual().start(() -> {
+            try {
+                currentLoad.increment();
+                boolean success = false;
+
+                if (operation.equals("INCR") || operation.equals("DECR")) {
+                    String command = operation + " " + key + "\r\n";
+                    success = executeCommand(command);
+                } else {
+                    success = executeCommand(operation);
+                }
+
+                if (!success) {
+                    failedOperations.increment();
+                    log.warn("Failed to sync like operation to Kryocache: {}", operation);
+                }
+            } finally {
+                currentLoad.decrement();
+            }
+        });
+    }
+
+
+
     public void startSyncScheduler() {
         Thread.ofVirtual().start(() -> {
             while (true) {
@@ -115,9 +170,10 @@ public class KryocacheLikeClient {
         });
     }
 
+    // add
     public void syncLocalLikeStatus() {
         localLikeStatus.forEach((key, check) -> {
-
+        
         });
     }
 
