@@ -8,11 +8,15 @@ import org.springframework.stereotype.Component;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.concurrent.locks.ReentrantLock;
 
+@Slf4j
 public class KryocacheLikeClient {
     @Value("${kryocache.server.host:0:0:0:0:0:0:0:1}")
     private String host;
@@ -56,4 +60,241 @@ public class KryocacheLikeClient {
 │                   ОЗУ (RAM)                         │
 └─────────────────────────────────────────────────────┘
      */
+    private final Map<String, LongAdder> localCounters = new ConcurrentHashMap<>();
+    /*
+    check if like ?
+     */
+    private final Map<String, Boolean> localLikeStatus = new ConcurrentHashMap<>();
+
+    /*
+    Statistics
+     */
+    private final AtomicLong totalOperations = new AtomicLong(0);
+    private final AtomicLong failedOperations = new AtomicLong(0);
+    private final LongAdder currentLoad = new LongAdder();
+
+    /*
+    @PostConstruct is an annotation used to mark a method that should be executed immediately after the container
+    (e.g. Spring or Java EE/Jakarta EE) creates an instance of a class and completes all dependency injection.
+     */
+    @PostConstruct
+    public void init() {
+        log.info("KryocacheLikeClient initialized for likes system");
+        // Запускаем периодическую синхронизацию локальных счетчиков
+        startSyncScheduler();
+    }
+
+    public void startSyncScheduler() {
+        Thread.ofVirtual().start(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(5000);
+
+                    syncLocalCounters();
+                    syncLocalLikeStatus();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+            }
+        });
+    }
+
+    /*
+    sum then reset that
+     */
+    public void syncLocalCounters() {
+        localCounters.forEach((key, adder) -> {
+            long delta = adder.sumThenReset(); // reset and sum
+            if (delta != 0) {
+                String command = delta > 0 ?
+                        "INCRBY " + key + " " + delta + "\r\n" :
+                        "DECRBY " + key + " " + (-delta) + "\r\n";
+                executeCommand(command);
+            }
+        });
+    }
+
+    public void syncLocalLikeStatus() {
+        localLikeStatus.forEach((key, check) -> {
+
+        });
+    }
+
+    private boolean executeCommand(String command) {
+        lock.lock();
+        try {
+            for (int attempt = 0; attempt < maxRetries; attempt++) {
+                try {
+                    Socket socket = new Socket();
+
+                    socket.setSoTimeout(timeout);
+                    InetAddress[] addresses = InetAddress.getAllByName(host);
+
+                    List<InetAddress> ipv6Addresses = new ArrayList<>();
+
+                    for (InetAddress addr : addresses) {
+                        if (addr instanceof Inet6Address) {
+                            ipv6Addresses.add(addr);
+                        } else {
+                            return false;
+                        }
+                    }
+
+                    for (int i = 0; i < addresses.length; i++) {
+                        InetAddress addr = addresses[i];
+                        log.info("     [{}] {} (IPv6: {}, Loopback: {})",
+                                i, addr.getHostAddress(),
+                                addr instanceof Inet6Address,
+                                addr.isLoopbackAddress());
+                    }
+
+                    InetAddress ipv6Address = null;
+                    if (!ipv6Addresses.isEmpty()) {
+                        ipv6Address = ipv6Addresses.get(0);
+                    } else {
+                        throw new UnknownHostException("No IPv6 address found for host: " + host);
+                    }
+
+                    InetSocketAddress socketAddress = new InetSocketAddress(ipv6Address, port);
+
+                    socket.connect(socketAddress, timeout);
+
+                    try (OutputStream out = socket.getOutputStream();
+                         BufferedReader in = new BufferedReader(
+                                 new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8))) {
+
+                        byte[] commandBytes = command.getBytes(StandardCharsets.UTF_8);
+
+                        out.write(commandBytes);
+                        out.flush();
+
+                        String response = in.readLine();
+
+                        boolean success = response != null && response.contains("OK");
+
+                        socket.close();
+
+                        return success;
+                    }
+
+                } catch (SocketTimeoutException e) {
+                    log.error("   ⏰ Socket timeout after {} ms: {}", timeout, e.getMessage());
+                } catch (ConnectException e) {
+                    log.error("   🔌 Connection refused: {}", e.getMessage());
+                    log.error("   Possible causes:");
+                    log.error("     - Server is not running");
+                    log.error("     - Server is not listening on port {}", port);
+                    log.error("     - Firewall blocking connection");
+                } catch (UnknownHostException e) {
+                    log.error("   🏷️ Unknown host: {}", e.getMessage());
+                } catch (IOException e) {
+                    log.error("   ❌ I/O Error: {}", e.getMessage());
+                    log.error("   Error details:", e);
+                } catch (Exception e) {
+                    log.error("   ⚠️ Unexpected error: {}", e.getMessage());
+                    log.error("   Stack trace:", e);
+                }
+
+                log.warn("   Attempt {} failed for command '{}'",
+                        attempt + 1, command.trim());
+
+                if (attempt < maxRetries - 1) {
+                    int backoffMs = 100 * (1 << attempt);
+                    try {
+                        Thread.sleep(backoffMs);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                        break;
+                    }
+                }
+            }
+
+            return false;
+
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    private String sendCommandWithResponse(String command) {
+        lock.lock();
+        try {
+            for (int attempt = 0; attempt < maxRetries; attempt++) {
+                long startTime = System.currentTimeMillis();
+
+                try {
+                    Socket socket = new Socket();
+                    socket.setSoTimeout(timeout);
+
+                    InetAddress[] addresses = InetAddress.getAllByName(host);
+                    InetAddress ipv6Address = null;
+
+                    for (InetAddress addr : addresses) {
+                        if (addr instanceof Inet6Address) {
+                            ipv6Address = addr;
+                            break;
+                        }
+                    }
+
+                    if (ipv6Address == null) {
+                        throw new UnknownHostException("No IPv6 address found for host: " + host);
+                    }
+
+                    InetSocketAddress socketAddress = new InetSocketAddress(ipv6Address, port);
+                    socket.connect(socketAddress, timeout);
+
+                    try (OutputStream out = socket.getOutputStream();
+                         BufferedReader in = new BufferedReader(
+                                 new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8))) {
+
+                        byte[] commandBytes = command.getBytes(StandardCharsets.UTF_8);
+                        out.write(commandBytes);
+                        out.flush();
+
+                        StringBuilder response = new StringBuilder();
+                        char[] buffer = new char[8192]; // Увеличить буфер
+                        int charsRead;
+
+                        // Читаем всё что есть, пока не кончится
+                        while ((charsRead = in.read(buffer)) != -1) {
+                            response.append(buffer, 0, charsRead);
+                            // Проверяем, не закончился ли ответ (по таймауту или признаку конца)
+                            if (!in.ready()) {
+                                Thread.sleep(100); // Даем время для получения оставшихся данных
+                                if (!in.ready()) {
+                                    break;
+                                }
+                            }
+                        }
+
+                        String responseStr = response.toString().trim();
+                        log.info("DEBUG [sendCommandWithResponse]: Full response ({} chars): '{}'",
+                                responseStr.length(), responseStr);
+
+                        socket.close();
+                        return responseStr;
+                    }
+
+                } catch (Exception e) {
+                    log.error("   ⚠️ Error: {}", e.getMessage());
+                }
+
+                if (attempt < maxRetries - 1) {
+                    int backoffMs = 100 * (1 << attempt);
+                    try {
+                        Thread.sleep(backoffMs);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                        break;
+                    }
+                }
+            }
+
+            return null;
+
+        } finally {
+            lock.unlock();
+        }
+    }
 }
