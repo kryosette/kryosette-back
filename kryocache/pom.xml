@@ -9,11 +9,12 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
-	<groupId>com.transactions</groupId>
-	<artifactId>posts</artifactId>
+	<groupId>com.kryocache_common</groupId>
+	<artifactId>kryocache</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>transactions</name>
+	<name>kryocache_common</name>
 	<description>Demo project for Spring Boot</description>
+    <packaging>jar</packaging>
 
 	<properties>
 		<java.version>17</java.version>

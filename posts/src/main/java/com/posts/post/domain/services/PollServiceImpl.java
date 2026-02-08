@@ -1,5 +1,7 @@
 package com.posts.post.domain.services;
 
+import com.posts.common.auth.annotation.RequiresAuth;
+import com.posts.common.auth.aspect.AuthContext;
 import com.posts.post.domain.aspect.GetToken;
 import com.posts.post.domain.model.*;
 import com.posts.post.domain.repositories.*;
@@ -29,15 +31,15 @@ public class PollServiceImpl implements PollService {
     private final PollOptionRepository pollOptionRepository;
     private final PollVoteRepository pollVoteRepository;
     private final PostRepository postRepository;
-    private final GetToken getToken;
 
     ExecutorService executor = Executors.newFixedThreadPool(4);
     CompletionService<PollVote> completionService = new ExecutorCompletionService<>(executor);
 
     @Override
     @Transactional
+    @RequiresAuth
     public PollResponse createPoll(Long postId, PollRequest request, String token) {
-        String userId = getToken.verifyTokenAndGetUserId(token);
+        String userId = AuthContext.
 
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new ResourceNotFoundException("Post not found"));
