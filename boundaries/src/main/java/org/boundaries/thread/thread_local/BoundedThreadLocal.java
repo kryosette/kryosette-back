@@ -3,7 +3,7 @@ package org.boundaries.thread.thread_local;
 import java.util.function.Supplier;
 
 /**
- * Strictly typed ThreadLocal container with compile-time safety.
+ * Strictly typed ThreadLocal container with compile-time safety. (for bounders)
  */
 public class BoundedThreadLocal<T> {
 
