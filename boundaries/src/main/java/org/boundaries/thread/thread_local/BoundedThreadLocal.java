@@ -30,6 +30,29 @@ public class BoundedThreadLocal<T> {
         });
     }
 
+    /**
+     * Creates a nullable bounded ThreadLocal.
+     */
+    public static <T> BoundedThreadLocal<T> nullable(Class<T> type, String name) {
+        return new BoundedThreadLocal<>(type, name, true);
+    }
+
+    /**
+     * Creates with initial value supplier.
+     */
+    public static <T> BoundedThreadLocal<T> withInitial(
+            Class<T> type, String name, Supplier<T> supplier) {
+        return new BoundedThreadLocal<>(type, name, false, supplier);
+    }
+
+    /**
+     * Creates with initial value.
+     */
+    public static <T> BoundedThreadLocal<T> withInitialValue(
+            Class<T> type, String name, T initialValue) {
+        return new BoundedThreadLocal<>(type, name, false, () -> initialValue);
+    }
+
     public void set(T value) {
         validate(value);
         threadLocal.set(value);
@@ -77,6 +100,40 @@ public class BoundedThreadLocal<T> {
             throw new IllegalArgumentException(
                     String.format("Expected type %s but got %s",
                             type.getName(), value.getClass().getName()));
+        }
+    }
+
+    /**
+     * Executes action with temporary value, ensuring cleanup.
+     */
+    public void withValue(T value, Runnable action) {
+        T previous = threadLocal.get();
+        try {
+            set(value);
+            action.run();
+        } finally {
+            if (previous != null) {
+                set(previous);
+            } else {
+                remove();
+            }
+        }
+    }
+
+    /**
+     * Executes supplier with temporary value.
+     */
+    public <R> R withValue(T value, Supplier<R> supplier) {
+        T previous = threadLocal.get();
+        try {
+            set(value);
+            return supplier.get();
+        } finally {
+            if (previous != null) {
+                set(previous);
+            } else {
+                remove();
+            }
         }
     }
 }
