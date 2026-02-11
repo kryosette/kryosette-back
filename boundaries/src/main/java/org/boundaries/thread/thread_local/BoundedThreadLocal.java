@@ -1,58 +1,121 @@
 package org.boundaries.thread.thread_local;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
- * Strictly typed ThreadLocal container with compile-time safety. (for bounders)
+ * Strictly typed ThreadLocal container with compile-time safety.
  */
-public class BoundedThreadLocal<T> {
+public final class BoundedThreadLocal<T> {
 
     private final ThreadLocal<T> threadLocal;
     private final Class<T> type;
     private final String name;
     private final boolean nullable;
+    private final Supplier<T> defaultValueSupplier;
 
-    private BoundedThreadLocal(Class<T> type, String name, boolean nullable) {
-        this.type = type;
-        this.name = name;
-        this.nullable = nullable;
-        this.threadLocal = new ThreadLocal<>();
-    }
+    private BoundedThreadLocal(Builder<T> builder) {
+        this.type = builder.type;
+        this.name = builder.name;
+        this.nullable = builder.nullable;
+        this.defaultValueSupplier = builder.defaultValueSupplier;
 
-    private BoundedThreadLocal(Class<T> type, String name, boolean nullable, Supplier<T> intialSupplier) {
-        this.type = type;
-        this.name = name;
-        this.nullable = nullable;
-        this.threadLocal = ThreadLocal.withInitial(() -> {
-            T value = intialSupplier.get();
-            validate(value);
-            return value;
-        });
+        if (builder.initialSupplier != null) {
+            this.threadLocal = ThreadLocal.withInitial(() -> {
+                T value = builder.initialSupplier.get();
+                validate(value);
+                return value;
+            });
+        } else {
+            this.threadLocal = new ThreadLocal<>();
+        }
     }
 
     /**
-     * Creates a nullable bounded ThreadLocal.
+     * Builder для создания BoundedThreadLocal.
      */
+    public static class Builder<T> {
+        private final Class<T> type;
+        private final String name;
+        private boolean nullable = true;
+        private Supplier<T> initialSupplier;
+        private Supplier<T> defaultValueSupplier;
+
+        private Builder(Class<T> type, String name) {
+            if (type == null) throw new IllegalArgumentException("Type cannot be null");
+            if (name == null || name.trim().isEmpty()) {
+                throw new IllegalArgumentException("Name cannot be null or empty");
+            }
+            this.type = type;
+            this.name = name;
+        }
+
+        public Builder<T> notNullable() {
+            this.nullable = false;
+            return this;
+        }
+
+        public Builder<T> withInitial(Supplier<T> initialSupplier) {
+            this.initialSupplier = initialSupplier;
+            return this;
+        }
+
+        public Builder<T> withInitialValue(T initialValue) {
+            this.initialSupplier = () -> initialValue;
+            return this;
+        }
+
+        public Builder<T> withDefaultValue(Supplier<T> defaultValueSupplier) {
+            this.defaultValueSupplier = defaultValueSupplier;
+            return this;
+        }
+
+        public Builder<T> withDefaultValue(T defaultValue) {
+            this.defaultValueSupplier = () -> defaultValue;
+            return this;
+        }
+
+        public BoundedThreadLocal<T> build() {
+            return new BoundedThreadLocal<>(this);
+        }
+    }
+
+    /**
+     * Создает builder для BoundedThreadLocal.
+     */
+    public static <T> Builder<T> builder(Class<T> type, String name) {
+        return new Builder<>(type, name);
+    }
+
+    /**
+     * Устаревшие фабричные методы (для обратной совместимости).
+     */
+    @Deprecated
     public static <T> BoundedThreadLocal<T> nullable(Class<T> type, String name) {
-        return new BoundedThreadLocal<>(type, name, true);
+        return builder(type, name).build();
     }
 
-    /**
-     * Creates with initial value supplier.
-     */
+    @Deprecated
     public static <T> BoundedThreadLocal<T> withInitial(
             Class<T> type, String name, Supplier<T> supplier) {
-        return new BoundedThreadLocal<>(type, name, false, supplier);
+        return builder(type, name)
+                .notNullable()
+                .withInitial(supplier)
+                .build();
+    }
+
+    @Deprecated
+    public static <T> BoundedThreadLocal<T> withInitialValue(
+            Class<T> type, String name, T initialValue) {
+        return builder(type, name)
+                .notNullable()
+                .withInitialValue(initialValue)
+                .build();
     }
 
     /**
-     * Creates with initial value.
+     * Основные методы.
      */
-    public static <T> BoundedThreadLocal<T> withInitialValue(
-            Class<T> type, String name, T initialValue) {
-        return new BoundedThreadLocal<>(type, name, false, () -> initialValue);
-    }
-
     public void set(T value) {
         validate(value);
         threadLocal.set(value);
@@ -60,18 +123,34 @@ public class BoundedThreadLocal<T> {
 
     public T get() {
         T value = threadLocal.get();
-        if (!nullable && value == null) {
-            throw new IllegalArgumentException(
-                    String.format("ThreadLocal '%s' of type %s cannot be null",
-                            name, type.getSimpleName()));
+        if (value == null && !nullable) {
+            if (defaultValueSupplier != null) {
+                value = defaultValueSupplier.get();
+                set(value); // кэшируем значение по умолчанию
+            } else {
+                throw new IllegalStateException(
+                        String.format("ThreadLocal '%s' of type %s cannot be null",
+                                name, type.getSimpleName()));
+            }
         }
-
         return value;
     }
 
-    public T getOrDefault(T defaultValue) {
+    public Optional<T> getOptional() {
+        return Optional.ofNullable(threadLocal.get());
+    }
+
+    public T getOrDefault() {
         T value = threadLocal.get();
-        return value != null ? value : defaultValue;
+        if (value == null && defaultValueSupplier != null) {
+            return defaultValueSupplier.get();
+        }
+        return value;
+    }
+
+    public T getOrDefault(T customDefault) {
+        T value = threadLocal.get();
+        return value != null ? value : customDefault;
     }
 
     public void remove() {
@@ -90,50 +169,78 @@ public class BoundedThreadLocal<T> {
         return name;
     }
 
+    /**
+     * Валидация значения.
+     */
     private void validate(T value) {
-        if (!nullable && value == null) {
-            throw new IllegalArgumentException(
-                    String.format("Value for ThreadLocal '%s' cannot be null", name));
+        if (value == null) {
+            if (!nullable) {
+                throw new IllegalArgumentException(
+                        String.format("Value for ThreadLocal '%s' cannot be null", name));
+            }
+            return;
         }
 
-        if (value != null && !type.isInstance(value)) {
+        if (!type.isInstance(value)) {
             throw new IllegalArgumentException(
-                    String.format("Expected type %s but got %s",
-                            type.getName(), value.getClass().getName()));
+                    String.format("Expected type %s but got %s for ThreadLocal '%s'",
+                            type.getName(), value.getClass().getName(), name));
         }
     }
 
     /**
-     * Executes action with temporary value, ensuring cleanup.
+     * Выполнение с временным значением.
      */
-    public void withValue(T value, Runnable action) {
+    public void runWithValue(T value, Runnable action) {
         T previous = threadLocal.get();
         try {
             set(value);
             action.run();
         } finally {
-            if (previous != null) {
-                set(previous);
-            } else {
-                remove();
-            }
+            restore(previous);
         }
     }
 
     /**
-     * Executes supplier with temporary value.
+     * Выполнение с временным значением и возвратом результата.
      */
-    public <R> R withValue(T value, Supplier<R> supplier) {
+    public <R> R callWithValue(T value, Supplier<R> action) {
         T previous = threadLocal.get();
         try {
             set(value);
-            return supplier.get();
+            return action.get();
         } finally {
-            if (previous != null) {
-                set(previous);
-            } else {
-                remove();
-            }
+            restore(previous);
         }
+    }
+
+    /**
+     * Выполнение с очисткой контекста.
+     */
+    public void runWithoutValue(Runnable action) {
+        T previous = threadLocal.get();
+        try {
+            remove();
+            action.run();
+        } finally {
+            restore(previous);
+        }
+    }
+
+    /**
+     * Восстановление предыдущего значения.
+     */
+    private void restore(T previous) {
+        if (previous != null) {
+            threadLocal.set(previous);
+        } else {
+            threadLocal.remove();
+        }
+    }
+
+    @Override
+    public String toString() {
+        return String.format("BoundedThreadLocal[name=%s, type=%s, nullable=%s, set=%s]",
+                name, type.getSimpleName(), nullable, isSet());
     }
 }
